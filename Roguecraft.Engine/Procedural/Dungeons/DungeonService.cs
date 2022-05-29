@@ -84,11 +84,11 @@ namespace Roguecraft.Engine.Procedural.Dungeons
         {
             foreach (var room in _dungeon.Rooms)
             {
-                if (room == Start)
+                if (room != Start)
                 {
                     continue;
                 }
-                AddEnemy(room.Center + new Vector2(0.5f));
+                AddEnemy(room.Center + new Vector2(1.5f));
             }
         }
 

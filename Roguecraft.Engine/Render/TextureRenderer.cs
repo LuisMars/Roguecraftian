@@ -15,7 +15,7 @@ public class TextureRenderer
 
     public void Render(SpriteBatch spriteBatch)
     {
-        foreach (var actor in _actorPool.Actors.Where(a => a.Texture is not null))
+        foreach (var actor in _actorPool.Actors.Where(a => a.Texture is not null && a.Visibility.IsVisible))
         {
             spriteBatch.Draw(actor.Texture,
                              actor.Position,

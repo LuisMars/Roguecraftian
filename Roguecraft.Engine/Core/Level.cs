@@ -5,9 +5,11 @@ using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Cameras;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Factories;
+using Roguecraft.Engine.Helpers;
 using Roguecraft.Engine.Procedural.Dungeons;
 using Roguecraft.Engine.Render;
 using Roguecraft.Engine.Simulation;
+using Roguecraft.Engine.Visibility;
 
 namespace Roguecraft.Engine.Core
 {
@@ -22,13 +24,17 @@ namespace Roguecraft.Engine.Core
         private readonly DoorFactory _doorFactory;
         private readonly DungeonService _dungeonService;
         private readonly CreatureFactory<Enemy> _enemyFactory;
+        private readonly FrameCounter _frameCounter;
         private readonly GameLoop _gameLoop;
         private readonly GraphicsDeviceManager _graphics;
         private readonly GraphicsDevice _graphicsDevice;
         private readonly CreatureFactory<Hero> _heroFactory;
+        private readonly HudRenderer _hudRenderer;
         private readonly ShapeRenderer _shapeRenderer;
         private readonly SpriteBatch _spriteBatch;
         private readonly TextureRenderer _textureRenderer;
+        private readonly VisibilityRenderer _visibilityRenderer;
+        private readonly VisibilityService _visibilityService;
         private readonly WallFactory _wallFactory;
 
         public Level(GraphicsDevice graphicsDevice, GraphicsDeviceManager graphics, ContentManager content)
@@ -38,14 +44,10 @@ namespace Roguecraft.Engine.Core
             _content = content;
             _contentRepository = new ContentRepository(_content);
             _configuration = new Configuration();
-
+            _frameCounter = new FrameCounter();
             _actorPool = new ActorPool();
 
             _collisionService = new CollisionService(_actorPool);
-
-            _gameLoop = new GameLoop(_actorPool, _collisionService);
-            _textureRenderer = new TextureRenderer(_actorPool);
-            _shapeRenderer = new ShapeRenderer(_actorPool);
 
             _heroFactory = new CreatureFactory<Hero>(_configuration, _actorPool, _collisionService, _contentRepository);
             _enemyFactory = new CreatureFactory<Enemy>(_configuration, _actorPool, _collisionService, _contentRepository);
@@ -61,13 +63,20 @@ namespace Roguecraft.Engine.Core
 
             _cameraService = new CameraService(_actorPool, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
 
+            _visibilityService = new VisibilityService(_collisionService);
+            _visibilityRenderer = new VisibilityRenderer(_actorPool, _graphicsDevice, _cameraService, _contentRepository, _visibilityService, _configuration);
+            _gameLoop = new GameLoop(_actorPool, _collisionService, _visibilityService);
+
+            _textureRenderer = new TextureRenderer(_actorPool);
+            _shapeRenderer = new ShapeRenderer(_actorPool, _visibilityService);
+            _hudRenderer = new HudRenderer(_actorPool, _contentRepository, _frameCounter);
             _dungeonService.Initialize();
         }
 
-        public void Draw()
+        public void Draw(float deltaTime)
         {
             _cameraService.Update(_graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height);
-            _graphicsDevice.Clear(Color.Black);
+            _graphicsDevice.Clear(_configuration.BackgroundColor.ToColor());
 
             _spriteBatch.Begin(transformMatrix: _cameraService.GetViewTransformationMatrix(),
                                sortMode: SpriteSortMode.FrontToBack,
@@ -75,14 +84,18 @@ namespace Roguecraft.Engine.Core
                                blendState: BlendState.AlphaBlend);
 
             _textureRenderer.Render(_spriteBatch);
-            _shapeRenderer.Render(_spriteBatch);
-
+            //_shapeRenderer.Render(_spriteBatch);
             _spriteBatch.End();
+
+            _visibilityRenderer.Render(_spriteBatch);
+
+            _hudRenderer.Render(_spriteBatch);
+            _frameCounter.Update();
         }
 
-        public void Update(float delta)
+        public void Update(float deltaTime)
         {
-            _gameLoop.Update(delta);
+            _gameLoop.Update(deltaTime);
         }
     }
 }

@@ -19,6 +19,7 @@ public class CollisionService
         _actorPool = actorPool;
     }
 
+    public IEnumerable<Collision> Collisions => _targetDataDictionary.Keys;
     private Quadtree CollisionTree { get; set; }
 
     public bool Contains(Collision target)

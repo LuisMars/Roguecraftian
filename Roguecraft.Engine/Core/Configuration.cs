@@ -5,7 +5,7 @@
         public string BackgroundColor { get; } = "#111111";
         public float BaseCreatureAreaOfInfluenceRadius { get; } = 55;
         public float BaseCreatureRadius { get; } = 45;
-        public float BaseCreatureSpeed { get; } = 250;
+        public float BaseCreatureSpeed { get; } = 500;
         public string BloodColor { get; } = "#781B27";
         public string DeadColor { get; } = "#A74749";
         public string EnemyColor { get; } = "#5C7D6C";

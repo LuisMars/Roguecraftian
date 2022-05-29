@@ -3,16 +3,19 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Core;
+using Roguecraft.Engine.Visibility;
 
 namespace Roguecraft.Engine.Render;
 
 public class ShapeRenderer
 {
     private readonly ActorPool _actorPool;
+    private readonly VisibilityService _visibilityService;
 
-    public ShapeRenderer(ActorPool actorPool)
+    public ShapeRenderer(ActorPool actorPool, VisibilityService visibilityService)
     {
         _actorPool = actorPool;
+        _visibilityService = visibilityService;
     }
 
     public void Render(SpriteBatch spriteBatch)
@@ -28,6 +31,10 @@ public class ShapeRenderer
 
                 DrawShape(spriteBatch, actor, aoi);
             }
+        }
+        foreach (var triangle in _visibilityService.Triangles)
+        {
+            spriteBatch.DrawLine(triangle.VertexA, triangle.VertexB, Color.White);
         }
     }
 

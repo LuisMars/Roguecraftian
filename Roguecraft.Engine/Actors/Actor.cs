@@ -2,6 +2,7 @@
 using MonoGame.Extended.TextureAtlases;
 using Roguecraft.Engine.Actions;
 using Roguecraft.Engine.Components;
+using Roguecraft.Engine.Visibility;
 using System.Diagnostics;
 
 namespace Roguecraft.Engine.Actors;
@@ -38,6 +39,7 @@ public abstract class Actor
     }
 
     public TextureRegion2D Texture { get; set; }
+    public VisibilityProperties Visibility { get; set; } = new();
 
     public virtual void ClearSimulationData()
     {
@@ -52,5 +54,20 @@ public abstract class Actor
     public virtual void UpdateSimulationData()
     {
         Collision.Update();
+    }
+
+    internal void CalculateVisibility(VisibilityService visibilityService)
+    {
+        var isVisible = visibilityService.IsVisible(Position, Collision.Bounds);
+
+        //if (Visibility.IsVisible != isVisible)
+        //{
+        //    Visibility.LastChange = gameTime.TotalGameTime;
+        //}
+        Visibility.IsVisible = isVisible;
+        if (Collision.IsFixed && Visibility.IsVisible)
+        {
+            Visibility.TimesSeen++;
+        }
     }
 }

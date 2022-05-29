@@ -54,7 +54,7 @@ public class Main : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        _level.Draw();
+        _level.Draw((float)gameTime.ElapsedGameTime.TotalSeconds);
     }
 
     protected override void Initialize()

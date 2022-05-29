@@ -14,7 +14,7 @@ public class CameraService
         _actorPool = actorPool;
     }
 
-    public Matrix? GetViewTransformationMatrix()
+    public Matrix GetViewTransformationMatrix()
     {
         return _camera.GetViewTransformationMatrix();
     }

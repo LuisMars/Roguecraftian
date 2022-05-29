@@ -10,7 +10,7 @@ public abstract class GameAction
     }
 
     public Creature Creature { get; set; }
-    public float EngeryCost { get; set; } = 100;
+    public float EngeryCost { get; set; } = 1000;
 
     public void Perform(float deltaTime)
     {
