@@ -1,14 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Input;
 using Roguecraft.Engine.Actions;
 
 namespace Roguecraft.Engine.Actors;
 
 public class Hero : Creature
 {
-    public override GameAction? TakeTurn(float deltaTime)
+    public override GameAction? OnTakeTurn(float deltaTime)
     {
-        var state = Keyboard.GetState();
+        var state = KeyboardExtended.GetState();
+        if (TryOpenDoor(state))
+        {
+            return ToggleDoorAction;
+        }
         if (TryWalk(state))
         {
             return WalkAction;
@@ -16,7 +21,26 @@ public class Hero : Creature
         return WalkAction;
     }
 
-    private bool TryWalk(KeyboardState state)
+    private bool TryOpenDoor(KeyboardStateExtended state)
+    {
+        if (Energy < 0)
+        {
+            return false;
+        }
+        if (!state.WasKeyJustDown(Keys.Space))
+        {
+            return false;
+        }
+        var door = AreaOfInfluence.LastEvents.FirstOrDefault(e => e.Other.Actor is Door);
+        if (door is null)
+        {
+            return false;
+        }
+        ToggleDoorAction.BindTarget((Door)door.Other.Actor);
+        return true;
+    }
+
+    private bool TryWalk(KeyboardStateExtended state)
     {
         var direction = new Vector2();
         var moved = false;
@@ -40,9 +64,9 @@ public class Hero : Creature
             moved = true;
             direction += new Vector2(1, 0);
         }
-        
+
         WalkAction.Set(direction);
-        
+
         return moved;
     }
 }

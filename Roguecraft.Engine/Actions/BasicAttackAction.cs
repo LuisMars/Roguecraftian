@@ -2,9 +2,9 @@
 
 namespace Roguecraft.Engine.Actions
 {
-    public class BasicAttack : Attack
+    public class BasicAttackAction : AttackAction
     {
-        public BasicAttack(Creature actor) : base(actor)
+        public BasicAttackAction(Creature actor) : base(actor)
         {
         }
 

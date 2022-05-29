@@ -15,12 +15,14 @@ namespace Roguecraft.Engine.Content
         }
 
         public TextureRegion2D Creature { get; private set; }
+        public TextureRegion2D Door { get; private set; }
         public TextureRegion2D Wall { get; private set; }
 
         private void Load()
         {
             Creature = LoadTextureRegion("person");
             Wall = LoadTextureRegion("wall");
+            Door = LoadTextureRegion("door");
         }
 
         private TextureRegion2D LoadTextureRegion(string name)

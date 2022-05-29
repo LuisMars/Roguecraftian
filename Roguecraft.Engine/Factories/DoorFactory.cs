@@ -9,20 +9,20 @@ using Roguecraft.Engine.Simulation;
 
 namespace Roguecraft.Engine.Factories;
 
-public class WallFactory : ActorFactoryBase<Wall>
+public class DoorFactory : ActorFactoryBase<Door>
 {
-    public WallFactory(Configuration configuration, ActorPool actorPool, CollisionService collisionService, ContentRepository contentRepository) :
+    public DoorFactory(Configuration configuration, ActorPool actorPool, CollisionService collisionService, ContentRepository contentRepository) :
                   base(configuration, actorPool, collisionService, contentRepository)
     {
     }
 
-    protected override Wall Create(Vector2 position, string? name = null)
+    protected override Door Create(Vector2 position, string? name = null)
     {
-        var wall = new Wall
+        var wall = new Door
         {
             Color = Configuration.WallColor.ToColor(),
-            Texture = ContentRepository.Wall,
-            Name = name ?? "Wall",
+            Texture = ContentRepository.Door,
+            Name = name ?? "Door",
             Position = position
         };
 

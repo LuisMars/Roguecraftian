@@ -19,6 +19,7 @@ namespace Roguecraft.Engine.Core
         private readonly Configuration _configuration;
         private readonly ContentManager _content;
         private readonly ContentRepository _contentRepository;
+        private readonly DoorFactory _doorFactory;
         private readonly DungeonService _dungeonService;
         private readonly CreatureFactory<Enemy> _enemyFactory;
         private readonly GameLoop _gameLoop;
@@ -46,24 +47,25 @@ namespace Roguecraft.Engine.Core
             _textureRenderer = new TextureRenderer(_actorPool);
             _shapeRenderer = new ShapeRenderer(_actorPool);
 
-            _heroFactory = new CreatureFactory<Hero>(_actorPool, _collisionService, _contentRepository);
-            _enemyFactory = new CreatureFactory<Enemy>(_actorPool, _collisionService, _contentRepository);
-            _wallFactory = new WallFactory(_actorPool, _collisionService, _contentRepository);
+            _heroFactory = new CreatureFactory<Hero>(_configuration, _actorPool, _collisionService, _contentRepository);
+            _enemyFactory = new CreatureFactory<Enemy>(_configuration, _actorPool, _collisionService, _contentRepository);
+            _wallFactory = new WallFactory(_configuration, _actorPool, _collisionService, _contentRepository);
+            _doorFactory = new DoorFactory(_configuration, _actorPool, _collisionService, _contentRepository);
 
-            _dungeonService = new DungeonService(_configuration, _collisionService, _heroFactory, _enemyFactory, _wallFactory);
+            _dungeonService = new DungeonService(_configuration, _collisionService, _heroFactory, _enemyFactory, _wallFactory, _doorFactory);
 
-            _dungeonService.Initialize();
             //_heroFactory.Add(100, 100, "Hero");
             //_enemyFactory.Add(100, 160);
             //_wallFactory.Add(100, 190);
             _spriteBatch = new SpriteBatch(_graphicsDevice);
 
             _cameraService = new CameraService(_actorPool, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
+
+            _dungeonService.Initialize();
         }
 
         public void Draw()
         {
-            _cameraService.LookAtPlayer();
             _cameraService.Update(_graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height);
             _graphicsDevice.Clear(Color.Black);
 

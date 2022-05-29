@@ -19,13 +19,9 @@ public class CameraService
         return _camera.GetViewTransformationMatrix();
     }
 
-    public void LookAtPlayer()
-    {
-        _camera.SetPosition(_actorPool.Hero.Position);
-    }
-
     internal void Update(int width, int height)
     {
+        _camera.SetPosition(_actorPool.Hero.Position);
         _camera.Update(width, height);
     }
 }

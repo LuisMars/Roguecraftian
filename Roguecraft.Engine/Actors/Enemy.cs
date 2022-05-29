@@ -4,7 +4,7 @@ namespace Roguecraft.Engine.Actors;
 
 public class Enemy : Creature
 {
-    public override GameAction? TakeTurn(float deltaTime)
+    public override GameAction? OnTakeTurn(float deltaTime)
     {
         Energy += Stats.Speed * deltaTime;
         Energy = Math.Min(0, Energy);
@@ -12,10 +12,11 @@ public class Enemy : Creature
         {
             return attack;
         }
+
         return NullAction;
     }
 
-    private bool TryAttack(out Attack attack)
+    private bool TryAttack(out AttackAction attack)
     {
         attack = null;
         if (Energy < 0)

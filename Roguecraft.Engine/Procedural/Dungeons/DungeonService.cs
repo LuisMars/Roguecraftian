@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended;
-using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Core;
 using Roguecraft.Engine.Factories;
 using Roguecraft.Engine.Simulation;
@@ -11,10 +10,11 @@ namespace Roguecraft.Engine.Procedural.Dungeons
     {
         private readonly CollisionService _collisionService;
         private readonly Configuration _configuration;
+        private readonly IActorFactory _doorFactory;
         private readonly Dungeon _dungeon;
-        private readonly CreatureFactory<Enemy> _enemyFactory;
-        private readonly CreatureFactory<Hero> _heroFactory;
-        private readonly WallFactory _wallFactory;
+        private readonly IActorFactory _enemyFactory;
+        private readonly IActorFactory _heroFactory;
+        private readonly IActorFactory _wallFactory;
 
         public DungeonService(Configuration configuration)
         {
@@ -26,9 +26,10 @@ namespace Roguecraft.Engine.Procedural.Dungeons
 
         public DungeonService(Configuration configuration,
                               CollisionService collisionService,
-                              CreatureFactory<Hero> heroFactory,
-                              CreatureFactory<Enemy> enemyFactory,
-                              WallFactory wallFactory)
+                              IActorFactory heroFactory,
+                              IActorFactory enemyFactory,
+                              IActorFactory wallFactory,
+                              IActorFactory doorFactory)
         {
             _configuration = configuration;
 
@@ -36,6 +37,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
             _heroFactory = heroFactory;
             _enemyFactory = enemyFactory;
             _wallFactory = wallFactory;
+            _doorFactory = doorFactory;
 
             _dungeon = new Dungeon();
             for (int i = 0; i < _configuration.RoomsPerDungeon; i++)
@@ -65,12 +67,39 @@ namespace Roguecraft.Engine.Procedural.Dungeons
         {
             _collisionService.Initialize(Bounds);
             AddWalls();
+            AddDoors();
             AddPlayer();
+            AddEnemies();
+        }
+
+        private void AddDoors()
+        {
+            foreach (var (x, y) in _dungeon.Connections.Positions)
+            {
+                _doorFactory.Add(new Vector2(x, y) * _configuration.WallSize);
+            }
+        }
+
+        private void AddEnemies()
+        {
+            foreach (var room in _dungeon.Rooms)
+            {
+                if (room == Start)
+                {
+                    continue;
+                }
+                AddEnemy(room.Center + new Vector2(0.5f));
+            }
+        }
+
+        private void AddEnemy(Vector2 position)
+        {
+            _enemyFactory.Add(position * _configuration.WallSize);
         }
 
         private void AddPlayer()
         {
-            _heroFactory.Add(Start.Center * _configuration.WallSize);
+            _heroFactory.Add((Start.Center + new Vector2(0.5f)) * _configuration.WallSize);
         }
 
         private void AddWalls()

@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
 using Roguecraft.Engine.Core;
 
@@ -16,11 +15,11 @@ public class TextureRenderer
 
     public void Render(SpriteBatch spriteBatch)
     {
-        foreach (var actor in _actorPool.Actors.Where(a => a.Image is not null))
+        foreach (var actor in _actorPool.Actors.Where(a => a.Texture is not null))
         {
-            spriteBatch.Draw(actor.Image,
+            spriteBatch.Draw(actor.Texture,
                              actor.Position,
-                             Color.White,
+                             actor.Color,
                              actor.Angle,
                              actor.Origin,
                              actor.Scale,

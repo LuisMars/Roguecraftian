@@ -2,9 +2,9 @@
 
 namespace Roguecraft.Engine.Actions;
 
-public abstract class Attack : GameAction
+public abstract class AttackAction : GameAction
 {
-    protected Attack(Creature actor) : base(actor)
+    protected AttackAction(Creature actor) : base(actor)
     {
     }
 

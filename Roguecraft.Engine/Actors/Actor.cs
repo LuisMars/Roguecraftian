@@ -9,9 +9,9 @@ namespace Roguecraft.Engine.Actors;
 [DebuggerDisplay("{Name}: {Position}")]
 public abstract class Actor
 {
-    public TextureRegion2D Image;
     public float Angle { get; set; }
     public Collision Collision { get; set; }
+    public Color Color { get; set; }
     public string Name { get; set; }
     public NullAction NullAction { get; init; }
 
@@ -19,7 +19,7 @@ public abstract class Actor
     {
         get
         {
-            return Collision.Origin * Image.Width;
+            return Collision.Origin * Texture.Width;
         }
     }
 
@@ -29,15 +29,15 @@ public abstract class Actor
     {
         get
         {
-            if (Image is null)
+            if (Texture is null)
             {
                 return Vector2.One;
             }
-            return new Vector2(Collision.Width / Image.Width, Collision.Height / Image.Height);
+            return new Vector2(Collision.Width / Texture.Width, Collision.Height / Texture.Height);
         }
     }
 
-    public float Speed { get; set; }
+    public TextureRegion2D Texture { get; set; }
 
     public virtual void ClearSimulationData()
     {

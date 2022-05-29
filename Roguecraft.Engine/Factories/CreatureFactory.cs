@@ -5,13 +5,15 @@ using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Components;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Core;
+using Roguecraft.Engine.Helpers;
 using Roguecraft.Engine.Simulation;
 
 namespace Roguecraft.Engine.Factories;
 
 public class CreatureFactory<TActor> : ActorFactoryBase<TActor> where TActor : Creature, new()
 {
-    public CreatureFactory(ActorPool actorPool, CollisionService collisionService, ContentRepository contentRepository) : base(actorPool, collisionService, contentRepository)
+    public CreatureFactory(Configuration configuration, ActorPool actorPool, CollisionService collisionService, ContentRepository contentRepository) :
+                      base(configuration, actorPool, collisionService, contentRepository)
     {
     }
 
@@ -19,16 +21,16 @@ public class CreatureFactory<TActor> : ActorFactoryBase<TActor> where TActor : C
     {
         var creature = new TActor
         {
-            Image = ContentRepository.Creature,
+            Texture = ContentRepository.Creature,
             Name = name ?? "Creature",
             Position = position,
-            Speed = 100
         };
+        creature.Color = Configuration.GetCreatureColor(creature);
         var stats = new Stats
         {
             MaxHealth = 2,
-            Speed = 1,
-            DefaultAttack = new BasicAttack(creature)
+            Speed = Configuration.BaseCreatureSpeed,
+            DefaultAttack = new BasicAttackAction(creature)
         };
         creature.Stats = stats;
         creature.Health = creature.Stats.MaxHealth;
@@ -38,7 +40,7 @@ public class CreatureFactory<TActor> : ActorFactoryBase<TActor> where TActor : C
             Actor = creature,
             Bounds = new CircleF
             {
-                Radius = 45f
+                Radius = Configuration.BaseCreatureRadius
             }
         };
         CollisionService.Insert(creature.Collision);
@@ -47,13 +49,14 @@ public class CreatureFactory<TActor> : ActorFactoryBase<TActor> where TActor : C
             Actor = creature,
             Bounds = new CircleF
             {
-                Radius = 55f
+                Radius = Configuration.BaseCreatureAreaOfInfluenceRadius
             },
             IsSensor = true
         };
         CollisionService.Insert(creature.AreaOfInfluence);
 
         creature.WalkAction = new WalkAction(creature);
+        creature.ToggleDoorAction = new ToggleDoorAction(creature);
         return creature;
     }
 }
