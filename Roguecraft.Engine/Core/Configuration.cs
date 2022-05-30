@@ -3,7 +3,7 @@
     public class Configuration
     {
         public string BackgroundColor { get; } = "#111111";
-        public float BaseCreatureAreaOfInfluenceRadius { get; } = 55;
+        public float BaseCreatureAreaOfInfluenceRadius { get; } = 90;
         public float BaseCreatureRadius { get; } = 45;
         public float BaseCreatureSpeed { get; } = 500;
         public string BloodColor { get; } = "#781B27";

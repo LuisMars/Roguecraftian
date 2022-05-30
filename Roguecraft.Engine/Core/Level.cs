@@ -75,7 +75,7 @@ namespace Roguecraft.Engine.Core
 
         public void Draw(float deltaTime)
         {
-            _cameraService.Update(_graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height);
+            _cameraService.Update(_graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, deltaTime);
             _graphicsDevice.Clear(_configuration.BackgroundColor.ToColor());
 
             _spriteBatch.Begin(transformMatrix: _cameraService.GetViewTransformationMatrix(),
@@ -84,7 +84,7 @@ namespace Roguecraft.Engine.Core
                                blendState: BlendState.AlphaBlend);
 
             _textureRenderer.Render(_spriteBatch);
-            //_shapeRenderer.Render(_spriteBatch);
+            _shapeRenderer.Render(_spriteBatch);
             _spriteBatch.End();
 
             _visibilityRenderer.Render(_spriteBatch);

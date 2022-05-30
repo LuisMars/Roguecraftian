@@ -92,7 +92,10 @@ public class VisibilityRenderer
         using var renderTarget = new RenderTarget2D(_graphicsDevice, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height);
         _graphicsDevice.SetRenderTarget(renderTarget);
 
-        _graphicsDevice.Clear(_configuration.BackgroundColor.ToColor());
+        var color = _configuration.BackgroundColor.ToColor();
+        color = Color.Lerp(color, Color.White, 0.25f);
+        _graphicsDevice.Clear(color);
+        //_graphicsDevice.Clear(Color.White);
 
         _primitiveBatch.Begin(ref projection, ref view);
         var count = _visibilityService.Count;
@@ -140,36 +143,15 @@ public class VisibilityRenderer
                 last = triangle;
                 continue;
             }
-
-            var angle = (last.VertexB - triangle.VertexA).ToAngle();
-
-            var steps = len / 150;
-            for (var i = 0f; i < (int)steps; i++)
-            {
-                var step = i / steps;
-                var start = Vector2.Lerp(last.VertexB, triangle.VertexA, step);
-                spriteBatch.Draw(_line,
-                                  start,
-                                  Color.White,
-                                  angle,
-                                  new Vector2(16, 0),
-                                  new Vector2(1, 1),
-                                  SpriteEffects.None,
-                                  0f);
-            }
-            var step2 = (int)steps / steps;
-
-            var start2 = Vector2.Lerp(last.VertexB, triangle.VertexA, step2);
-            spriteBatch.Draw(_line,
-                              start2,
-                              Color.White,
-                              angle,
-                              new Vector2(16, 0),
-                              new Vector2(1, steps - (int)steps),
-                              SpriteEffects.None,
-                              0f);
+            DrawVisibilityLine(spriteBatch, len, triangle.VertexA, last.VertexB);
 
             last = triangle;
+        }
+        foreach (var triangle in sorted)
+        {
+            var len = (triangle.VertexB - triangle.VertexA).Length();
+
+            DrawVisibilityLine(spriteBatch, len, triangle.VertexA, triangle.VertexB);
         }
 
         spriteBatch.End();
@@ -179,5 +161,36 @@ public class VisibilityRenderer
         spriteBatch.Begin(blendState: _lightBlend);
         spriteBatch.Draw(renderTarget, Vector2.Zero, Color.White);
         spriteBatch.End();
+    }
+
+    private void DrawVisibilityLine(SpriteBatch spriteBatch, float len, Vector2 lineStart, Vector2 lineEnd)
+    {
+        var angle = (lineStart - lineEnd).ToAngle();
+
+        var steps = len / 150;
+        for (var i = 0f; i < (int)steps; i++)
+        {
+            var step = i / steps;
+            var start = Vector2.Lerp(lineStart, lineEnd, step);
+            spriteBatch.Draw(_line,
+                              start,
+                              Color.White,
+                              angle,
+                              new Vector2(16, 0),
+                              new Vector2(1, 1),
+                              SpriteEffects.None,
+                              0f);
+        }
+        var step2 = (int)steps / steps;
+
+        var start2 = Vector2.Lerp(lineStart, lineEnd, step2);
+        spriteBatch.Draw(_line,
+                          start2,
+                          Color.White,
+                          angle,
+                          new Vector2(16, 0),
+                          new Vector2(1, steps - (int)steps),
+                          SpriteEffects.None,
+                          0f);
     }
 }

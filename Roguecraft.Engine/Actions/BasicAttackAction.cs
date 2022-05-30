@@ -8,7 +8,7 @@ namespace Roguecraft.Engine.Actions
         {
         }
 
-        protected override void OnPerform(float deltaTime)
+        protected override void OnAttack(float deltaTime)
         {
             Target.Health -= MaxDamage;
         }

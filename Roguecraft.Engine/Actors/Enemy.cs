@@ -1,4 +1,5 @@
-﻿using Roguecraft.Engine.Actions;
+﻿using Microsoft.Xna.Framework;
+using Roguecraft.Engine.Actions;
 
 namespace Roguecraft.Engine.Actors;
 
@@ -12,24 +13,31 @@ public class Enemy : Creature
         {
             return attack;
         }
+        if (TryOpenDoor())
+        {
+            return ToggleDoorAction;
+        }
+        if (TryWalk())
+        {
+            return WalkAction;
+        }
 
         return NullAction;
     }
 
-    private bool TryAttack(out AttackAction attack)
+    protected override bool CanAttack()
     {
-        attack = null;
-        if (Energy < 0)
-        {
-            return false;
-        }
-        var creatureEvent = AreaOfInfluence.LastEvents.FirstOrDefault(x => x.Other.Actor is Creature);
-        if (creatureEvent?.Other?.Actor is not Creature creature || creature == this)
-        {
-            return false;
-        }
-        Stats.DefaultAttack.BindTarget(creature);
-        attack = Stats.DefaultAttack;
+        return true;
+    }
+
+    protected override bool CanOpenDoor()
+    {
+        return true;
+    }
+
+    protected override bool CanWalk(out Vector2 direction)
+    {
+        direction = Vector2.Zero;
         return true;
     }
 }

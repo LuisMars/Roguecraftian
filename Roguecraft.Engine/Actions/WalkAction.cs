@@ -11,7 +11,7 @@ public class WalkAction : GameAction
         EngeryCost = 0;
     }
 
-    private Vector2 Direction { get; set; }
+    public Vector2 Direction { get; private set; }
 
     public void Set(Vector2 direction)
     {

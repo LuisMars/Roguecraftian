@@ -6,6 +6,7 @@ public class ToggleDoorAction : GameAction
 {
     public ToggleDoorAction(Creature creature) : base(creature)
     {
+        EngeryCost = 250;
     }
 
     public Door Target { get; private set; }
@@ -17,6 +18,6 @@ public class ToggleDoorAction : GameAction
 
     protected override void OnPerform(float deltaTime)
     {
-        Target.Toggle();
+        Target?.Toggle();
     }
 }

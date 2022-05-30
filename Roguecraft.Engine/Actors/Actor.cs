@@ -60,10 +60,6 @@ public abstract class Actor
     {
         var isVisible = visibilityService.IsVisible(Position, Collision.Bounds);
 
-        //if (Visibility.IsVisible != isVisible)
-        //{
-        //    Visibility.LastChange = gameTime.TotalGameTime;
-        //}
         Visibility.IsVisible = isVisible;
         if (Collision.IsFixed && Visibility.IsVisible)
         {

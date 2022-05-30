@@ -7,66 +7,60 @@ namespace Roguecraft.Engine.Actors;
 
 public class Hero : Creature
 {
+    private KeyboardStateExtended KeyBoardState { get; set; }
+
     public override GameAction? OnTakeTurn(float deltaTime)
     {
-        var state = KeyboardExtended.GetState();
-        if (TryOpenDoor(state))
+        KeyBoardState = KeyboardExtended.GetState();
+        if (TryAttack(out var attack))
+        {
+            return attack;
+        }
+        if (TryOpenDoor())
         {
             return ToggleDoorAction;
         }
-        if (TryWalk(state))
+        if (TryWalk())
         {
             return WalkAction;
         }
         return WalkAction;
     }
 
-    private bool TryOpenDoor(KeyboardStateExtended state)
+    protected override bool CanAttack()
     {
-        if (Energy < 0)
-        {
-            return false;
-        }
-        if (!state.WasKeyJustDown(Keys.Space))
-        {
-            return false;
-        }
-        var door = AreaOfInfluence.LastEvents.FirstOrDefault(e => e.Other.Actor is Door);
-        if (door is null)
-        {
-            return false;
-        }
-        ToggleDoorAction.BindTarget((Door)door.Other.Actor);
-        return true;
+        return KeyBoardState.WasKeyJustDown(Keys.Space);
     }
 
-    private bool TryWalk(KeyboardStateExtended state)
+    protected override bool CanOpenDoor()
     {
-        var direction = new Vector2();
+        return KeyBoardState.WasKeyJustDown(Keys.Space);
+    }
+
+    protected override bool CanWalk(out Vector2 direction)
+    {
+        direction = new Vector2();
         var moved = false;
-        if (state.IsKeyDown(Keys.W))
+        if (KeyBoardState.IsKeyDown(Keys.W))
         {
             moved = true;
             direction += new Vector2(0, -1);
         }
-        if (state.IsKeyDown(Keys.S))
+        if (KeyBoardState.IsKeyDown(Keys.S))
         {
             moved = true;
             direction += new Vector2(0, 1);
         }
-        if (state.IsKeyDown(Keys.A))
+        if (KeyBoardState.IsKeyDown(Keys.A))
         {
             moved = true;
             direction += new Vector2(-1, 0);
         }
-        if (state.IsKeyDown(Keys.D))
+        if (KeyBoardState.IsKeyDown(Keys.D))
         {
             moved = true;
             direction += new Vector2(1, 0);
         }
-
-        WalkAction.Set(direction);
-
         return moved;
     }
 }
