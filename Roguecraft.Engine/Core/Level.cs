@@ -9,6 +9,7 @@ using Roguecraft.Engine.Helpers;
 using Roguecraft.Engine.Procedural.Dungeons;
 using Roguecraft.Engine.Render;
 using Roguecraft.Engine.Simulation;
+using Roguecraft.Engine.Sound;
 using Roguecraft.Engine.Visibility;
 
 namespace Roguecraft.Engine.Core
@@ -30,7 +31,9 @@ namespace Roguecraft.Engine.Core
         private readonly GraphicsDevice _graphicsDevice;
         private readonly CreatureFactory<Hero> _heroFactory;
         private readonly HudRenderer _hudRenderer;
+        private readonly ParticleRenderer _particleRenderer;
         private readonly ShapeRenderer _shapeRenderer;
+        private readonly SoundService _soundService;
         private readonly SpriteBatch _spriteBatch;
         private readonly TextureRenderer _textureRenderer;
         private readonly VisibilityRenderer _visibilityRenderer;
@@ -69,7 +72,10 @@ namespace Roguecraft.Engine.Core
 
             _textureRenderer = new TextureRenderer(_actorPool);
             _shapeRenderer = new ShapeRenderer(_actorPool, _visibilityService);
+            _particleRenderer = new ParticleRenderer(_configuration, _contentRepository, _actorPool);
             _hudRenderer = new HudRenderer(_actorPool, _contentRepository, _frameCounter);
+
+            _soundService = new SoundService(_actorPool, _contentRepository);
             _dungeonService.Initialize();
         }
 
@@ -84,18 +90,23 @@ namespace Roguecraft.Engine.Core
                                blendState: BlendState.AlphaBlend);
 
             _textureRenderer.Render(_spriteBatch);
-            _shapeRenderer.Render(_spriteBatch);
+            _particleRenderer.Render(_spriteBatch);
+            //_shapeRenderer.Render(_spriteBatch);
             _spriteBatch.End();
 
             _visibilityRenderer.Render(_spriteBatch);
 
             _hudRenderer.Render(_spriteBatch);
+
             _frameCounter.Update();
         }
 
         public void Update(float deltaTime)
         {
             _gameLoop.Update(deltaTime);
+
+            _soundService.Update();
+            _particleRenderer.Update(deltaTime);
         }
     }
 }

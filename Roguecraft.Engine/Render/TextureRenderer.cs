@@ -30,7 +30,12 @@ public class TextureRenderer
                              actor.Origin,
                              actor.Scale,
                              SpriteEffects.None,
-                             0);
+                             GetLayer(actor.Position));
         }
+    }
+
+    private float GetLayer(Vector2 position)
+    {
+        return 0.5f + position.Y / 100000f + position.X / 10000000000f;
     }
 }

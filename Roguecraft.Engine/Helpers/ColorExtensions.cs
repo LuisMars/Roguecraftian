@@ -17,9 +17,9 @@ namespace Roguecraft.Engine.Helpers
             }).ToColor();
         }
 
-        public static Color ToColor(this string hex)
+        public static Color ToColor(this string hex, float alpha = 1)
         {
-            return ColorHelper.FromHex(hex);
+            return new Color(ColorHelper.FromHex(hex), alpha);
         }
     }
 }

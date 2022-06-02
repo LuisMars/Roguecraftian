@@ -139,6 +139,12 @@
 /processorParam:Quality=Best
 /build:door_01.wav
 
+#begin door_02.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:door_02.wav
+
 #begin heal.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

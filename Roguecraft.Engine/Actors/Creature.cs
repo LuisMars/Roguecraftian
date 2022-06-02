@@ -8,6 +8,7 @@ namespace Roguecraft.Engine.Actors;
 public abstract class Creature : Actor
 {
     public Collision AreaOfInfluence { get; set; }
+    public float DistanceWalked { get; set; }
     public float Energy { get; set; }
     public int Health { get; set; }
     public ActionTimer HurtTimer { get; } = new();
@@ -70,8 +71,8 @@ public abstract class Creature : Actor
         }
 
         var door = AreaOfInfluence.LastEvents.FirstOrDefault(e => e.Other.Actor is Door);
-        var bodyDoor = Collision.LastEvents.FirstOrDefault(e => e.Other.Actor is Door);
-        if (door is null || bodyDoor is not null)
+        var isInsideDoor = Collision.LastEvents.Any(e => e.Other.Actor is Door && e.PenetrationVector.LengthSquared() > 100);
+        if (door is null || isInsideDoor)
         {
             return false;
         }

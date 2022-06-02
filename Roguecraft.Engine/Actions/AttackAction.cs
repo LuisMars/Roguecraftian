@@ -22,6 +22,6 @@ public abstract class AttackAction : GameAction
     protected override void OnPerform(float deltaTime)
     {
         OnAttack(deltaTime);
-        Target.HurtTimer.Reset(0.5f);
+        Target.HurtTimer.Reset(0.125f);
     }
 }

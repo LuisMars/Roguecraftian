@@ -12,7 +12,8 @@ public class WalkAction : GameAction
     }
 
     public Vector2 Direction { get; private set; }
-
+    public Vector2 CurrentPosition { get; set; }
+    public Vector2 LastPosition { get; set; }
     public void Set(Vector2 direction)
     {
         if (direction.LengthSquared() != 0)
@@ -29,7 +30,11 @@ public class WalkAction : GameAction
 
     protected override void OnPerform(float deltaTime)
     {
-        Creature.Position += Direction * Creature.Stats.Speed * deltaTime;
+        var speed = Direction * Creature.Stats.Speed * deltaTime;
+        Creature.Position += speed;
+        CurrentPosition = Creature.Position;
+
+        Creature.DistanceWalked += speed.Length();
         Creature.Angle = Direction.ToAngle();
     }
 }

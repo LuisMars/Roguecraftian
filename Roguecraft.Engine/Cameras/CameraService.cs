@@ -28,11 +28,11 @@ public class CameraService
         var direction = hero.WalkAction.Direction;
         if (_camera.Position != Vector2.Zero)
         {
-            center = Vector2.Lerp(_camera.Position, center + (direction * speed), deltaTime);
+            center = Vector2.Lerp(_camera.Position, center + (direction * speed * 2), deltaTime);
         }
         _camera.SetPosition(center);
 
-        var newZoom = MathF.Max(0.33f, 1f - direction.Length());
+        var newZoom = MathF.Max(0.5f, 1f - direction.Length());
         _camera.Zoom = MathHelper.Lerp(_camera.Zoom, newZoom, deltaTime);
         _camera.Rotation = 0;
         _camera.Update(width, height);
