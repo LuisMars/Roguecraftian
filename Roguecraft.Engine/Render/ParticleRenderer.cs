@@ -29,8 +29,7 @@ public class ParticleRenderer
         _fireParticle = new FireParticle(configuration, contentRepository);
         _healParticle = new HealParticle(configuration, contentRepository);
         _footstepParticle = new FootstepsParticle(configuration, contentRepository);
-        //_stepFrequencyBaseSquared = configuration.StepFrequencyBase * configuration.StepFrequencyBase;
-        //_stepDrawOffset = configuration.StepFrequencyBase / configuration.StepDrawOffset;
+
         var diameter = configuration.BaseCreatureRadius * 2;
         _stepFrequencyBaseSquared = diameter * diameter;
         _stepDrawOffset = configuration.BaseCreatureRadius * 0.75f;
@@ -38,6 +37,7 @@ public class ParticleRenderer
 
     public void Render(SpriteBatch spriteBatch)
     {
+        spriteBatch.Draw(_deathParticle);
         spriteBatch.Draw(_bloodPaticle);
         spriteBatch.Draw(_footstepParticle);
     }
@@ -50,9 +50,12 @@ public class ParticleRenderer
             {
                 continue;
             }
+
+            TriggerDeath(creature);
             TriggerBlood(creature);
             TriggerFootsteps(creature);
         }
+        _deathParticle.Update(deltaTime);
         _bloodPaticle.Update(deltaTime);
         _footstepParticle.Update(deltaTime);
     }
@@ -64,6 +67,15 @@ public class ParticleRenderer
             return;
         }
         _bloodPaticle.Trigger(creature.Position, 0);
+    }
+
+    private void TriggerDeath(Creature creature)
+    {
+        if (!creature.DeadTimer.JustTriggered)
+        {
+            return;
+        }
+        _deathParticle.Trigger(creature.Position, 0);
     }
 
     private void TriggerFootsteps(Creature creature)

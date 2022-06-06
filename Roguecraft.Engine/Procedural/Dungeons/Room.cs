@@ -11,18 +11,20 @@ public class Room
         Bounds = new Rectangle(x, y, width, height);
     }
 
-    public int Bottom { get => Bounds.Bottom; }
+    public int Bottom => Bounds.Bottom;
     public Rectangle Bounds { get; private set; }
     public bool CanHaveConnections { get; internal set; } = true;
-    public Vector2 Center { get => Bounds.Center.ToVector2(); }
+    public Vector2 Center => Bounds.Center.ToVector2();
 
-    public int Height { get => Bounds.Height; }
-    public int Left { get => Bounds.Left; }
-    public int Right { get => Bounds.Right; }
-    public int Top { get => Bounds.Top; }
-    public int Width { get => Bounds.Width; }
-    public int X { get => Bounds.X; }
-    public int Y { get => Bounds.Y; }
+    public Vector2 FloatCenter => new(Left + (Width + 1) * 0.5f, Top + (Height + 1) * 0.5f);
+
+    public int Height => Bounds.Height;
+    public int Left => Bounds.Left;
+    public int Right => Bounds.Right;
+    public int Top => Bounds.Top;
+    public int Width => Bounds.Width;
+    public int X => Bounds.X;
+    public int Y => Bounds.Y;
 
     public ((int X, int Y), (int X, int Y)) FindWayPoints(Room other)
     {

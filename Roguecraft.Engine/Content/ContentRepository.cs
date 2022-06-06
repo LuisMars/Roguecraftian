@@ -37,7 +37,7 @@ namespace Roguecraft.Engine.Content
             Door = LoadTextureRegion("door");
             Line = LoadTextureRegion("line");
             Particle = LoadTextureRegion("particle");
-            Dead = LoadTextureRegion("particle");
+            Dead = LoadTextureRegion("dead");
             Footstep = LoadTextureRegion("footstep");
             Font = _content.Load<SpriteFont>("font");
             HitSound = new GameSound(

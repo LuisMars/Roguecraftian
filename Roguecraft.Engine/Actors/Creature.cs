@@ -9,12 +9,14 @@ public abstract class Creature : Actor
 {
     public Collision AreaOfInfluence { get; set; }
     public AvailableActions AvailableActions { get; set; }
+    public ActionTimer DeadTimer { get; } = new();
     public Vector2 Direction { get; set; }
     public float DistanceWalked { get; set; }
     public float Energy { get; set; }
     public Vector2 FootstepDistance { get; set; }
     public int Health { get; set; }
     public ActionTimer HurtTimer { get; } = new();
+    public bool IsDead { get; set; }
     public Vector2 LastPosition { get; set; }
     public Vector2 Speed => Position - LastPosition;
     public Stats Stats { get; set; }

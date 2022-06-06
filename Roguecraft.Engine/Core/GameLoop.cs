@@ -18,6 +18,8 @@ public class GameLoop
 
     public void Update(float deltaTime)
     {
+        _actorPool.RemoveDead();
+        _collisionService.RemoveDead();
         _visibilityService.Update(_actorPool.Hero);
 
         foreach (var actor in _actorPool.Actors)

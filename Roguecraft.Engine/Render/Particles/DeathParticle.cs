@@ -12,22 +12,22 @@ internal class DeathParticle : ParticleEffect
 {
     public DeathParticle(Configuration configuration, ContentRepository contentRepository)
     {
-        var color = configuration.DeadColor.ToColor();
-
+        var color = configuration.DeadColor.ToColor(0.5f);
         var bodyTextureRegion = contentRepository.Dead;
+
         Emitters = new List<ParticleEmitter>
             {
                 new ParticleEmitter(bodyTextureRegion, 15000, TimeSpan.FromSeconds(10),
-                                    Profile.Circle(100, Profile.CircleRadiation.Out))
+                                    Profile.Circle(50, Profile.CircleRadiation.Out))
                 {
                     AutoTrigger = false,
                     Parameters = new ParticleReleaseParameters
                     {
                         Color = color.ToHsl(),
-                        Speed = new Range<float>(50, 200),
+                        Speed = new Range<float>(100, 200),
                         Quantity = 4,
                         Rotation = new Range<float>(-1, 1),
-                        Scale = new Range<float>(2, 3)
+                        Scale = new Range<float>(0.75f, 1.25f)
                     },
                     Modifiers =
                     {

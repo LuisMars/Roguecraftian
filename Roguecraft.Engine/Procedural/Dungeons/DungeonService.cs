@@ -12,17 +12,12 @@ namespace Roguecraft.Engine.Procedural.Dungeons
         private readonly Configuration _configuration;
         private readonly IActorFactory _doorFactory;
         private readonly Dungeon _dungeon;
+        private readonly Room _end;
         private readonly IActorFactory _enemyFactory;
         private readonly IActorFactory _heroFactory;
+        private readonly Room _special;
+        private readonly Room _start;
         private readonly IActorFactory _wallFactory;
-
-        public DungeonService(Configuration configuration)
-        {
-            var path = _dungeon.GetLongestPath();
-            var playerRoom = path.First();
-            var endRoom = path.Last();
-            var specialRoom = _dungeon.FindSpecialRoom();
-        }
 
         public DungeonService(Configuration configuration,
                               CollisionService collisionService,
@@ -45,7 +40,9 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                 _dungeon.AddRoom();
             }
             var longestPath = _dungeon.GetLongestPath();
-            Start = longestPath.First();
+            _start = longestPath.First();
+            _end = longestPath.Last();
+            _special = _dungeon.FindSpecialRoom();
         }
 
         public RectangleF Bounds
@@ -59,9 +56,6 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                                      (height + 1) * _configuration.WallSize);
             }
         }
-
-        private Room End { get; set; }
-        private Room Start { get; set; }
 
         public void Initialize()
         {
@@ -84,11 +78,11 @@ namespace Roguecraft.Engine.Procedural.Dungeons
         {
             foreach (var room in _dungeon.Rooms)
             {
-                if (room != Start)
+                if (room == _start || room == _end || room == _special)
                 {
                     continue;
                 }
-                AddEnemy(room.Center + new Vector2(1.5f));
+                AddEnemy(room.FloatCenter);
             }
         }
 
@@ -99,7 +93,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
 
         private void AddPlayer()
         {
-            _heroFactory.Add((Start.Center + new Vector2(0.5f)) * _configuration.WallSize);
+            _heroFactory.Add((_start.FloatCenter) * _configuration.WallSize);
         }
 
         private void AddWalls()

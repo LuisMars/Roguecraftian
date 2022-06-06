@@ -83,6 +83,15 @@ public class CollisionService
         ReactToCollission();
     }
 
+    internal void RemoveDead()
+    {
+        var toRemove = _targetDataDictionary.Where(x => x.Key.Actor is Creature creature && creature.IsDead);
+        foreach (var dead in toRemove)
+        {
+            Remove(dead.Key);
+        }
+    }
+
     private static Vector2 CalculatePenetrationVector(IShapeF a, IShapeF b)
     {
         return (a, b) switch

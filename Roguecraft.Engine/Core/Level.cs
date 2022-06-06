@@ -87,7 +87,7 @@ namespace Roguecraft.Engine.Core
 
             _textureRenderer.Render(_spriteBatch);
             _particleRenderer.Render(_spriteBatch);
-            //_shapeRenderer.Render(_spriteBatch);
+            _shapeRenderer.Render(_spriteBatch);
             _spriteBatch.End();
 
             _visibilityRenderer.Render(_spriteBatch);
