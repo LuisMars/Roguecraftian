@@ -29,7 +29,6 @@ public class HudRenderer
         spriteBatch.DrawString(_font, $"HP: {health}", new(8, 8), _color);
         spriteBatch.DrawString(_font, $"FPS: {(int)_frameCounter.AverageFramesPerSecond}", new(8, 32), _color);
         spriteBatch.DrawString(_font, $"Slowness: {_frameCounter.Slowness:F2}", new(8, 64), _color);
-        spriteBatch.DrawString(_font, $"Speed: {hero.Speed}", new(8, 96), _color);
 
         spriteBatch.End();
     }

@@ -77,7 +77,7 @@ public class VisibilityComputer : IVisibilityComputer
         // ones intersect the initial sweep line, and then sort them.
         for (int pass = 0; pass < 2; pass++)
         {
-            foreach (EndPoint p in endpoints)
+            foreach (var p in endpoints)
             {
                 var currentOld = open.Count == 0 ? null : open.First.Value;
 
@@ -254,8 +254,8 @@ public class VisibilityComputer : IVisibilityComputer
     // Processess segments so that we can sort them later
     private void UpdateSegments()
     {
-        Parallel.ForEach(_segments, segment =>
-        //foreach (Segment segment in _segments)
+        //Parallel.ForEach(_segments, segment =>
+        foreach (Segment segment in _segments)
         {
             // NOTE: future optimization: we could record the quadrant
             // and the y/x or x/y ratio, and sort by (quadrant,
@@ -279,6 +279,6 @@ public class VisibilityComputer : IVisibilityComputer
 
             segment.P1.Begin = dAngle > 0.0f;
             segment.P2.Begin = !segment.P1.Begin;
-        });
+        };
     }
 }

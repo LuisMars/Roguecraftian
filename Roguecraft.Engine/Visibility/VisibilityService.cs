@@ -26,11 +26,6 @@ public class VisibilityService
 
     public List<TriangleF> Triangles { get; private set; }
 
-    internal void Init(Actor sourceActor)
-    {
-        Triangles = _extendedVisibility.Init(sourceActor);
-    }
-
     internal bool IsVisible(Vector2 position, IShapeF shape)
     {
         return Triangles.Any(t =>
@@ -41,5 +36,10 @@ public class VisibilityService
             }
             return t.Intersects(shape);
         });
+    }
+
+    internal void Update(Actor sourceActor)
+    {
+        Triangles = _extendedVisibility.Calculate(sourceActor);
     }
 }

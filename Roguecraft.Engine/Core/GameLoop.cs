@@ -18,15 +18,14 @@ public class GameLoop
 
     public void Update(float deltaTime)
     {
-        UpdateSimulation(deltaTime);
-
-        _visibilityService.Init(_actorPool.Hero);
+        _visibilityService.Update(_actorPool.Hero);
 
         foreach (var actor in _actorPool.Actors)
         {
             actor.CalculateVisibility(_visibilityService);
             actor.TakeTurn(deltaTime)?.Perform(deltaTime);
         }
+        UpdateSimulation(deltaTime);
     }
 
     internal void UpdateTimers(float deltaTime)

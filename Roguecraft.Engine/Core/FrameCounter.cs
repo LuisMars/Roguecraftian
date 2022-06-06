@@ -12,7 +12,7 @@ public class FrameCounter
 
     public float AverageFramesPerSecond { get; private set; }
     public float CurrentFramesPerSecond { get; private set; }
-    public int SlowFrames => _sampleBuffer.Count(x => x < 55);
+    public int SlowFrames => _sampleBuffer.Count(x => x < 50);
     public float Slowness => 1f * SlowFrames / _sampleBuffer.Count;
     public long TotalFrames { get; private set; }
     public float TotalSeconds { get; private set; }

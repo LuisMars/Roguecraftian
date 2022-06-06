@@ -2,7 +2,6 @@
 using MonoGame.Extended;
 using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Components;
-using Roguecraft.Engine.Helpers;
 using Roguecraft.Engine.Simulation;
 using System.Collections.Concurrent;
 
@@ -19,25 +18,34 @@ internal class ExtendedVisibility
         _visibilityComputer = new VisibilityComputer();
     }
 
-    public List<TriangleF> Init(Actor sourceActor, float radius = 1000)
+    public List<TriangleF> Calculate(Actor sourceActor, float radius = 1000)
     {
         var origin = sourceActor.Position;
         _visibilityComputer.Reset(origin, radius);
         var collidables = _collisionService.Collisions;
         var radiusSquared = radius * radius;
-        var viewBounds = new RectangleF((int)(origin.X - radius), (int)(origin.Y - radius), (int)(radius * 2), (int)(radius * 2));
+        var viewBounds = new RectangleF(origin.X - radius, origin.Y - radius, radius * 2, radius * 2);
 
-        Parallel.ForEach(collidables, (collidable) =>
+        foreach (var collidable in collidables)
         {
             AddOccluders(_visibilityComputer, sourceActor, collidable, radiusSquared, viewBounds, origin);
-        });
+        }
+        //Parallel.ForEach(collidables, (collidable) =>
+        //{
+        //    AddOccluders(_visibilityComputer, sourceActor, collidable, radiusSquared, viewBounds, origin);
+        //});
 
         var points = _visibilityComputer.Compute();
         var triangles = new ConcurrentBag<TriangleF>();
-        Parallel.For(0, points.Count, i =>
+
+        for (var i = 0; i < points.Count; i++)
         {
             AddTriangles(i, points, triangles, origin);
-        });
+        }
+        //Parallel.For(0, points.Count, i =>
+        //{
+        //    AddTriangles(i, points, triangles, origin);
+        //});
 
         return triangles.ToList();
     }
@@ -55,13 +63,17 @@ internal class ExtendedVisibility
         var shape = collidable.Bounds;
         if (shape is CircleF circle)
         {
-            if (!viewBounds.Contains(circle))
+            if ((origin - (Vector2)circle.Center).LengthSquared() > radiusSquared)
             {
                 return;
             }
+            //if (!viewBounds.Contains(circle))
+            //{
+            //    return;
+            //}
             circle.Radius *= 0.75f;
             var sides = 6f;
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < sides / 2; i++)
             {
                 var pointA = circle.BoundaryPointAt(MathHelper.ToRadians(i * 360 / sides));
                 var pointB = circle.BoundaryPointAt(MathHelper.ToRadians((i + 3) * 360 / sides));
@@ -72,10 +84,14 @@ internal class ExtendedVisibility
 
         if (shape is RectangleF rect)
         {
-            if (!viewBounds.Contains(rect))
+            if ((origin - (Vector2)rect.Center).LengthSquared() > radiusSquared)
             {
                 return;
             }
+            //if (!viewBounds.Contains(rect))
+            //{
+            //    return;
+            //}
             visibilityComputer.AddLineOccluder(rect.TopLeft, rect.BottomRight);
             visibilityComputer.AddLineOccluder(rect.BottomLeft, rect.TopRight);
         }
