@@ -23,17 +23,19 @@ public class CameraService
     internal void Update(int width, int height, float deltaTime)
     {
         var hero = _actorPool.Hero;
-        var center = hero.Position;
         var speed = hero.Stats.Speed;
-        var direction = hero.WalkAction.Direction;
+        var currentSpeed = hero.Speed / deltaTime;
+        var relativeSpeed = currentSpeed / speed;
+
+        var cameraPosition = hero.Position;
         if (_camera.Position != Vector2.Zero)
         {
-            center = Vector2.Lerp(_camera.Position, hero.Position + direction * speed * 0.5f, 0.025f);
+            cameraPosition = _camera.Position;
         }
+        var target = hero.Position + currentSpeed * 2;
+        var center = Vector2.Lerp(cameraPosition, target, deltaTime);
         _camera.SetPosition(center);
-
-        var newZoom = MathF.Max(0.5f, 1f - direction.Length());
-        _camera.Zoom = MathHelper.Lerp(_camera.Zoom, newZoom, deltaTime);
+        _camera.Zoom = Math.Max(0.5f, MathHelper.Lerp(_camera.Zoom, 1 - relativeSpeed.Length(), deltaTime));
         _camera.Rotation = 0;
         _camera.Update(width, height);
         if (_actorPool.Hero.HurtTimer?.IsActive ?? false)

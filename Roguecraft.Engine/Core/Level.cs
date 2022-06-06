@@ -58,9 +58,6 @@ namespace Roguecraft.Engine.Core
 
             _dungeonService = new DungeonService(_configuration, _collisionService, _heroFactory, _enemyFactory, _wallFactory, _doorFactory);
 
-            //_heroFactory.Add(100, 100, "Hero");
-            //_enemyFactory.Add(100, 160);
-            //_wallFactory.Add(100, 190);
             _spriteBatch = new SpriteBatch(_graphicsDevice);
 
             _cameraService = new CameraService(_actorPool, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);

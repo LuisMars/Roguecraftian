@@ -111,7 +111,7 @@ public class VisibilityRenderer
             _primitiveDrawing.DrawSolidPolygon(Vector2.Zero, new[] { triangle.VertexA, triangle.VertexB, triangle.VertexC }, Color.White, false);
             current++;
         }
-        foreach (var entity in _actorPool.Actors.Where(a => a.Visibility.IsVisibleByPlayer))
+        foreach (var entity in _actorPool.Actors.Where(a => a.Visibility.IsVisibleByHero))
         {
             var collidableComponent = entity.Collision;
             if (collidableComponent is null)

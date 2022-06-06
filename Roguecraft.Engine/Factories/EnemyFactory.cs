@@ -1,5 +1,4 @@
-﻿using Roguecraft.Engine.Actions;
-using Roguecraft.Engine.Actors;
+﻿using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Components;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Core;
@@ -15,18 +14,21 @@ public class EnemyFactory : CreatureFactory<Enemy>
     {
     }
 
-    protected override void OnCreate(Enemy creature)
+    protected override void OnCreate(Enemy enemy)
     {
         var stats = new Stats
         {
             MaxHealth = 2,
-            Speed = Configuration.BaseCreatureSpeed * 0.75f,
-            DefaultAttack = new BasicAttackAction(creature)
+            Speed = Configuration.BaseCreatureSpeed * 0.75f
         };
-        creature.Name = "Enemy";
-        creature.Texture = ContentRepository.Enemy;
-        creature.Stats = stats;
-        creature.Color = Configuration.EnemyColor.ToColor();
-        creature.Hero = ActorPool.Hero;
+        enemy.Name = "Enemy";
+        enemy.Texture = ContentRepository.Enemy;
+        enemy.Stats = stats;
+        enemy.Color = Configuration.EnemyColor.ToColor();
+        enemy.Hero = ActorPool.Hero;
+
+        //enemy.AvailableActions.Add(new HeroVisibleTrigger(), new BasicAttackAction(enemy));
+        //enemy.AvailableActions.Add(new HeroNotVisibleTrigger(), new ToggleDoorAction(enemy));
+        //enemy.AvailableActions.Add(new AutoTrigger(), new ChaseHeroAction(enemy, ActorPool.Hero));
     }
 }

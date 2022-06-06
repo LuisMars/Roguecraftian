@@ -1,4 +1,4 @@
-﻿using Roguecraft.Engine.Actions;
+﻿using Roguecraft.Engine.Actions.Combat;
 
 namespace Roguecraft.Engine.Components;
 

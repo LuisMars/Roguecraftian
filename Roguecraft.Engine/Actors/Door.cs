@@ -14,7 +14,7 @@ namespace Roguecraft.Engine.Actors
         public override GameAction? TakeTurn(float deltaTime)
         {
             WasOpen = IsOpen;
-            return NullAction;
+            return null;
         }
 
         internal void Toggle()

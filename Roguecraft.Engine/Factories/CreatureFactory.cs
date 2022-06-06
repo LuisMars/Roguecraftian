@@ -21,8 +21,9 @@ public abstract class CreatureFactory<TActor> : ActorFactoryBase<TActor> where T
         var creature = new TActor
         {
             Position = position,
+            LastPosition = position
         };
-
+        creature.AvailableActions = new AvailableActions(creature);
         OnCreate(creature);
         creature.Health = creature.Stats.MaxHealth;
 
@@ -46,8 +47,8 @@ public abstract class CreatureFactory<TActor> : ActorFactoryBase<TActor> where T
         };
         CollisionService.Insert(creature.AreaOfInfluence);
 
-        creature.WalkAction = new WalkAction(creature);
-        creature.ToggleDoorAction = new ToggleDoorAction(creature);
+        //creature.WalkAction = new MoveAction(creature);
+        //creature.ToggleDoorAction = new ToggleDoorAction(creature);
         return creature;
     }
 

@@ -8,13 +8,16 @@ namespace Roguecraft.Engine.Actors;
 public abstract class Creature : Actor
 {
     public Collision AreaOfInfluence { get; set; }
+    public AvailableActions AvailableActions { get; set; }
+    public Vector2 Direction { get; set; }
     public float DistanceWalked { get; set; }
     public float Energy { get; set; }
+    public Vector2 FootstepDistance { get; set; }
     public int Health { get; set; }
     public ActionTimer HurtTimer { get; } = new();
+    public Vector2 LastPosition { get; set; }
+    public Vector2 Speed => Position - LastPosition;
     public Stats Stats { get; set; }
-    public ToggleDoorAction ToggleDoorAction { get; set; }
-    public WalkAction WalkAction { get; set; }
 
     public override void AfterUpdate(float deltaTime)
     {
@@ -31,6 +34,7 @@ public abstract class Creature : Actor
 
     public override GameAction? TakeTurn(float deltaTime)
     {
+        LastPosition = Position;
         Energy += Stats.Speed * deltaTime;
         Energy = Math.Min(0, Energy);
         return OnTakeTurn(deltaTime);
@@ -40,61 +44,6 @@ public abstract class Creature : Actor
     {
         base.UpdateSimulationData();
         AreaOfInfluence.Update();
-    }
-
-    protected abstract bool CanAttack();
-
-    protected abstract bool CanOpenDoor();
-
-    protected abstract bool CanWalk(out Vector2 direction);
-
-    protected bool TryAttack(out AttackAction attack)
-    {
-        attack = null;
-
-        if (Energy < 0 || !CanAttack())
-        {
-            return false;
-        }
-        var creatureEvent = AreaOfInfluence.LastEvents.FirstOrDefault(x => !x.Other.IsSensor && x.Other.Actor is Creature creature && creature != this);
-        if (creatureEvent is null)
-        {
-            return false;
-        }
-        var creature = (Creature)creatureEvent.Other.Actor;
-        Stats.DefaultAttack.BindTarget(creature);
-        attack = Stats.DefaultAttack;
-        return true;
-    }
-
-    protected bool TryOpenDoor()
-    {
-        if (Energy < 0 || !CanOpenDoor())
-        {
-            return false;
-        }
-
-        var door = AreaOfInfluence.LastEvents.FirstOrDefault(e => e.Other.Actor is Door);
-        var isInsideDoor = Collision.LastEvents.Any(e => e.Other.Actor is Door && e.PenetrationVector.LengthSquared() > 100);
-        if (door is null || isInsideDoor)
-        {
-            return false;
-        }
-        ToggleDoorAction.BindTarget((Door)door.Other.Actor);
-        return true;
-    }
-
-    protected bool TryWalk()
-    {
-        if (!CanWalk(out var direction))
-        {
-            WalkAction.Set(direction);
-            return false;
-        }
-
-        WalkAction.Set(direction);
-
-        return true;
     }
 
     private void UpdateTimers(float deltaTime)

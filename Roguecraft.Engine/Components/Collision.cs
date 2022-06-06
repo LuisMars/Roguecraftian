@@ -25,7 +25,6 @@ public class Collision
 
     public bool IsFixed { get; set; }
     public bool IsSensor { get; set; }
-    public HashSet<CollisionArgs> LastEvents { get; set; } = new();
 
     public Vector2 Origin
     {
@@ -54,6 +53,12 @@ public class Collision
     }
 
     internal List<CollisionArgs> InternalEvents { get; set; } = new();
+    private HashSet<CollisionArgs> LastEvents { get; set; } = new();
+
+    public CollisionArgs? FirstOrDefault<TActor>(Func<CollisionArgs, bool>? extraConditions = null) where TActor : Actor
+    {
+        return LastEvents.FirstOrDefault(e => e.Other.Actor is TActor && (extraConditions?.Invoke(e) ?? true));
+    }
 
     internal void AddEvent(CollisionArgs collisionInfo)
     {

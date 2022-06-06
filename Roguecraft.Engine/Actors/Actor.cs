@@ -14,7 +14,6 @@ public abstract class Actor
     public Collision Collision { get; set; }
     public Color Color { get; set; }
     public string Name { get; set; }
-    public NullAction NullAction { get; init; }
 
     public Vector2 Origin
     {
@@ -64,8 +63,8 @@ public abstract class Actor
     {
         var isVisible = visibilityService.IsVisible(Position, Collision.Bounds);
 
-        Visibility.IsVisibleByPlayer = isVisible;
-        if (Collision.IsFixed && Visibility.IsVisibleByPlayer)
+        Visibility.IsVisibleByHero = isVisible;
+        if (Collision.IsFixed && Visibility.IsVisibleByHero)
         {
             Visibility.TimesSeen++;
         }

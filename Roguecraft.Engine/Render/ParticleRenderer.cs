@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Particles;
 using Roguecraft.Engine.Actors;
@@ -17,8 +18,8 @@ public class ParticleRenderer
     private readonly ParticleEffect _fireParticle;
     private readonly ParticleEffect _footstepParticle;
     private readonly ParticleEffect _healParticle;
-    private readonly int _stepDrawOffset;
-    private readonly int _stepFrequencyBaseSquared;
+    private readonly float _stepDrawOffset;
+    private readonly float _stepFrequencyBaseSquared;
 
     public ParticleRenderer(Configuration configuration, ContentRepository contentRepository, ActorPool actorPool)
     {
@@ -28,8 +29,11 @@ public class ParticleRenderer
         _fireParticle = new FireParticle(configuration, contentRepository);
         _healParticle = new HealParticle(configuration, contentRepository);
         _footstepParticle = new FootstepsParticle(configuration, contentRepository);
-        _stepFrequencyBaseSquared = configuration.StepFrequencyBase * configuration.StepFrequencyBase;
-        _stepDrawOffset = configuration.StepFrequencyBase / configuration.StepDrawOffset;
+        //_stepFrequencyBaseSquared = configuration.StepFrequencyBase * configuration.StepFrequencyBase;
+        //_stepDrawOffset = configuration.StepFrequencyBase / configuration.StepDrawOffset;
+        var diameter = configuration.BaseCreatureRadius * 2;
+        _stepFrequencyBaseSquared = diameter * diameter;
+        _stepDrawOffset = configuration.BaseCreatureRadius * 0.75f;
     }
 
     public void Render(SpriteBatch spriteBatch)
@@ -42,7 +46,7 @@ public class ParticleRenderer
     {
         foreach (var creature in _actorPool.Actors.Where(a => a is Creature).Cast<Creature>())
         {
-            if (!creature.Visibility.IsVisibleByPlayer && !creature.Visibility.CanBeDrawn)
+            if (!creature.Visibility.IsVisibleByHero && !creature.Visibility.CanBeDrawn)
             {
                 continue;
             }
@@ -64,14 +68,16 @@ public class ParticleRenderer
 
     private void TriggerFootsteps(Creature creature)
     {
-        var direction = creature.WalkAction.CurrentPosition - creature.WalkAction.LastPosition;
-        var lengthSquared = direction.LengthSquared();
+        creature.FootstepDistance += creature.Position - creature.LastPosition;
+
+        var lengthSquared = creature.FootstepDistance.LengthSquared();
         if (lengthSquared <= _stepFrequencyBaseSquared)
         {
             return;
         }
-        creature.WalkAction.LastPosition = creature.WalkAction.CurrentPosition;
-        var rotation = creature.WalkAction.Direction.ToAngle() + MathF.PI * 0.5f;
+        var direction = creature.Direction;
+        creature.FootstepDistance = new Vector2();
+        var rotation = direction.ToAngle() + MathF.PI * 0.5f;
         _footstepParticle.Emitters[0].Parameters.Rotation = new(rotation - 0.2f, rotation + 0.2f);
 
         var stepOffset = direction;

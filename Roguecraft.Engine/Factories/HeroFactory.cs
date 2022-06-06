@@ -1,4 +1,9 @@
-﻿using Roguecraft.Engine.Actions;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using Roguecraft.Engine.Actions.Combat;
+using Roguecraft.Engine.Actions.Interaction;
+using Roguecraft.Engine.Actions.Movement;
+using Roguecraft.Engine.Actions.Triggers;
 using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Components;
 using Roguecraft.Engine.Content;
@@ -15,17 +20,30 @@ public class HeroFactory : CreatureFactory<Hero>
     {
     }
 
-    protected override void OnCreate(Hero creature)
+    protected override void OnCreate(Hero hero)
     {
         var stats = new Stats
         {
             MaxHealth = 2,
-            Speed = Configuration.BaseCreatureSpeed,
-            DefaultAttack = new BasicAttackAction(creature)
+            Speed = Configuration.BaseCreatureSpeed
         };
-        creature.Name = "Hero";
-        creature.Texture = ContentRepository.Creature;
-        creature.Stats = stats;
-        creature.Color = Configuration.PlayerColor.ToColor();
+        hero.Name = "Hero";
+        hero.Texture = ContentRepository.Creature;
+        hero.Stats = stats;
+        hero.Color = Configuration.PlayerColor.ToColor();
+
+        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.Space } }, new ToggleDoorAction(hero));
+        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.Space } }, new BasicAttackAction(hero));
+        //hero.AvailableActions.Add(new AutoTrigger(), new MoveDirectionAction(hero, new Vector2(0, 1)));
+
+        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.W, Keys.A }, Except = new() { Keys.S, Keys.D } }, new MoveDirectionAction(hero, new Vector2(-1, -1)));
+        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.W, Keys.D }, Except = new() { Keys.S, Keys.A } }, new MoveDirectionAction(hero, new Vector2(1, -1)));
+        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.S, Keys.A }, Except = new() { Keys.W, Keys.D } }, new MoveDirectionAction(hero, new Vector2(-1, 1)));
+        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.S, Keys.D }, Except = new() { Keys.W, Keys.A } }, new MoveDirectionAction(hero, new Vector2(1, 1)));
+
+        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.W }, Except = new() { Keys.A, Keys.S, Keys.D } }, new MoveDirectionAction(hero, new Vector2(0, -1)));
+        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.S }, Except = new() { Keys.W, Keys.A, Keys.D } }, new MoveDirectionAction(hero, new Vector2(0, 1)));
+        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.A }, Except = new() { Keys.W, Keys.S, Keys.D } }, new MoveDirectionAction(hero, new Vector2(-1, 0)));
+        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.D }, Except = new() { Keys.W, Keys.A, Keys.S } }, new MoveDirectionAction(hero, new Vector2(1, 0)));
     }
 }
