@@ -11,9 +11,10 @@ public class WalkAction : GameAction
         EngeryCost = 0;
     }
 
-    public Vector2 Direction { get; private set; }
     public Vector2 CurrentPosition { get; set; }
+    public Vector2 Direction { get; private set; }
     public Vector2 LastPosition { get; set; }
+
     public void Set(Vector2 direction)
     {
         if (direction.LengthSquared() != 0)

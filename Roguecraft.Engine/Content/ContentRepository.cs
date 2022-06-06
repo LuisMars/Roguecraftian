@@ -21,6 +21,7 @@ namespace Roguecraft.Engine.Content
         public TextureRegion2D Door { get; private set; }
         public GameSound DoorCloseSound { get; private set; }
         public GameSound DoorOpenSound { get; private set; }
+        public TextureRegion2D Enemy { get; private set; }
         public SpriteFont Font { get; private set; }
         public TextureRegion2D Footstep { get; private set; }
         public GameSound HitSound { get; private set; }
@@ -31,6 +32,7 @@ namespace Roguecraft.Engine.Content
         private void Load()
         {
             Creature = LoadTextureRegion("person");
+            Enemy = LoadTextureRegion("enemy");
             Wall = LoadTextureRegion("wall");
             Door = LoadTextureRegion("door");
             Line = LoadTextureRegion("line");

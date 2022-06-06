@@ -41,6 +41,10 @@ public abstract class Actor
     public TextureRegion2D Texture { get; set; }
     public VisibilityProperties Visibility { get; set; } = new();
 
+    public virtual void AfterUpdate(float deltaTime)
+    {
+    }
+
     public virtual void ClearSimulationData()
     {
         Collision.Clear();
@@ -60,8 +64,8 @@ public abstract class Actor
     {
         var isVisible = visibilityService.IsVisible(Position, Collision.Bounds);
 
-        Visibility.IsVisible = isVisible;
-        if (Collision.IsFixed && Visibility.IsVisible)
+        Visibility.IsVisibleByPlayer = isVisible;
+        if (Collision.IsFixed && Visibility.IsVisibleByPlayer)
         {
             Visibility.TimesSeen++;
         }

@@ -5,13 +5,17 @@ namespace Roguecraft.Engine.Actors;
 
 public class Enemy : Creature
 {
+    public Hero Hero { get; set; }
+
     public override GameAction? OnTakeTurn(float deltaTime)
     {
-        Energy += Stats.Speed * deltaTime;
-        Energy = Math.Min(0, Energy);
         if (TryAttack(out var attack))
         {
             return attack;
+        }
+        if (TryFollowHero())
+        {
+            return OnFollowHero();
         }
         if (TryOpenDoor())
         {
@@ -27,7 +31,7 @@ public class Enemy : Creature
 
     protected override bool CanAttack()
     {
-        return true;
+        return AreaOfInfluence.InternalEvents.Any(x => x.Other.Actor == Hero);
     }
 
     protected override bool CanOpenDoor()
@@ -39,5 +43,16 @@ public class Enemy : Creature
     {
         direction = Vector2.Zero;
         return true;
+    }
+
+    private GameAction OnFollowHero()
+    {
+        WalkAction.Set(Hero.Position - Position);
+        return WalkAction;
+    }
+
+    private bool TryFollowHero()
+    {
+        return Visibility.IsVisibleByPlayer;
     }
 }

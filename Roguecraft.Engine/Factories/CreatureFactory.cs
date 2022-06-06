@@ -5,12 +5,11 @@ using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Components;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Core;
-using Roguecraft.Engine.Helpers;
 using Roguecraft.Engine.Simulation;
 
 namespace Roguecraft.Engine.Factories;
 
-public class CreatureFactory<TActor> : ActorFactoryBase<TActor> where TActor : Creature, new()
+public abstract class CreatureFactory<TActor> : ActorFactoryBase<TActor> where TActor : Creature, new()
 {
     public CreatureFactory(Configuration configuration, ActorPool actorPool, CollisionService collisionService, ContentRepository contentRepository) :
                       base(configuration, actorPool, collisionService, contentRepository)
@@ -21,18 +20,10 @@ public class CreatureFactory<TActor> : ActorFactoryBase<TActor> where TActor : C
     {
         var creature = new TActor
         {
-            Texture = ContentRepository.Creature,
-            Name = name ?? "Creature",
             Position = position,
         };
-        creature.Color = Configuration.GetCreatureColor(creature);
-        var stats = new Stats
-        {
-            MaxHealth = 2,
-            Speed = Configuration.BaseCreatureSpeed,
-            DefaultAttack = new BasicAttackAction(creature)
-        };
-        creature.Stats = stats;
+
+        OnCreate(creature);
         creature.Health = creature.Stats.MaxHealth;
 
         creature.Collision = new Collision
@@ -59,4 +50,6 @@ public class CreatureFactory<TActor> : ActorFactoryBase<TActor> where TActor : C
         creature.ToggleDoorAction = new ToggleDoorAction(creature);
         return creature;
     }
+
+    protected abstract void OnCreate(TActor creature);
 }

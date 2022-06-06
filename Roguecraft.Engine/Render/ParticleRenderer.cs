@@ -42,7 +42,7 @@ public class ParticleRenderer
     {
         foreach (var creature in _actorPool.Actors.Where(a => a is Creature).Cast<Creature>())
         {
-            if (!creature.Visibility.IsVisible && !creature.Visibility.CanBeDrawn)
+            if (!creature.Visibility.IsVisibleByPlayer && !creature.Visibility.CanBeDrawn)
             {
                 continue;
             }
@@ -66,7 +66,7 @@ public class ParticleRenderer
     {
         var direction = creature.WalkAction.CurrentPosition - creature.WalkAction.LastPosition;
         var lengthSquared = direction.LengthSquared();
-        if (lengthSquared <= _stepFrequencyBaseSquared - (creature.Stats.Speed * creature.Stats.Speed))
+        if (lengthSquared <= _stepFrequencyBaseSquared)
         {
             return;
         }

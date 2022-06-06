@@ -29,29 +29,42 @@ public class SoundService
         sound.PlayRandom(volume, pan);
     }
 
-    public void Update()
+    public void Play()
     {
         foreach (var actor in _actorPool.Actors)
         {
-            if (actor is Creature creature)
-            {
-                if (creature.HurtTimer.JustTriggered)
-                {
-                    Play(_contentRepository.HitSound, actor.Position);
-                }
-            }
+            PlayCreature(actor);
+            PlayDoor(actor);
+        }
+    }
 
-            if (actor is Door door)
-            {
-                if (door.JustOpened)
-                {
-                    Play(_contentRepository.DoorOpenSound, actor.Position);
-                }
-                if (door.JustClosed)
-                {
-                    Play(_contentRepository.DoorCloseSound, actor.Position);
-                }
-            }
+    private void PlayCreature(Actor actor)
+    {
+        if (actor is not Creature creature)
+        {
+            return;
+        }
+
+        if (!creature.HurtTimer.JustTriggered)
+        {
+            return;
+        }
+        Play(_contentRepository.HitSound, actor.Position);
+    }
+
+    private void PlayDoor(Actor actor)
+    {
+        if (actor is not Door door)
+        {
+            return;
+        }
+        if (door.JustOpened)
+        {
+            Play(_contentRepository.DoorOpenSound, actor.Position);
+        }
+        if (door.JustClosed)
+        {
+            Play(_contentRepository.DoorCloseSound, actor.Position);
         }
     }
 }

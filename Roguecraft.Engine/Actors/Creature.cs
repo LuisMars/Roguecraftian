@@ -16,6 +16,11 @@ public abstract class Creature : Actor
     public ToggleDoorAction ToggleDoorAction { get; set; }
     public WalkAction WalkAction { get; set; }
 
+    public override void AfterUpdate(float deltaTime)
+    {
+        UpdateTimers(deltaTime);
+    }
+
     public override void ClearSimulationData()
     {
         base.ClearSimulationData();
@@ -26,7 +31,6 @@ public abstract class Creature : Actor
 
     public override GameAction? TakeTurn(float deltaTime)
     {
-        UpdateTimers(deltaTime);
         Energy += Stats.Speed * deltaTime;
         Energy = Math.Min(0, Energy);
         return OnTakeTurn(deltaTime);

@@ -19,7 +19,7 @@ public class TextureRenderer
         foreach (var actor in _actorPool.Actors.Where(a => a.Texture is not null))
         {
             var color = actor.Color;
-            if (!actor.Visibility.IsVisible && !actor.Visibility.CanBeDrawn)
+            if (!actor.Visibility.IsVisibleByPlayer && !actor.Visibility.CanBeDrawn)
             {
                 continue;
             }

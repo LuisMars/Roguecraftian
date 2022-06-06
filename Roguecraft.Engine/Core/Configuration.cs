@@ -16,8 +16,8 @@
         public string PotionColor { get; } = "#5362b6";
         public int RoomsPerDungeon { get; } = 30;
         public string SplashColor { get; } = "#3CA29C";
-        public int StepDrawOffset { get; } = 16;
-        public int StepFrequencyBase { get; } = 512;
+        public int StepDrawOffset { get; } = 6;
+        public int StepFrequencyBase { get; } = 200;
         public string WallColor { get; } = "#323230";
         public int WallSize { get; } = 100;
     }

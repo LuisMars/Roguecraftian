@@ -8,16 +8,15 @@ namespace Roguecraft.Engine.Factories;
 
 public abstract class ActorFactoryBase<TActor> : IActorFactory where TActor : Actor
 {
-    private readonly ActorPool _actorPool;
-
     public ActorFactoryBase(Configuration configuration, ActorPool actorPool, CollisionService collisionService, ContentRepository contentRepository)
     {
-        _actorPool = actorPool;
+        ActorPool = actorPool;
         CollisionService = collisionService;
         ContentRepository = contentRepository;
         Configuration = configuration;
     }
 
+    protected ActorPool ActorPool { get; }
     protected CollisionService CollisionService { get; }
     protected Configuration Configuration { get; }
     protected ContentRepository ContentRepository { get; }
@@ -30,10 +29,10 @@ public abstract class ActorFactoryBase<TActor> : IActorFactory where TActor : Ac
     public void Add(Vector2 position, string? name = null)
     {
         var actor = Create(position, name);
-        _actorPool.Add(actor);
+        ActorPool.Add(actor);
         if (actor is Hero hero)
         {
-            _actorPool.Hero = hero;
+            ActorPool.Hero = hero;
         }
     }
 

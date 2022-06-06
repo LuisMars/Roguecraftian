@@ -29,6 +29,14 @@ public class GameLoop
         }
     }
 
+    internal void UpdateTimers(float deltaTime)
+    {
+        foreach (var actor in _actorPool.Actors)
+        {
+            actor.AfterUpdate(deltaTime);
+        }
+    }
+
     private void UpdateSimulation(float deltaTime)
     {
         foreach (var actor in _actorPool.Actors)

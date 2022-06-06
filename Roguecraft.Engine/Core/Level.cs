@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Cameras;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Factories;
@@ -24,12 +23,12 @@ namespace Roguecraft.Engine.Core
         private readonly ContentRepository _contentRepository;
         private readonly DoorFactory _doorFactory;
         private readonly DungeonService _dungeonService;
-        private readonly CreatureFactory<Enemy> _enemyFactory;
+        private readonly EnemyFactory _enemyFactory;
         private readonly FrameCounter _frameCounter;
         private readonly GameLoop _gameLoop;
         private readonly GraphicsDeviceManager _graphics;
         private readonly GraphicsDevice _graphicsDevice;
-        private readonly CreatureFactory<Hero> _heroFactory;
+        private readonly HeroFactory _heroFactory;
         private readonly HudRenderer _hudRenderer;
         private readonly ParticleRenderer _particleRenderer;
         private readonly ShapeRenderer _shapeRenderer;
@@ -52,8 +51,8 @@ namespace Roguecraft.Engine.Core
 
             _collisionService = new CollisionService(_actorPool);
 
-            _heroFactory = new CreatureFactory<Hero>(_configuration, _actorPool, _collisionService, _contentRepository);
-            _enemyFactory = new CreatureFactory<Enemy>(_configuration, _actorPool, _collisionService, _contentRepository);
+            _heroFactory = new HeroFactory(_configuration, _actorPool, _collisionService, _contentRepository);
+            _enemyFactory = new EnemyFactory(_configuration, _actorPool, _collisionService, _contentRepository);
             _wallFactory = new WallFactory(_configuration, _actorPool, _collisionService, _contentRepository);
             _doorFactory = new DoorFactory(_configuration, _actorPool, _collisionService, _contentRepository);
 
@@ -104,9 +103,9 @@ namespace Roguecraft.Engine.Core
         public void Update(float deltaTime)
         {
             _gameLoop.Update(deltaTime);
-
-            _soundService.Update();
+            _soundService.Play();
             _particleRenderer.Update(deltaTime);
+            _gameLoop.UpdateTimers(deltaTime);
         }
     }
 }

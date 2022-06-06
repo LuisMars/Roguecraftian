@@ -28,7 +28,7 @@ public class CameraService
         var direction = hero.WalkAction.Direction;
         if (_camera.Position != Vector2.Zero)
         {
-            center = Vector2.Lerp(_camera.Position, center + (direction * speed * 2), deltaTime);
+            center = Vector2.Lerp(_camera.Position, hero.Position + direction * speed * 0.5f, 0.025f);
         }
         _camera.SetPosition(center);
 
