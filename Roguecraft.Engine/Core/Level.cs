@@ -5,6 +5,7 @@ using Roguecraft.Engine.Cameras;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Factories;
 using Roguecraft.Engine.Helpers;
+using Roguecraft.Engine.Input;
 using Roguecraft.Engine.Procedural.Dungeons;
 using Roguecraft.Engine.Render;
 using Roguecraft.Engine.Simulation;
@@ -30,6 +31,7 @@ namespace Roguecraft.Engine.Core
         private readonly GraphicsDevice _graphicsDevice;
         private readonly HeroFactory _heroFactory;
         private readonly HudRenderer _hudRenderer;
+        private readonly InputManager _inputManager;
         private readonly ParticleRenderer _particleRenderer;
         private readonly PotionFactory _potionFactory;
         private readonly RandomGenerator _randomGenerator;
@@ -51,10 +53,10 @@ namespace Roguecraft.Engine.Core
             _configuration = new Configuration();
             _frameCounter = new FrameCounter();
             _actorPool = new ActorPool();
-
+            _inputManager = new InputManager();
             _collisionService = new CollisionService(_actorPool);
             _randomGenerator = new RandomGenerator();
-            _heroFactory = new HeroFactory(_configuration, _actorPool, _collisionService, _contentRepository, _randomGenerator);
+            _heroFactory = new HeroFactory(_configuration, _actorPool, _collisionService, _contentRepository, _randomGenerator, _inputManager);
             _enemyFactory = new EnemyFactory(_configuration, _actorPool, _collisionService, _contentRepository, _randomGenerator);
             _wallFactory = new WallFactory(_configuration, _actorPool, _collisionService, _contentRepository);
             _doorFactory = new DoorFactory(_configuration, _actorPool, _collisionService, _contentRepository);
@@ -104,6 +106,7 @@ namespace Roguecraft.Engine.Core
 
         public void Update(float deltaTime)
         {
+            _inputManager.Update();
             _gameLoop.Update(deltaTime);
             _soundService.Play();
             _particleRenderer.Update(deltaTime);

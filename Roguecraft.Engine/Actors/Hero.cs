@@ -1,15 +1,15 @@
 ﻿using MonoGame.Extended.Input;
 using Roguecraft.Engine.Actions;
+using Roguecraft.Engine.Input;
 
 namespace Roguecraft.Engine.Actors;
 
 public class Hero : Creature
 {
-    private KeyboardStateExtended KeyBoardState { get; set; }
+    public InputManager InputManager { get; set; }
 
     public override GameAction? OnTakeTurn(float deltaTime)
     {
-        KeyBoardState = KeyboardExtended.GetState();
-        return AvailableActions.GetNextAction(KeyBoardState);
+        return AvailableActions.GetNextAction(InputManager.State);
     }
 }

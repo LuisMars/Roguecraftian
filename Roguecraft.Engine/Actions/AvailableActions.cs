@@ -1,6 +1,6 @@
-﻿using MonoGame.Extended.Input;
-using Roguecraft.Engine.Actions.Triggers;
+﻿using Roguecraft.Engine.Actions.Triggers;
 using Roguecraft.Engine.Actors;
+using Roguecraft.Engine.Input;
 
 namespace Roguecraft.Engine.Actions;
 
@@ -20,7 +20,7 @@ public class AvailableActions
         Actions.Add((trigger, action));
     }
 
-    public GameAction GetNextAction(KeyboardStateExtended state)
+    public GameAction GetNextAction(InputState state)
     {
         var args = new ActionTriggerArgs
         {

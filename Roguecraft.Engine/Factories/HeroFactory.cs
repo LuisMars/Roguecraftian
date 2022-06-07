@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Roguecraft.Engine.Actions.Combat;
 using Roguecraft.Engine.Actions.Interaction;
 using Roguecraft.Engine.Actions.Movement;
@@ -9,15 +8,24 @@ using Roguecraft.Engine.Components;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Core;
 using Roguecraft.Engine.Helpers;
+using Roguecraft.Engine.Input;
 using Roguecraft.Engine.Simulation;
 
 namespace Roguecraft.Engine.Factories;
 
 public class HeroFactory : CreatureFactory<Hero>
 {
-    public HeroFactory(Configuration configuration, ActorPool actorPool, CollisionService collisionService, ContentRepository contentRepository, RandomGenerator randomGenerator) :
+    private readonly InputManager _inputManager;
+
+    public HeroFactory(Configuration configuration,
+                       ActorPool actorPool,
+                       CollisionService collisionService,
+                       ContentRepository contentRepository,
+                       RandomGenerator randomGenerator,
+                       InputManager inputManager) :
         base(configuration, actorPool, collisionService, contentRepository, randomGenerator)
     {
+        _inputManager = inputManager;
     }
 
     protected override void OnCreate(Hero hero)
@@ -32,20 +40,23 @@ public class HeroFactory : CreatureFactory<Hero>
         hero.Texture = ContentRepository.Creature;
         hero.Stats = stats;
         hero.Color = Configuration.PlayerColor.ToColor();
+        hero.InputManager = _inputManager;
 
-        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.E } }, new PickupItemAction(hero));
-        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.Space } }, new ConsumeItemAction(hero));
-        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.Space } }, new ToggleDoorAction(hero));
-        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.Space } }, new AttackSelectionAction(hero));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.Equip } }, new PickupItemAction(hero));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.QuickAction } }, new ConsumeItemAction(hero));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.QuickAction } }, new ToggleDoorAction(hero));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.QuickAction } }, new AttackSelectionAction(hero));
 
-        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.W, Keys.A }, Except = new() { Keys.S, Keys.D } }, new MoveDirectionAction(hero, new Vector2(-1, -1)));
-        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.W, Keys.D }, Except = new() { Keys.S, Keys.A } }, new MoveDirectionAction(hero, new Vector2(1, -1)));
-        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.S, Keys.A }, Except = new() { Keys.W, Keys.D } }, new MoveDirectionAction(hero, new Vector2(-1, 1)));
-        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.S, Keys.D }, Except = new() { Keys.W, Keys.A } }, new MoveDirectionAction(hero, new Vector2(1, 1)));
+        hero.AvailableActions.Add(new InputActionTrigger { LeftStick = true }, new JoystickMovementAction(hero, _inputManager));
 
-        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.W }, Except = new() { Keys.A, Keys.S, Keys.D } }, new MoveDirectionAction(hero, new Vector2(0, -1)));
-        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.S }, Except = new() { Keys.W, Keys.A, Keys.D } }, new MoveDirectionAction(hero, new Vector2(0, 1)));
-        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.A }, Except = new() { Keys.W, Keys.S, Keys.D } }, new MoveDirectionAction(hero, new Vector2(-1, 0)));
-        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.D }, Except = new() { Keys.W, Keys.A, Keys.S } }, new MoveDirectionAction(hero, new Vector2(1, 0)));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.MoveUp, InputAction.MoveLeft }, Except = new() { InputAction.MoveDown, InputAction.MoveRight } }, new MoveDirectionAction(hero, new Vector2(-1, -1)));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.MoveUp, InputAction.MoveRight }, Except = new() { InputAction.MoveDown, InputAction.MoveLeft } }, new MoveDirectionAction(hero, new Vector2(1, -1)));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.MoveDown, InputAction.MoveLeft }, Except = new() { InputAction.MoveUp, InputAction.MoveRight } }, new MoveDirectionAction(hero, new Vector2(-1, 1)));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.MoveDown, InputAction.MoveRight }, Except = new() { InputAction.MoveUp, InputAction.MoveLeft } }, new MoveDirectionAction(hero, new Vector2(1, 1)));
+
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.MoveUp }, Except = new() { InputAction.MoveLeft, InputAction.MoveDown, InputAction.MoveRight } }, new MoveDirectionAction(hero, new Vector2(0, -1)));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.MoveDown }, Except = new() { InputAction.MoveUp, InputAction.MoveLeft, InputAction.MoveRight } }, new MoveDirectionAction(hero, new Vector2(0, 1)));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.MoveLeft }, Except = new() { InputAction.MoveUp, InputAction.MoveDown, InputAction.MoveRight } }, new MoveDirectionAction(hero, new Vector2(-1, 0)));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.MoveRight }, Except = new() { InputAction.MoveUp, InputAction.MoveLeft, InputAction.MoveDown } }, new MoveDirectionAction(hero, new Vector2(1, 0)));
     }
 }
