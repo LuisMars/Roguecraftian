@@ -13,7 +13,7 @@ public class ActionTimer
         Elapsed += deltaTime;
     }
 
-    internal void Reset(float totalTime)
+    internal void Reset(float totalTime = 0.125f)
     {
         JustTriggered = true;
         TotalTime = totalTime;

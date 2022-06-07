@@ -85,7 +85,7 @@ public class CollisionService
 
     internal void RemoveDead()
     {
-        var toRemove = _targetDataDictionary.Where(x => x.Key.Actor is Creature creature && creature.IsDead);
+        var toRemove = _targetDataDictionary.Where(x => x.Key.Actor.IsPickedUp);
         foreach (var dead in toRemove)
         {
             Remove(dead.Key);

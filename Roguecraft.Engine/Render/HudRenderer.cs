@@ -55,9 +55,8 @@ public class HudRenderer
         var health = hero.Health;
         var energy = hero.Energy;
         var maxHealth = hero.Stats.MaxHealth;
-        var minimumEnergy = hero.Stats.Speed;
+        var minimumEnergy = hero.Stats.Speed * 2;
         var progressCenter = new Vector2((spriteBatch.GraphicsDevice.Viewport.Width - _progressBack.Width) / 2, 8);
-
 
         var clip = new Rectangle((int)progressCenter.X + 8, 0, _progressFront.Width, 1000);
         var healthPercent = 1 - (1f * health / maxHealth);

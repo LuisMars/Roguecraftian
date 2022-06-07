@@ -15,8 +15,8 @@ namespace Roguecraft.Engine.Factories;
 
 public class HeroFactory : CreatureFactory<Hero>
 {
-    public HeroFactory(Configuration configuration, ActorPool actorPool, CollisionService collisionService, ContentRepository contentRepository) :
-        base(configuration, actorPool, collisionService, contentRepository)
+    public HeroFactory(Configuration configuration, ActorPool actorPool, CollisionService collisionService, ContentRepository contentRepository, RandomGenerator randomGenerator) :
+        base(configuration, actorPool, collisionService, contentRepository, randomGenerator)
     {
     }
 
@@ -25,16 +25,18 @@ public class HeroFactory : CreatureFactory<Hero>
         var stats = new Stats
         {
             MaxHealth = 20,
-            Speed = Configuration.BaseCreatureSpeed
+            Speed = Configuration.BaseCreatureSpeed,
+            UnarmedAttack = new AttackAction(hero, RandomGenerator) { MinDamage = 1 }
         };
         hero.Name = "Hero";
         hero.Texture = ContentRepository.Creature;
         hero.Stats = stats;
         hero.Color = Configuration.PlayerColor.ToColor();
 
+        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.E } }, new PickupItemAction(hero));
+        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.Space } }, new ConsumeItemAction(hero));
         hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.Space } }, new ToggleDoorAction(hero));
-        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.Space } }, new BasicAttackAction(hero));
-        //hero.AvailableActions.Add(new AutoTrigger(), new MoveDirectionAction(hero, new Vector2(0, 1)));
+        hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.Space } }, new AttackSelectionAction(hero));
 
         hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.W, Keys.A }, Except = new() { Keys.S, Keys.D } }, new MoveDirectionAction(hero, new Vector2(-1, -1)));
         hero.AvailableActions.Add(new KeyPressedActionTrigger { Keys = new() { Keys.W, Keys.D }, Except = new() { Keys.S, Keys.A } }, new MoveDirectionAction(hero, new Vector2(1, -1)));

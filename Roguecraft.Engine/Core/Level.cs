@@ -31,6 +31,8 @@ namespace Roguecraft.Engine.Core
         private readonly HeroFactory _heroFactory;
         private readonly HudRenderer _hudRenderer;
         private readonly ParticleRenderer _particleRenderer;
+        private readonly PotionFactory _potionFactory;
+        private readonly RandomGenerator _randomGenerator;
         private readonly ShapeRenderer _shapeRenderer;
         private readonly SoundService _soundService;
         private readonly SpriteBatch _spriteBatch;
@@ -38,6 +40,7 @@ namespace Roguecraft.Engine.Core
         private readonly VisibilityRenderer _visibilityRenderer;
         private readonly VisibilityService _visibilityService;
         private readonly WallFactory _wallFactory;
+        private readonly WeaponFactory _weaponFactory;
 
         public Level(GraphicsDevice graphicsDevice, GraphicsDeviceManager graphics, ContentManager content)
         {
@@ -50,13 +53,15 @@ namespace Roguecraft.Engine.Core
             _actorPool = new ActorPool();
 
             _collisionService = new CollisionService(_actorPool);
-
-            _heroFactory = new HeroFactory(_configuration, _actorPool, _collisionService, _contentRepository);
-            _enemyFactory = new EnemyFactory(_configuration, _actorPool, _collisionService, _contentRepository);
+            _randomGenerator = new RandomGenerator();
+            _heroFactory = new HeroFactory(_configuration, _actorPool, _collisionService, _contentRepository, _randomGenerator);
+            _enemyFactory = new EnemyFactory(_configuration, _actorPool, _collisionService, _contentRepository, _randomGenerator);
             _wallFactory = new WallFactory(_configuration, _actorPool, _collisionService, _contentRepository);
             _doorFactory = new DoorFactory(_configuration, _actorPool, _collisionService, _contentRepository);
+            _potionFactory = new PotionFactory(_configuration, _actorPool, _collisionService, _contentRepository);
+            _weaponFactory = new WeaponFactory(_configuration, _actorPool, _collisionService, _contentRepository, _randomGenerator);
 
-            _dungeonService = new DungeonService(_configuration, _collisionService, _heroFactory, _enemyFactory, _wallFactory, _doorFactory);
+            _dungeonService = new DungeonService(_configuration, _collisionService, _heroFactory, _enemyFactory, _wallFactory, _doorFactory, _potionFactory, _weaponFactory);
 
             _spriteBatch = new SpriteBatch(_graphicsDevice);
 

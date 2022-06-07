@@ -1,17 +1,31 @@
 ﻿using Roguecraft.Engine.Actors;
+using Roguecraft.Engine.Helpers;
+using Roguecraft.Engine.Timers;
 
 namespace Roguecraft.Engine.Actions.Combat;
 
-public abstract class AttackAction : GameAction
+public class AttackAction : GameAction
 {
-    protected AttackAction(Creature actor) : base(actor)
+    private readonly RandomGenerator _random;
+
+    public AttackAction(RandomGenerator random) : this(null, random)
     {
-        EngeryCost = 1000;
+    }
+
+    public AttackAction(Creature actor, RandomGenerator random) : base(actor)
+    {
+        EngeryCost = 500;
+        _random = random;
     }
 
     public int MaxDamage { get; init; } = 1;
     public int MinDamage { get; init; } = 0;
     public Creature Target { get; private set; }
+
+    public int GetDamage()
+    {
+        return _random.FromRange(MinDamage, MaxDamage);
+    }
 
     public override bool TryPrepare()
     {
@@ -34,11 +48,20 @@ public abstract class AttackAction : GameAction
         Target = target;
     }
 
-    protected abstract void OnAttack(float deltaTime);
+    protected virtual int OnAttack(float deltaTime)
+    {
+        var damageDealt = GetDamage();
+        Target.Health -= damageDealt;
+        return damageDealt;
+    }
 
     protected override void OnPerform(float deltaTime)
     {
-        OnAttack(deltaTime);
-        Target.HurtTimer.Reset(0.125f);
+        var damageDealt = OnAttack(deltaTime);
+        if (damageDealt == 0)
+        {
+            return;
+        }
+        Target.Timers[TimerType.Hurt].Reset();
     }
 }

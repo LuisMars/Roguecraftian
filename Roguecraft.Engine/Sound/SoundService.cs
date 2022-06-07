@@ -2,6 +2,7 @@
 using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Core;
+using Roguecraft.Engine.Timers;
 
 namespace Roguecraft.Engine.Sound;
 
@@ -9,11 +10,20 @@ public class SoundService
 {
     private readonly ActorPool _actorPool;
     private readonly ContentRepository _contentRepository;
+    private readonly Dictionary<TimerType, GameSound> _sounds = new();
 
     public SoundService(ActorPool actorPool, ContentRepository contentRepository)
     {
         _actorPool = actorPool;
         _contentRepository = contentRepository;
+        _sounds = new Dictionary<TimerType, GameSound>
+        {
+            { TimerType.Death, _contentRepository.DeathSound },
+            { TimerType.Hurt, _contentRepository.HitSound },
+            { TimerType.Fire, _contentRepository.FireSound },
+            { TimerType.Heal, _contentRepository.HealSound },
+            { TimerType.Pickup, _contentRepository.InventorySound }
+        };
     }
 
     public void Play(GameSound sound, Vector2 origin)
@@ -33,23 +43,17 @@ public class SoundService
     {
         foreach (var actor in _actorPool.Actors)
         {
-            PlayCreature(actor);
+            PlayActor(actor);
             PlayDoor(actor);
         }
     }
 
-    private void PlayCreature(Actor actor)
+    private void PlayActor(Actor actor)
     {
-        if (actor is not Creature creature)
+        foreach (var type in actor.Timers.JustTriggeredTypes)
         {
-            return;
+            Play(_sounds[type], actor.Position);
         }
-
-        if (!creature.HurtTimer.JustTriggered)
-        {
-            return;
-        }
-        Play(_contentRepository.HitSound, actor.Position);
     }
 
     private void PlayDoor(Actor actor)

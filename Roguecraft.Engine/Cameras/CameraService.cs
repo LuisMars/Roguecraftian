@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Roguecraft.Engine.Core;
 using Roguecraft.Engine.Helpers;
+using Roguecraft.Engine.Timers;
 
 namespace Roguecraft.Engine.Cameras;
 
@@ -38,7 +39,7 @@ public class CameraService
         _camera.Zoom = Math.Max(0.5f, MathHelper.Lerp(_camera.Zoom, 1 - relativeSpeed.Length(), deltaTime));
         _camera.Rotation = 0;
         _camera.Update(width, height);
-        if (_actorPool.Hero.HurtTimer?.IsActive ?? false)
+        if (_actorPool.Hero.Timers[TimerType.Hurt]?.IsActive ?? false)
         {
             Shake();
         }

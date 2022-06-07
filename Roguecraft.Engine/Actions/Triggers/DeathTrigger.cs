@@ -1,12 +1,9 @@
 ﻿namespace Roguecraft.Engine.Actions.Triggers;
 
-public class HealthTrigger : ActionTrigger
+public class DeathTrigger : ActionTrigger
 {
-    private readonly int _health;
-
-    public HealthTrigger(int health)
+    public DeathTrigger()
     {
-        _health = health;
     }
 
     public override bool Trigger(ActionTriggerArgs args)
@@ -15,6 +12,6 @@ public class HealthTrigger : ActionTrigger
         {
             return false;
         }
-        return args.Actor.Health == _health;
+        return args.Actor.Health <= 0;
     }
 }

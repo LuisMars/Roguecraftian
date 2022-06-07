@@ -10,7 +10,6 @@ public class DieAction : GameAction
 
     protected override void OnPerform(float deltaTime)
     {
-        Creature.IsDead = true;
-        Creature.DeadTimer.Reset(0.125f);
+        Creature.Die();
     }
 }

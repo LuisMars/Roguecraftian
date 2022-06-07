@@ -8,28 +8,37 @@ namespace Roguecraft.Engine.Actors;
 public abstract class Creature : Actor
 {
     public Collision AreaOfInfluence { get; set; }
-    public AvailableActions AvailableActions { get; set; }
-    public ActionTimer DeadTimer { get; } = new();
-    public Vector2 Direction { get; set; }
-    public float DistanceWalked { get; set; }
-    public float Energy { get; set; }
-    public Vector2 FootstepDistance { get; set; }
-    public int Health { get; set; }
-    public ActionTimer HurtTimer { get; } = new();
-    public bool IsDead { get; set; }
-    public Vector2 LastPosition { get; set; }
-    public Vector2 Speed => Position - LastPosition;
-    public Stats Stats { get; set; }
 
-    public override void AfterUpdate(float deltaTime)
-    {
-        UpdateTimers(deltaTime);
-    }
+    public AvailableActions AvailableActions { get; set; }
+
+    public Vector2 Direction { get; set; }
+
+    public float DistanceWalked { get; set; }
+
+    public float Energy { get; set; }
+
+    public Item EquipedItem { get; set; }
+
+    public Vector2 FootstepDistance { get; set; }
+
+    public int Health { get; set; }
+
+    public Vector2 LastPosition { get; set; }
+
+    public Vector2 Speed => Position - LastPosition;
+
+    public Stats Stats { get; set; }
 
     public override void ClearSimulationData()
     {
         base.ClearSimulationData();
         AreaOfInfluence.Clear();
+    }
+
+    public void Die()
+    {
+        IsPickedUp = true;
+        Timers[TimerType.Death].Reset();
     }
 
     public abstract GameAction? OnTakeTurn(float deltaTime);
@@ -46,10 +55,5 @@ public abstract class Creature : Actor
     {
         base.UpdateSimulationData();
         AreaOfInfluence.Update();
-    }
-
-    private void UpdateTimers(float deltaTime)
-    {
-        HurtTimer?.Update(deltaTime);
     }
 }

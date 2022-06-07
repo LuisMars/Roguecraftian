@@ -2,6 +2,7 @@
 using MonoGame.Extended.TextureAtlases;
 using Roguecraft.Engine.Actions;
 using Roguecraft.Engine.Components;
+using Roguecraft.Engine.Timers;
 using Roguecraft.Engine.Visibility;
 using System.Diagnostics;
 
@@ -13,6 +14,7 @@ public abstract class Actor
     public float Angle { get; set; }
     public Collision Collision { get; set; }
     public Color Color { get; set; }
+    public bool IsPickedUp { get; protected set; }
     public string Name { get; set; }
 
     public Vector2 Origin
@@ -38,10 +40,23 @@ public abstract class Actor
     }
 
     public TextureRegion2D Texture { get; set; }
+    public TimerManager Timers { get; } = new TimerManager();
     public VisibilityProperties Visibility { get; set; } = new();
 
-    public virtual void AfterUpdate(float deltaTime)
+    public void AfterUpdate(float deltaTime)
     {
+        UpdateTimers(deltaTime);
+    }
+
+    public void CalculateVisibility(VisibilityService visibilityService)
+    {
+        var isVisible = visibilityService.IsVisible(Position, Collision.Bounds);
+
+        Visibility.IsVisibleByHero = isVisible;
+        if (Collision.IsFixed && Visibility.IsVisibleByHero)
+        {
+            Visibility.TimesSeen++;
+        }
     }
 
     public virtual void ClearSimulationData()
@@ -59,14 +74,8 @@ public abstract class Actor
         Collision.Update();
     }
 
-    internal void CalculateVisibility(VisibilityService visibilityService)
+    private void UpdateTimers(float deltaTime)
     {
-        var isVisible = visibilityService.IsVisible(Position, Collision.Bounds);
-
-        Visibility.IsVisibleByHero = isVisible;
-        if (Collision.IsFixed && Visibility.IsVisibleByHero)
-        {
-            Visibility.TimesSeen++;
-        }
+        Timers.Update(deltaTime);
     }
 }

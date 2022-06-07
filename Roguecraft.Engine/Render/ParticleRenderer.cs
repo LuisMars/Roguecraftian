@@ -6,6 +6,7 @@ using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Core;
 using Roguecraft.Engine.Render.Particles;
+using Roguecraft.Engine.Timers;
 
 namespace Roguecraft.Engine.Render;
 
@@ -18,16 +19,21 @@ public class ParticleRenderer
     private readonly ParticleEffect _fireParticle;
     private readonly ParticleEffect _footstepParticle;
     private readonly ParticleEffect _healParticle;
+    private readonly Dictionary<TimerType, ParticleEffect> _particles = new();
     private readonly float _stepDrawOffset;
     private readonly float _stepFrequencyBaseSquared;
 
     public ParticleRenderer(Configuration configuration, ContentRepository contentRepository, ActorPool actorPool)
     {
         _actorPool = actorPool;
-        _bloodPaticle = new BloodParticle(configuration, contentRepository);
-        _deathParticle = new DeathParticle(configuration, contentRepository);
-        _fireParticle = new FireParticle(configuration, contentRepository);
-        _healParticle = new HealParticle(configuration, contentRepository);
+        _particles = new Dictionary<TimerType, ParticleEffect>
+        {
+            { TimerType.Death, new DeathParticle(configuration, contentRepository) },
+            { TimerType.Hurt, new BloodParticle(configuration, contentRepository) },
+            { TimerType.Fire, new FireParticle(configuration, contentRepository) },
+            { TimerType.Heal, new HealParticle(configuration, contentRepository) }
+        };
+
         _footstepParticle = new FootstepsParticle(configuration, contentRepository);
 
         var diameter = configuration.BaseCreatureRadius * 2;
@@ -37,8 +43,10 @@ public class ParticleRenderer
 
     public void Render(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(_deathParticle);
-        spriteBatch.Draw(_bloodPaticle);
+        foreach (var particle in _particles.Values)
+        {
+            spriteBatch.Draw(particle);
+        }
         spriteBatch.Draw(_footstepParticle);
     }
 
@@ -50,32 +58,22 @@ public class ParticleRenderer
             {
                 continue;
             }
-
-            TriggerDeath(creature);
-            TriggerBlood(creature);
+            foreach (var type in creature.Timers.ActiveTypes)
+            {
+                if (!_particles.TryGetValue(type, out var particle))
+                {
+                    continue;
+                }
+                particle.Trigger(creature.Position);
+            }
             TriggerFootsteps(creature);
         }
-        _deathParticle.Update(deltaTime);
-        _bloodPaticle.Update(deltaTime);
+
+        foreach (var particle in _particles.Values)
+        {
+            particle.Update(deltaTime);
+        }
         _footstepParticle.Update(deltaTime);
-    }
-
-    private void TriggerBlood(Creature creature)
-    {
-        if (!creature.HurtTimer.IsActive)
-        {
-            return;
-        }
-        _bloodPaticle.Trigger(creature.Position, 0);
-    }
-
-    private void TriggerDeath(Creature creature)
-    {
-        if (!creature.DeadTimer.JustTriggered)
-        {
-            return;
-        }
-        _deathParticle.Trigger(creature.Position, 0);
     }
 
     private void TriggerFootsteps(Creature creature)

@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using MonoGame.Extended;
+﻿using MonoGame.Extended;
 using MonoGame.Extended.Particles;
 using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
@@ -19,16 +18,15 @@ internal class HealParticle : ParticleEffect
 
         Emitters = new List<ParticleEmitter>
                 {
-                    new ParticleEmitter(healTextureRegion, 15000, TimeSpan.FromSeconds(0.75f),
-                                        Profile.Spray(new Vector2(0, -1), 3f)
-                                        )
+                    new ParticleEmitter(healTextureRegion, 15000, TimeSpan.FromSeconds(1.5f),
+                                        Profile.Circle(75, Profile.CircleRadiation.Out))
                     {
                         AutoTrigger = false,
                         Parameters = new ParticleReleaseParameters
                         {
                             Color = new Range<HslColor>(color.ToHsl(), color2.ToHsl()),
-                            Speed = new Range<float>(100, 200),
-                            Quantity = 10,
+                            Speed = new Range<float>(50, 150),
+                            Quantity = 2,
                             Rotation = new Range<float>(-1, 1),
                             Scale = new Range<float>(0.5f, 1)
                         },
@@ -37,12 +35,7 @@ internal class HealParticle : ParticleEffect
                             new RotationModifier { RotationRate = .1f },
                             new DragModifier
                             {
-                                Density = 1f, DragCoefficient = 1f
-                            },
-                            new LinearGravityModifier
-                            {
-                                Direction = new Vector2(0,1),
-                                Strength = 300f
+                                Density = 2f, DragCoefficient = 2f
                             },
                             new OpacityFastFadeModifier()
                         }

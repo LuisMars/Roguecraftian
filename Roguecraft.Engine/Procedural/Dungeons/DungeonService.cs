@@ -15,16 +15,20 @@ namespace Roguecraft.Engine.Procedural.Dungeons
         private readonly Room _end;
         private readonly IActorFactory _enemyFactory;
         private readonly IActorFactory _heroFactory;
+        private readonly IActorFactory _potionFactory;
         private readonly Room _special;
         private readonly Room _start;
         private readonly IActorFactory _wallFactory;
+        private readonly IActorFactory _weaponFactory;
 
         public DungeonService(Configuration configuration,
                               CollisionService collisionService,
                               IActorFactory heroFactory,
                               IActorFactory enemyFactory,
                               IActorFactory wallFactory,
-                              IActorFactory doorFactory)
+                              IActorFactory doorFactory,
+                              IActorFactory potionFactory,
+                              IActorFactory weaponFactory)
         {
             _configuration = configuration;
 
@@ -33,6 +37,8 @@ namespace Roguecraft.Engine.Procedural.Dungeons
             _enemyFactory = enemyFactory;
             _wallFactory = wallFactory;
             _doorFactory = doorFactory;
+            _potionFactory = potionFactory;
+            _weaponFactory = weaponFactory;
 
             _dungeon = new Dungeon();
             for (int i = 0; i < _configuration.RoomsPerDungeon; i++)
@@ -64,6 +70,10 @@ namespace Roguecraft.Engine.Procedural.Dungeons
             AddDoors();
             AddPlayer();
             AddEnemies();
+            _potionFactory.Add(new Vector2(_start.Left + 1.5f, _start.Top + 1.5f) * _configuration.WallSize);
+            _potionFactory.Add(new Vector2(_start.Left + 3.5f, _start.Top + 1.5f) * _configuration.WallSize);
+            _potionFactory.Add(new Vector2(_start.Left + 4.5f, _start.Top + 1.5f) * _configuration.WallSize);
+            _weaponFactory.Add(new Vector2(_start.Left + 1.5f, _start.Bottom - 1.5f) * _configuration.WallSize);
         }
 
         private void AddDoors()

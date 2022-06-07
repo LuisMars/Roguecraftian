@@ -25,6 +25,18 @@
 /processorParam:TextureFormat=Color
 /build:door.png
 
+#begin dagger.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:dagger.png
+
 #begin energy-back.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -168,6 +180,36 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:enemy.png
+
+#begin inventory_01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:inventory_01.wav
+
+#begin inventory_02.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:inventory_02.wav
+
+#begin inventory_03.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:inventory_03.wav
+
+#begin inventory_04.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:inventory_04.wav
+
+#begin inventory_05.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:inventory_05.wav
 
 #begin fire.wav
 /importer:WavImporter

@@ -16,6 +16,6 @@ public class ActorPool
 
     internal void RemoveDead()
     {
-        _actors.RemoveAll(a => a is Creature creature && creature.IsDead);
+        _actors.RemoveAll(a => a.IsPickedUp);
     }
 }
