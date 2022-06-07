@@ -24,7 +24,7 @@ public class HeroFactory : CreatureFactory<Hero>
     {
         var stats = new Stats
         {
-            MaxHealth = 2,
+            MaxHealth = 20,
             Speed = Configuration.BaseCreatureSpeed
         };
         hero.Name = "Hero";

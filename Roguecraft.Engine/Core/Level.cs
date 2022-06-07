@@ -69,7 +69,7 @@ namespace Roguecraft.Engine.Core
             _textureRenderer = new TextureRenderer(_actorPool);
             _shapeRenderer = new ShapeRenderer(_actorPool, _visibilityService);
             _particleRenderer = new ParticleRenderer(_configuration, _contentRepository, _actorPool);
-            _hudRenderer = new HudRenderer(_actorPool, _contentRepository, _frameCounter);
+            _hudRenderer = new HudRenderer(_actorPool, _contentRepository, _configuration, _frameCounter);
 
             _soundService = new SoundService(_actorPool, _contentRepository);
             _dungeonService.Initialize();
@@ -87,7 +87,7 @@ namespace Roguecraft.Engine.Core
 
             _textureRenderer.Render(_spriteBatch);
             _particleRenderer.Render(_spriteBatch);
-            _shapeRenderer.Render(_spriteBatch);
+            //_shapeRenderer.Render(_spriteBatch);
             _spriteBatch.End();
 
             _visibilityRenderer.Render(_spriteBatch);
