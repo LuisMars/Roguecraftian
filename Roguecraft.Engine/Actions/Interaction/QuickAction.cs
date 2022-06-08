@@ -2,9 +2,9 @@
 
 namespace Roguecraft.Engine.Actions.Interaction;
 
-public class ConsumeItemAction : GameAction
+public class QuickAction : GameAction
 {
-    public ConsumeItemAction(Creature creature) : base(creature)
+    public QuickAction(Creature creature) : base(creature)
     {
         EngeryCost = 400;
     }

@@ -22,7 +22,8 @@ public class SoundService
             { TimerType.Hurt, _contentRepository.HitSound },
             { TimerType.Fire, _contentRepository.FireSound },
             { TimerType.Heal, _contentRepository.HealSound },
-            { TimerType.Pickup, _contentRepository.InventorySound }
+            { TimerType.Pickup, _contentRepository.InventorySound },
+            { TimerType.DrawDagger, _contentRepository.DaggerDraw }
         };
     }
 
@@ -37,6 +38,11 @@ public class SoundService
         }
         var pan = Math.Clamp((origin.X - listener.X) / 10000f, -1, 1);
         sound.PlayRandom(volume, pan);
+    }
+
+    public void Play(GameSound sound)
+    {
+        sound.PlayRandom(1, 0);
     }
 
     public void Play()

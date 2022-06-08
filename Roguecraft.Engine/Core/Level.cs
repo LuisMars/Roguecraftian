@@ -39,6 +39,7 @@ namespace Roguecraft.Engine.Core
         private readonly SoundService _soundService;
         private readonly SpriteBatch _spriteBatch;
         private readonly TextureRenderer _textureRenderer;
+        private readonly TimeManager _timeManager;
         private readonly VisibilityRenderer _visibilityRenderer;
         private readonly VisibilityService _visibilityService;
         private readonly WallFactory _wallFactory;
@@ -54,6 +55,7 @@ namespace Roguecraft.Engine.Core
             _frameCounter = new FrameCounter();
             _actorPool = new ActorPool();
             _inputManager = new InputManager();
+
             _collisionService = new CollisionService(_actorPool);
             _randomGenerator = new RandomGenerator();
             _heroFactory = new HeroFactory(_configuration, _actorPool, _collisionService, _contentRepository, _randomGenerator, _inputManager);
@@ -79,11 +81,14 @@ namespace Roguecraft.Engine.Core
             _hudRenderer = new HudRenderer(_actorPool, _contentRepository, _configuration, _frameCounter);
 
             _soundService = new SoundService(_actorPool, _contentRepository);
+            _timeManager = new TimeManager(_inputManager, _soundService, _contentRepository);
+
             _dungeonService.Initialize();
         }
 
         public void Draw(float deltaTime)
         {
+            deltaTime = _timeManager.DeltaTime;
             _cameraService.Update(_graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, deltaTime);
             _graphicsDevice.Clear(_configuration.BackgroundColor.ToColor());
 
@@ -107,6 +112,7 @@ namespace Roguecraft.Engine.Core
         public void Update(float deltaTime)
         {
             _inputManager.Update();
+            deltaTime = _timeManager.GetDeltaTime(deltaTime);
             _gameLoop.Update(deltaTime);
             _soundService.Play();
             _particleRenderer.Update(deltaTime);

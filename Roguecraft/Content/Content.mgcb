@@ -265,6 +265,24 @@
 /processorParam:Quality=Best
 /build:heal.wav
 
+#begin timewarp_01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:timewarp_01.wav
+
+#begin timewarp_02.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:timewarp_02.wav
+
+#begin dagger_draw.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:dagger_draw.wav
+
 #begin font.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor

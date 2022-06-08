@@ -13,7 +13,8 @@ public class InputState
         { InputAction.MoveLeft, g => g.DPad.Left == ButtonState.Pressed },
         { InputAction.MoveRight, g => g.DPad.Right == ButtonState.Pressed },
         { InputAction.QuickAction, g => g.Buttons.A == ButtonState.Pressed },
-        { InputAction.Equip, g => g.Buttons.B == ButtonState.Pressed },
+        { InputAction.PickUp, g => g.Buttons.X == ButtonState.Pressed },
+        { InputAction.SlowMotion, g => g.Buttons.LeftShoulder == ButtonState.Pressed },
     };
 
     private readonly GamePadState _gamePadState;
@@ -27,8 +28,9 @@ public class InputState
         { InputAction.MoveDown, Keys.S },
         { InputAction.MoveLeft, Keys.A },
         { InputAction.MoveRight, Keys.D },
-        { InputAction.Equip, Keys.E },
+        { InputAction.PickUp, Keys.E },
         { InputAction.QuickAction, Keys.Space },
+        { InputAction.SlowMotion, Keys.LeftControl },
     };
 
     public InputState(GamePadState gamePadState, KeyboardStateExtended keyboardState)

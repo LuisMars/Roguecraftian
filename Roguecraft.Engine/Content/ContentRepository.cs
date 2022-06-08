@@ -18,6 +18,7 @@ namespace Roguecraft.Engine.Content
 
         public TextureRegion2D Creature { get; private set; }
         public TextureRegion2D Dagger { get; private set; }
+        public GameSound DaggerDraw { get; private set; }
         public TextureRegion2D Dead { get; private set; }
         public GameSound DeathSound { get; private set; }
         public TextureRegion2D Door { get; private set; }
@@ -39,6 +40,8 @@ namespace Roguecraft.Engine.Content
         public TextureRegion2D ProgressBack { get; private set; }
         public TextureRegion2D ProgressFrame { get; private set; }
         public TextureRegion2D ProgressFront { get; private set; }
+        public GameSound SlowDownSound { get; private set; }
+        public GameSound SpeedUpSound { get; private set; }
         public TextureRegion2D Wall { get; private set; }
 
         private void Load()
@@ -76,6 +79,11 @@ namespace Roguecraft.Engine.Content
                  );
             FireSound = new GameSound(_content.Load<SoundEffect>("fire"));
             HealSound = new GameSound(_content.Load<SoundEffect>("heal"));
+
+            DaggerDraw = new GameSound(_content.Load<SoundEffect>("dagger_draw"));
+
+            SlowDownSound = new GameSound(_content.Load<SoundEffect>("timewarp_01"));
+            SpeedUpSound = new GameSound(_content.Load<SoundEffect>("timewarp_02"));
 
             InventorySound = new GameSound(
                 _content.Load<SoundEffect>("inventory_01"),

@@ -7,4 +7,5 @@ public enum TimerType
     Pickup,
     Heal,
     Fire,
+    DrawDagger,
 }

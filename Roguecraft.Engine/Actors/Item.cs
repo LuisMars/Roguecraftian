@@ -20,7 +20,6 @@ public abstract class Item : Actor
     public void QuickAction(Creature creature)
     {
         IsPickedUp = true;
-        creature.Timers[TimerType.Pickup].Reset();
         OnQuickAction(creature);
     }
 

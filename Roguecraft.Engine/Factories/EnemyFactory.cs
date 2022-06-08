@@ -1,5 +1,6 @@
 ﻿using Roguecraft.Engine.Actions.Combat;
 using Roguecraft.Engine.Actions.Interaction;
+using Roguecraft.Engine.Actions.Movement;
 using Roguecraft.Engine.Actions.Triggers;
 using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Components;
@@ -35,6 +36,6 @@ public class EnemyFactory : CreatureFactory<Enemy>
         enemy.AvailableActions.Add(new DeathTrigger(), new DieAction(enemy));
         enemy.AvailableActions.Add(new HeroVisibleTrigger(), new AttackSelectionAction(enemy));
         enemy.AvailableActions.Add(new HeroNotVisibleTrigger(), new ToggleDoorAction(enemy));
-        //enemy.AvailableActions.Add(new AutoTrigger(), new ChaseHeroAction(enemy, ActorPool.Hero));
+        enemy.AvailableActions.Add(new AutoTrigger(), new ChaseHeroAction(enemy, ActorPool.Hero));
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Roguecraft.Engine.Actions.Combat;
+using Roguecraft.Engine.Timers;
 
 namespace Roguecraft.Engine.Actors;
 
@@ -17,6 +18,7 @@ public class Weapon : Item
 
     protected override void OnQuickAction(Creature creature)
     {
+        creature.Timers[TimerType.DrawDagger].Reset();
         AttackAction.Creature = creature;
         creature.EquipedItem = this;
     }
