@@ -6,17 +6,19 @@ namespace Roguecraft.Engine.Core;
 
 public class TimeManager
 {
+    private readonly ActorPool _actorPool;
     private readonly ContentRepository _contentRepository;
     private readonly InputManager _inputManager;
     private readonly GameSound _slowDownSound;
     private readonly SoundService _soundService;
     private readonly GameSound _speedUpSound;
 
-    public TimeManager(InputManager inputManager, SoundService soundService, ContentRepository contentRepository)
+    public TimeManager(InputManager inputManager, SoundService soundService, ContentRepository contentRepository, ActorPool actorPool)
     {
         _inputManager = inputManager;
         _soundService = soundService;
         _contentRepository = contentRepository;
+        _actorPool = actorPool;
         _slowDownSound = _contentRepository.SlowDownSound;
         _speedUpSound = _contentRepository.SpeedUpSound;
     }
@@ -30,7 +32,8 @@ public class TimeManager
     public float GetDeltaTime(float deltaTime)
     {
         var originalDelta = deltaTime;
-        if (_inputManager.State.IsButtonDown(InputAction.SlowMotion))
+        var fullEnergy = _actorPool.Hero.Energy == 0;
+        if (_inputManager.State.IsButtonDown(InputAction.SlowMotion) && fullEnergy)
         {
             deltaTime = Math.Max(0.0005f, DeltaTime * 0.95f);
             JustStartedSlowingDown = !IsSlowingDown;

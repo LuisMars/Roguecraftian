@@ -40,10 +40,7 @@ public class SoundService
         sound.PlayRandom(volume, pan);
     }
 
-    public void Play(GameSound sound)
-    {
-        sound.PlayRandom(1, 0);
-    }
+    public void Play(GameSound sound) => sound.Play();
 
     public void Play()
     {

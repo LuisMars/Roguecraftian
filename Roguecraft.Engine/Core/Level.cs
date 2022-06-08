@@ -81,7 +81,7 @@ namespace Roguecraft.Engine.Core
             _hudRenderer = new HudRenderer(_actorPool, _contentRepository, _configuration, _frameCounter);
 
             _soundService = new SoundService(_actorPool, _contentRepository);
-            _timeManager = new TimeManager(_inputManager, _soundService, _contentRepository);
+            _timeManager = new TimeManager(_inputManager, _soundService, _contentRepository, _actorPool);
 
             _dungeonService.Initialize();
         }

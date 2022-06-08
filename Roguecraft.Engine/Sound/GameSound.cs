@@ -33,4 +33,9 @@ public class GameSound
     {
         return _sounds.Choice().Play(volume, _scale.Choice(), pan);
     }
+
+    internal void Play()
+    {
+        _sounds.Choice().Play();
+    }
 }

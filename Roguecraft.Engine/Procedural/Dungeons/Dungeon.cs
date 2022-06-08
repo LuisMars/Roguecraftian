@@ -14,7 +14,7 @@ public class Dungeon
 
     public Dungeon()
     {
-        _random = new FastRandom();
+        _random = new FastRandom((int)(DateTime.Now.Ticks % int.MaxValue));
     }
 
     public RoomConnections Connections { get; set; } = new();
