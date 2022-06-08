@@ -29,6 +29,6 @@ public class QuickAction : GameAction
 
     protected override void OnPerform(float deltaTime)
     {
-        Item?.QuickAction(Creature);
+        Item?.DefaultAction(Creature);
     }
 }

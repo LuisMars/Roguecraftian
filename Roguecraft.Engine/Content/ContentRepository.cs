@@ -33,6 +33,8 @@ namespace Roguecraft.Engine.Content
         public TextureRegion2D Footstep { get; private set; }
         public GameSound HealSound { get; private set; }
         public GameSound HitSound { get; private set; }
+        public TextureRegion2D InventoryFrame { get; private set; }
+        public TextureRegion2D InventorySelector { get; private set; }
         public GameSound InventorySound { get; private set; }
         public TextureRegion2D Line { get; private set; }
         public TextureRegion2D Particle { get; private set; }
@@ -61,6 +63,9 @@ namespace Roguecraft.Engine.Content
             ProgressBack = LoadTextureRegion("progress-back");
             ProgressFront = LoadTextureRegion("progress-front");
             ProgressFrame = LoadTextureRegion("progress-frame");
+
+            InventoryFrame = LoadTextureRegion("inventory");
+            InventorySelector = LoadTextureRegion("inventory_selector");
 
             EnergyBack = LoadTextureRegion("energy-back");
             EnergyFront = LoadTextureRegion("energy-front");

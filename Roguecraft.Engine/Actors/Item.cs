@@ -5,6 +5,12 @@ namespace Roguecraft.Engine.Actors;
 
 public abstract class Item : Actor
 {
+    public void DefaultAction(Creature creature)
+    {
+        IsPickedUp = true;
+        OnDefaultAction(creature);
+    }
+
     public AttackAction GetAttack()
     {
         return OnGetAttack();
@@ -14,13 +20,12 @@ public abstract class Item : Actor
     {
         IsPickedUp = true;
         creature.Timers[TimerType.Pickup].Reset();
+        creature.Inventory.Add(this);
         OnPickUp(creature);
     }
 
-    public void QuickAction(Creature creature)
+    protected virtual void OnDefaultAction(Creature creature)
     {
-        IsPickedUp = true;
-        OnQuickAction(creature);
     }
 
     protected virtual AttackAction OnGetAttack()
@@ -28,7 +33,7 @@ public abstract class Item : Actor
         return null;
     }
 
-    protected abstract void OnPickUp(Creature creature);
-
-    protected abstract void OnQuickAction(Creature creature);
+    protected virtual void OnPickUp(Creature creature)
+    {
+    }
 }

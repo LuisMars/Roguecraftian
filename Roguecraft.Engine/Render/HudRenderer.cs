@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
+using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Core;
 using Roguecraft.Engine.Helpers;
@@ -21,6 +22,8 @@ public class HudRenderer
     private readonly TextureRegion2D _energyFront;
     private readonly SpriteFont _font;
     private readonly FrameCounter _frameCounter;
+    private readonly TextureRegion2D _inventory;
+    private readonly TextureRegion2D _inventorySelector;
     private readonly Color _lightRed;
     private readonly TextureRegion2D _progressBack;
     private readonly TextureRegion2D _progressFrame;
@@ -39,6 +42,9 @@ public class HudRenderer
         _energyBack = _contentRepository.EnergyBack;
         _energyBar = _contentRepository.EnergyBar;
         _energyFront = _contentRepository.EnergyFront;
+
+        _inventory = _contentRepository.InventoryFrame;
+        _inventorySelector = _contentRepository.InventorySelector;
 
         _configuration = configuration;
         _color = _configuration.PlayerColor.ToColor();
@@ -73,6 +79,54 @@ public class HudRenderer
         spriteBatch.Draw(_energyBack, energyCenter, frameColor);
         spriteBatch.Draw(_energyBar, energyCenter - new Vector2(_energyBar.Width * energyPercent, 0), barColor, clip);
         spriteBatch.Draw(_energyFront, energyCenter, frameColor);
+
+        var inventoryStart = new Vector2(spriteBatch.GraphicsDevice.Viewport.Width - _inventory.Width - 8, 8);
+
+        var equipedStart = new Vector2(inventoryStart.X - _inventorySelector.Width, inventoryStart.Y);
+        spriteBatch.Draw(_inventorySelector, equipedStart, _color);
+        if (hero.EquipedItem is not null)
+        {
+            var scale = new Vector2(64f / hero.EquipedItem.Texture.Width);
+            equipedStart += new Vector2(8);
+
+            spriteBatch.Draw(hero.EquipedItem.Texture,
+                             equipedStart,
+                             hero.EquipedItem.Color,
+                             0f,
+                             Vector2.Zero,
+                             scale,
+                             SpriteEffects.None,
+                             0f);
+        }
+        spriteBatch.Draw(_inventory, inventoryStart, _color);
+        spriteBatch.Draw(_inventorySelector, inventoryStart + new Vector2(0, 64 * hero.Inventory.CurrentIndex), _color);
+
+        inventoryStart += new Vector2(8);
+        for (var i = 0; i < hero.Inventory.Items.Length; i++)
+        {
+            var item = hero.Inventory.Items[i];
+            if (item is null)
+            {
+                inventoryStart += new Vector2(0, 64);
+                continue;
+            }
+            var itemScale = new Vector2(64f / item.Texture.Width);
+            var color = item.Color;
+            if (i != hero.Inventory.CurrentIndex)
+            {
+                color = Color.Lerp(color, Color.Black, 0.5f);
+            }
+            spriteBatch.Draw(item.Texture,
+                             inventoryStart,
+                             color,
+                             0f,
+                             Vector2.Zero,
+                             itemScale,
+                             SpriteEffects.None,
+                             0f);
+
+            inventoryStart += new Vector2(0, 64);
+        }
 
         spriteBatch.DrawString(_font, $"HP: {health}", new(8, 8), _color);
         spriteBatch.DrawString(_font, $"FPS: {(int)_frameCounter.AverageFramesPerSecond}", new(8, 32), _color);

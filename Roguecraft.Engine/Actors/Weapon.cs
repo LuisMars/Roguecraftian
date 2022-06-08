@@ -16,7 +16,7 @@ public class Weapon : Item
     {
     }
 
-    protected override void OnQuickAction(Creature creature)
+    protected override void OnDefaultAction(Creature creature)
     {
         creature.Timers[TimerType.DrawDagger].Reset();
         AttackAction.Creature = creature;

@@ -8,5 +8,7 @@ public enum InputAction
     MoveRight,
     PickUp,
     QuickAction,
-    SlowMotion
+    InventoryNext,
+    InventoryPrev,
+    InventoryUse
 }

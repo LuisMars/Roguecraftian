@@ -1,16 +1,14 @@
-﻿using Roguecraft.Engine.Timers;
+﻿using Roguecraft.Engine.Actions.Effects;
 
 namespace Roguecraft.Engine.Actors;
 
 public class Potion : Item
 {
-    protected override void OnPickUp(Creature creature)
-    {
-    }
+    public HealAction HealAction { get; set; }
 
-    protected override void OnQuickAction(Creature creature)
+    protected override void OnDefaultAction(Creature creature)
     {
-        creature.Health = Math.Min(creature.Stats.MaxHealth, creature.Health + 2);
-        creature.Timers[TimerType.Heal].Reset();
+        HealAction.Creature = creature;
+        HealAction.Perform(0);
     }
 }

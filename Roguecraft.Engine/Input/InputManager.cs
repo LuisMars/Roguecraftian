@@ -6,9 +6,18 @@ namespace Roguecraft.Engine.Input;
 public class InputManager
 {
     public InputState State { get; private set; }
+    private GamePadState GamePadState { get; set; }
+    private GamePadState LastGamePadState { get; set; }
 
     public void Update()
     {
-        State = new InputState(GamePad.GetState(0), KeyboardExtended.GetState());
+        LastGamePadState = GamePadState;
+        GamePadState = GamePad.GetState(0);
+        if (LastGamePadState == default)
+        {
+            LastGamePadState = GamePadState;
+        }
+
+        State = new InputState(GamePadState, LastGamePadState, KeyboardExtended.GetState());
     }
 }

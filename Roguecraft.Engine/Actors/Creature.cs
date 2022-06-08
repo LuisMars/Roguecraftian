@@ -23,6 +23,7 @@ public abstract class Creature : Actor
 
     public int Health { get; set; }
 
+    public Inventory Inventory { get; set; } = new Inventory();
     public Vector2 LastPosition { get; set; }
 
     public Vector2 RealSpeed { get; set; }

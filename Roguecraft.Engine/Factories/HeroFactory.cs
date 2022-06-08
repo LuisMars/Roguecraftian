@@ -2,6 +2,7 @@
 using MonoGame.Extended;
 using Roguecraft.Engine.Actions.Combat;
 using Roguecraft.Engine.Actions.Interaction;
+using Roguecraft.Engine.Actions.Inventory;
 using Roguecraft.Engine.Actions.Movement;
 using Roguecraft.Engine.Actions.Triggers;
 using Roguecraft.Engine.Actors;
@@ -54,6 +55,10 @@ public class HeroFactory : CreatureFactory<Hero>
         hero.Stats = stats;
         hero.Color = Configuration.PlayerColor.ToColor();
         hero.InputManager = _inputManager;
+
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.InventoryNext } }, new MoveInventoryAction(hero, true));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.InventoryPrev } }, new MoveInventoryAction(hero, false));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.InventoryUse } }, new UseInventoryAction(hero));
 
         hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.QuickAction } }, new AttackSelectionAction(hero));
         hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.PickUp } }, new PickupItemAction(hero));
