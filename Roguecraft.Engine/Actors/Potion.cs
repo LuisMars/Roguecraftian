@@ -9,6 +9,6 @@ public class Potion : Item
     protected override void OnDefaultAction(Creature creature)
     {
         HealAction.Creature = creature;
-        HealAction.Perform(0);
+        HealAction.Perform();
     }
 }

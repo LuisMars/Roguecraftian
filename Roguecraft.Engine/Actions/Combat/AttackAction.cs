@@ -57,6 +57,7 @@ public class AttackAction : GameAction
 
     protected override void OnPerform(float deltaTime)
     {
+        Creature.Timers[TimerType.Attack].Reset(0.5f);
         var damageDealt = OnAttack(deltaTime);
         if (damageDealt == 0)
         {

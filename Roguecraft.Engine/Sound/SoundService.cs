@@ -55,7 +55,11 @@ public class SoundService
     {
         foreach (var type in actor.Timers.JustTriggeredTypes)
         {
-            Play(_sounds[type], actor.Position);
+            if (!_sounds.TryGetValue(type, out var sound))
+            {
+                continue;
+            }
+            Play(sound, actor.Position);
         }
     }
 

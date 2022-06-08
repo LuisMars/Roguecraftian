@@ -75,7 +75,7 @@ namespace Roguecraft.Engine.Core
             _visibilityRenderer = new VisibilityRenderer(_actorPool, _graphicsDevice, _cameraService, _contentRepository, _visibilityService, _configuration);
             _gameLoop = new GameLoop(_actorPool, _collisionService, _visibilityService);
 
-            _textureRenderer = new TextureRenderer(_actorPool);
+            _textureRenderer = new TextureRenderer(_actorPool, _contentRepository);
             _shapeRenderer = new ShapeRenderer(_actorPool, _visibilityService);
             _particleRenderer = new ParticleRenderer(_configuration, _contentRepository, _actorPool);
             _hudRenderer = new HudRenderer(_actorPool, _contentRepository, _configuration, _frameCounter);

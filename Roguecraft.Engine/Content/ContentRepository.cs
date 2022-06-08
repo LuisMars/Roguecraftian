@@ -29,6 +29,7 @@ namespace Roguecraft.Engine.Content
         public TextureRegion2D EnergyBar { get; private set; }
         public TextureRegion2D EnergyFront { get; private set; }
         public GameSound FireSound { get; private set; }
+        public TextureRegion2D Fist { get; private set; }
         public SpriteFont Font { get; private set; }
         public TextureRegion2D Footstep { get; private set; }
         public GameSound HealSound { get; private set; }
@@ -59,6 +60,7 @@ namespace Roguecraft.Engine.Content
             Footstep = LoadTextureRegion("footstep");
 
             Dagger = LoadTextureRegion("dagger");
+            Fist = LoadTextureRegion("fist");
 
             ProgressBack = LoadTextureRegion("progress-back");
             ProgressFront = LoadTextureRegion("progress-front");

@@ -25,7 +25,7 @@ public class EnemyFactory : CreatureFactory<Enemy>
         var stats = new Stats
         {
             MaxHealth = 2,
-            Speed = Configuration.BaseCreatureSpeed * 0.75f,
+            Speed = Configuration.BaseCreatureSpeed * 0.85f,
             UnarmedAttack = new AttackAction(enemy, RandomGenerator)
         };
 

@@ -8,4 +8,5 @@ public enum TimerType
     Heal,
     Fire,
     DrawDagger,
+    Attack,
 }
