@@ -131,7 +131,6 @@ public class Room
     internal bool Intersects(Room other)
     {
         return other.Bounds.Intersects(Bounds);
-        //return MaxX > other.MinX && other.MaxX > MinX && MaxY > other.MinY && other.MaxY > MinY;
     }
 
     internal void Move(int x, int y)
@@ -142,6 +141,5 @@ public class Room
     internal float TaxiDistance(Room room)
     {
         return MathF.Abs(Center.X - room.Center.X) + MathF.Abs(Center.Y - room.Center.Y);
-        //return (Center - room.Center).LengthSquared();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Roguecraft.Engine.Actions.Combat;
+﻿using MonoGame.Extended;
+using Roguecraft.Engine.Actions.Combat;
 using Roguecraft.Engine.Actions.Interaction;
 using Roguecraft.Engine.Actions.Movement;
 using Roguecraft.Engine.Actions.Triggers;
@@ -27,6 +28,18 @@ public class EnemyFactory : CreatureFactory<Enemy>
             Speed = Configuration.BaseCreatureSpeed * 0.75f,
             UnarmedAttack = new AttackAction(enemy, RandomGenerator)
         };
+
+        enemy.AreaOfInfluence = new Collision
+        {
+            Actor = enemy,
+            Bounds = new CircleF
+            {
+                Radius = Configuration.BaseCreatureAreaOfInfluenceRadius * 0.75f
+            },
+            IsSensor = true
+        };
+        CollisionService.Insert(enemy.AreaOfInfluence);
+
         enemy.Name = "Enemy";
         enemy.Texture = ContentRepository.Enemy;
         enemy.Stats = stats;

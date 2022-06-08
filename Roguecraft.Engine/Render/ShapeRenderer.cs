@@ -48,7 +48,7 @@ public class ShapeRenderer
 
         if (shape is CircleF circle)
         {
-            spriteBatch.DrawCircle(circle, 10, Color.White);
+            spriteBatch.DrawCircle(circle, 16, Color.White);
         }
         if (shape is RectangleF rectangle)
         {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using Roguecraft.Engine.Actions.Combat;
 using Roguecraft.Engine.Actions.Interaction;
 using Roguecraft.Engine.Actions.Movement;
@@ -36,6 +37,18 @@ public class HeroFactory : CreatureFactory<Hero>
             Speed = Configuration.BaseCreatureSpeed,
             UnarmedAttack = new AttackAction(hero, RandomGenerator) { MinDamage = 1 }
         };
+
+        hero.AreaOfInfluence = new Collision
+        {
+            Actor = hero,
+            Bounds = new CircleF
+            {
+                Radius = Configuration.BaseCreatureAreaOfInfluenceRadius
+            },
+            IsSensor = true
+        };
+        CollisionService.Insert(hero.AreaOfInfluence);
+
         hero.Name = "Hero";
         hero.Texture = ContentRepository.Creature;
         hero.Stats = stats;

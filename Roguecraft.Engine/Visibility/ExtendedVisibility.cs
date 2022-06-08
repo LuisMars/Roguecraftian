@@ -16,7 +16,7 @@ internal class ExtendedVisibility
     {
         _collisionService = collisionService;
         _visibilityComputer = new VisibilityComputer();
-        Radius = 1000;
+        Radius = 1500;
         RadiusSquared = Radius * Radius;
     }
 
@@ -36,10 +36,6 @@ internal class ExtendedVisibility
         {
             AddOccluders(_visibilityComputer, sourceActor, collidable, radiusSquared, viewBounds, Center);
         }
-        //Parallel.ForEach(collidables, (collidable) =>
-        //{
-        //    AddOccluders(_visibilityComputer, sourceActor, collidable, radiusSquared, viewBounds, origin);
-        //});
 
         var points = _visibilityComputer.Compute();
         var triangles = new ConcurrentBag<TriangleF>();
@@ -48,10 +44,6 @@ internal class ExtendedVisibility
         {
             AddTriangles(i, points, triangles, Center);
         }
-        //Parallel.For(0, points.Count, i =>
-        //{
-        //    AddTriangles(i, points, triangles, origin);
-        //});
 
         return triangles.ToList();
     }
@@ -73,10 +65,6 @@ internal class ExtendedVisibility
             {
                 return;
             }
-            //if (!viewBounds.Contains(circle))
-            //{
-            //    return;
-            //}
             circle.Radius *= 0.75f;
             var sides = 6f;
             for (int i = 0; i < sides / 2; i++)
@@ -94,10 +82,6 @@ internal class ExtendedVisibility
             {
                 return;
             }
-            //if (!viewBounds.Contains(rect))
-            //{
-            //    return;
-            //}
             visibilityComputer.AddLineOccluder(rect.TopLeft, rect.BottomRight);
             visibilityComputer.AddLineOccluder(rect.BottomLeft, rect.TopRight);
         }

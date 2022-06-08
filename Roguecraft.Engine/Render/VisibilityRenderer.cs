@@ -95,7 +95,6 @@ public class VisibilityRenderer
         var color = _configuration.BackgroundColor.ToColor();
         color = Color.Lerp(color, Color.White, 0.25f);
         _graphicsDevice.Clear(color);
-        //_graphicsDevice.Clear(Color.White);
 
         _primitiveBatch.Begin(ref projection, ref view);
         var count = _visibilityService.Count;

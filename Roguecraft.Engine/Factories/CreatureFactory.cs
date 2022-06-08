@@ -40,16 +40,6 @@ public abstract class CreatureFactory<TActor> : ActorFactoryBase<TActor> where T
             }
         };
         CollisionService.Insert(creature.Collision);
-        creature.AreaOfInfluence = new Collision
-        {
-            Actor = creature,
-            Bounds = new CircleF
-            {
-                Radius = Configuration.BaseCreatureAreaOfInfluenceRadius
-            },
-            IsSensor = true
-        };
-        CollisionService.Insert(creature.AreaOfInfluence);
 
         return creature;
     }
