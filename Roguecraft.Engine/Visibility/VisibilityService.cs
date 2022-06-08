@@ -28,6 +28,10 @@ public class VisibilityService
 
     internal bool IsVisible(Vector2 position, IShapeF shape)
     {
+        if ((_extendedVisibility.Center - position).LengthSquared() > _extendedVisibility.RadiusSquared * 1.5f)
+        {
+            return false;
+        }
         return Triangles.Any(t =>
         {
             if (shape is null)

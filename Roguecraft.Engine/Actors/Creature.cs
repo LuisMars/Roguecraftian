@@ -25,6 +25,7 @@ public abstract class Creature : Actor
 
     public Vector2 LastPosition { get; set; }
 
+    public Vector2 RealSpeed { get; set; }
     public Vector2 Speed => Position - LastPosition;
 
     public Stats Stats { get; set; }

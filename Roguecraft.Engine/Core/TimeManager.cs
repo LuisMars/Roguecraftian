@@ -1,4 +1,5 @@
-﻿using Roguecraft.Engine.Content;
+﻿using Microsoft.Xna.Framework;
+using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Input;
 using Roguecraft.Engine.Sound;
 
@@ -33,7 +34,9 @@ public class TimeManager
     {
         var originalDelta = deltaTime;
         var fullEnergy = _actorPool.Hero.Energy == 0;
-        if (_inputManager.State.IsButtonDown(InputAction.SlowMotion) && fullEnergy)
+        var isStill = _actorPool.Hero.Direction == Vector2.Zero;
+
+        if (isStill && fullEnergy)
         {
             deltaTime = Math.Max(0.0005f, DeltaTime * 0.95f);
             JustStartedSlowingDown = !IsSlowingDown;

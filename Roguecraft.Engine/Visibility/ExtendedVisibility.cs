@@ -16,19 +16,25 @@ internal class ExtendedVisibility
     {
         _collisionService = collisionService;
         _visibilityComputer = new VisibilityComputer();
+        Radius = 1000;
+        RadiusSquared = Radius * Radius;
     }
 
-    public List<TriangleF> Calculate(Actor sourceActor, float radius = 1000)
+    public Vector2 Center { get; private set; }
+    public float Radius { get; private set; }
+    public float RadiusSquared { get; private set; }
+
+    public List<TriangleF> Calculate(Actor sourceActor)
     {
-        var origin = sourceActor.Position;
-        _visibilityComputer.Reset(origin, radius);
+        Center = sourceActor.Position;
+        _visibilityComputer.Reset(Center, Radius);
         var collidables = _collisionService.Collisions;
-        var radiusSquared = radius * radius;
-        var viewBounds = new RectangleF(origin.X - radius, origin.Y - radius, radius * 2, radius * 2);
+        var radiusSquared = RadiusSquared;
+        var viewBounds = new RectangleF(Center.X - Radius, Center.Y - Radius, Radius * 2, Radius * 2);
 
         foreach (var collidable in collidables)
         {
-            AddOccluders(_visibilityComputer, sourceActor, collidable, radiusSquared, viewBounds, origin);
+            AddOccluders(_visibilityComputer, sourceActor, collidable, radiusSquared, viewBounds, Center);
         }
         //Parallel.ForEach(collidables, (collidable) =>
         //{
@@ -40,7 +46,7 @@ internal class ExtendedVisibility
 
         for (var i = 0; i < points.Count; i++)
         {
-            AddTriangles(i, points, triangles, origin);
+            AddTriangles(i, points, triangles, Center);
         }
         //Parallel.For(0, points.Count, i =>
         //{

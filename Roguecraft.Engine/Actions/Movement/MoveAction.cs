@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using Roguecraft.Engine.Actors;
+using Roguecraft.Engine.Helpers;
 
 namespace Roguecraft.Engine.Actions.Movement;
 
@@ -16,6 +17,7 @@ public class MoveAction : GameAction
     public virtual Vector2 GetDirection()
     {
         var direction = Vector2.Lerp(Direction, Creature.Direction, 0.85f);
+        direction = direction.ClampMagnitude(1, out _);
         return direction;
     }
 
@@ -23,7 +25,8 @@ public class MoveAction : GameAction
     {
         var direction = GetDirection();
         Creature.Direction = direction;
-        var speed = direction.NormalizedCopy() * Creature.Stats.Speed * deltaTime;
+        var speed = direction * Creature.Stats.Speed * deltaTime;
+        Creature.RealSpeed = speed;
         Creature.Position += speed;
 
         Creature.DistanceWalked += speed.Length();

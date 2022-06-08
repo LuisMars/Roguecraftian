@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Roguecraft.Engine.Actors;
+using Roguecraft.Engine.Helpers;
 
 namespace Roguecraft.Engine.Actions.Movement;
 
@@ -16,7 +17,12 @@ public class ChaseHeroAction : MoveAction
     public override Vector2 GetDirection()
     {
         var direction = LastKnownPosition - Creature.Position;
-        direction.Normalize();
+        direction /= Creature.Stats.Speed * 2;
+        direction = direction.ClampMagnitude(1, out _);
+        if (Creature.AreaOfInfluence.Any<Hero>())
+        {
+            direction = direction * 0.125f + new Vector2(direction.Y, -direction.X) * 0.875f;
+        }
         return direction;
     }
 

@@ -55,6 +55,11 @@ public class Collision
     internal List<CollisionArgs> InternalEvents { get; set; } = new();
     private HashSet<CollisionArgs> LastEvents { get; set; } = new();
 
+    public bool Any<TActor>(Func<CollisionArgs, bool>? extraConditions = null) where TActor : Actor
+    {
+        return LastEvents.Any(e => e.Other.Actor is TActor && (extraConditions?.Invoke(e) ?? true));
+    }
+
     public CollisionArgs? FirstOrDefault<TActor>(Func<CollisionArgs, bool>? extraConditions = null) where TActor : Actor
     {
         return LastEvents.FirstOrDefault(e => e.Other.Actor is TActor && (extraConditions?.Invoke(e) ?? true));

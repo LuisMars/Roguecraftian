@@ -1,4 +1,5 @@
-﻿using Roguecraft.Engine.Actors;
+﻿using Microsoft.Xna.Framework;
+using Roguecraft.Engine.Actors;
 
 namespace Roguecraft.Engine.Actions;
 
@@ -10,5 +11,6 @@ public class NullAction : GameAction
 
     protected override void OnPerform(float deltaTime)
     {
+        Creature.Direction = Vector2.Zero;
     }
 }

@@ -42,10 +42,10 @@ public class HeroFactory : CreatureFactory<Hero>
         hero.Color = Configuration.PlayerColor.ToColor();
         hero.InputManager = _inputManager;
 
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.QuickAction } }, new AttackSelectionAction(hero));
         hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.PickUp } }, new PickupItemAction(hero));
         hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.QuickAction } }, new QuickAction(hero));
         hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.QuickAction } }, new ToggleDoorAction(hero));
-        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.QuickAction } }, new AttackSelectionAction(hero));
 
         hero.AvailableActions.Add(new InputActionTrigger { LeftStick = true }, new JoystickMovementAction(hero, _inputManager));
 
