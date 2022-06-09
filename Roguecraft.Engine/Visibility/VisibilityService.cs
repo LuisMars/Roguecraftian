@@ -7,11 +7,13 @@ namespace Roguecraft.Engine.Visibility;
 
 public class VisibilityService
 {
+    private readonly CollisionService _collisionService;
     private readonly ExtendedVisibility _extendedVisibility;
 
     public VisibilityService(CollisionService collisionService)
     {
         _extendedVisibility = new ExtendedVisibility(collisionService);
+        _collisionService = collisionService;
     }
 
     public int Count => Triangles.Count;
@@ -25,6 +27,16 @@ public class VisibilityService
     }
 
     public List<TriangleF> Triangles { get; private set; }
+
+    public IEnumerable<Actor> InActionRange()
+    {
+        return _extendedVisibility.QueryCandidates(1.25f);
+    }
+
+    public IEnumerable<Actor> InVisibilityRange()
+    {
+        return _extendedVisibility.QueryCandidates();
+    }
 
     internal bool IsVisible(Vector2 position, IShapeF shape)
     {

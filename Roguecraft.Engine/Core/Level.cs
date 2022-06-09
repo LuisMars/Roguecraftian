@@ -22,6 +22,7 @@ namespace Roguecraft.Engine.Core
         private readonly Configuration _configuration;
         private readonly ContentManager _content;
         private readonly ContentRepository _contentRepository;
+        private readonly DecorationFactory _decorationFactory;
         private readonly DoorFactory _doorFactory;
         private readonly DungeonService _dungeonService;
         private readonly EnemyFactory _enemyFactory;
@@ -32,6 +33,7 @@ namespace Roguecraft.Engine.Core
         private readonly HeroFactory _heroFactory;
         private readonly HudRenderer _hudRenderer;
         private readonly InputManager _inputManager;
+        private readonly MoveableDecorationFactory _moveableDecorationFactory;
         private readonly ParticleRenderer _particleRenderer;
         private readonly PotionFactory _potionFactory;
         private readonly RandomGenerator _randomGenerator;
@@ -64,8 +66,10 @@ namespace Roguecraft.Engine.Core
             _doorFactory = new DoorFactory(_configuration, _actorPool, _collisionService, _contentRepository);
             _potionFactory = new PotionFactory(_configuration, _actorPool, _collisionService, _contentRepository);
             _weaponFactory = new WeaponFactory(_configuration, _actorPool, _collisionService, _contentRepository, _randomGenerator);
+            _decorationFactory = new DecorationFactory(_configuration, _actorPool, _collisionService, _contentRepository);
+            _moveableDecorationFactory = new MoveableDecorationFactory(_configuration, _actorPool, _collisionService, _contentRepository);
 
-            _dungeonService = new DungeonService(_configuration, _collisionService, _heroFactory, _enemyFactory, _wallFactory, _doorFactory, _potionFactory, _weaponFactory);
+            _dungeonService = new DungeonService(_configuration, _collisionService, _heroFactory, _enemyFactory, _wallFactory, _doorFactory, _potionFactory, _weaponFactory, _decorationFactory, _moveableDecorationFactory);
 
             _spriteBatch = new SpriteBatch(_graphicsDevice);
 

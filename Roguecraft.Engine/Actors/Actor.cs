@@ -61,7 +61,7 @@ public abstract class Actor
 
     public virtual void ClearSimulationData()
     {
-        Collision.Clear();
+        Collision?.Clear();
     }
 
     public virtual GameAction? TakeTurn(float deltaTime)
@@ -71,7 +71,7 @@ public abstract class Actor
 
     public virtual void UpdateSimulationData()
     {
-        Collision.Update();
+        Collision?.Update();
     }
 
     private void UpdateTimers(float deltaTime)

@@ -23,7 +23,9 @@ public class SoundService
             { TimerType.Fire, _contentRepository.FireSound },
             { TimerType.Heal, _contentRepository.HealSound },
             { TimerType.Pickup, _contentRepository.InventorySound },
-            { TimerType.DrawDagger, _contentRepository.DaggerDraw }
+            { TimerType.DrawDagger, _contentRepository.DaggerDraw },
+            { TimerType.DoorOpen, _contentRepository.DoorOpenSound },
+            { TimerType.DoorClose, _contentRepository.DoorCloseSound }
         };
     }
 
@@ -47,7 +49,6 @@ public class SoundService
         foreach (var actor in _actorPool.Actors)
         {
             PlayActor(actor);
-            PlayDoor(actor);
         }
     }
 

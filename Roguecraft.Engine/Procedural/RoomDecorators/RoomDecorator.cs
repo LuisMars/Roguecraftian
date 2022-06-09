@@ -13,7 +13,7 @@ public class RoomDecorator
     {
         var map = GenerateInitialMap(dungeon, room);
 
-        if (isStart || isEnd)
+        if (isStart/* || isEnd*/)
         {
             var stairsRule = new StairsRule();
             stairsRule.TryApply(_random, map);
@@ -25,7 +25,6 @@ public class RoomDecorator
             new ColumnToWallRule(),
             new ColumnReductionRule(),
             new RoomShapeRule(),
-            new ReduceEnemiesRule(),
             new ArmorStandRule(),
             new TableRule(),
             new LongTableRule(),
@@ -42,7 +41,7 @@ public class RoomDecorator
             rules.Add(new ReduceChestRule());
         }
         ApplyRules(map, rules);
-        if (!(isStart || isEnd))
+        if (!isStart && !isEnd)
         {
             var enemyRules = new List<ReplacementRule>
             {

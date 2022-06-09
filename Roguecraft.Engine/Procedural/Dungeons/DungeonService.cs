@@ -2,6 +2,7 @@
 using MonoGame.Extended;
 using Roguecraft.Engine.Core;
 using Roguecraft.Engine.Factories;
+using Roguecraft.Engine.Procedural.RoomDecorators;
 using Roguecraft.Engine.Simulation;
 
 namespace Roguecraft.Engine.Procedural.Dungeons
@@ -10,12 +11,16 @@ namespace Roguecraft.Engine.Procedural.Dungeons
     {
         private readonly CollisionService _collisionService;
         private readonly Configuration _configuration;
+        private readonly IActorFactory _decorationFactory;
         private readonly IActorFactory _doorFactory;
         private readonly Dungeon _dungeon;
         private readonly Room _end;
         private readonly IActorFactory _enemyFactory;
         private readonly IActorFactory _heroFactory;
+        private readonly List<Room> _longestPath;
+        private readonly MoveableDecorationFactory _moveableDecorationFactory;
         private readonly IActorFactory _potionFactory;
+        private readonly RoomDecorator _roomDecorator;
         private readonly Room _special;
         private readonly Room _start;
         private readonly IActorFactory _wallFactory;
@@ -28,10 +33,12 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                               IActorFactory wallFactory,
                               IActorFactory doorFactory,
                               IActorFactory potionFactory,
-                              IActorFactory weaponFactory)
+                              IActorFactory weaponFactory,
+                              IActorFactory decorationFactory,
+                              MoveableDecorationFactory moveableDecorationFactory)
         {
             _configuration = configuration;
-
+            _roomDecorator = new RoomDecorator();
             _collisionService = collisionService;
             _heroFactory = heroFactory;
             _enemyFactory = enemyFactory;
@@ -39,15 +46,17 @@ namespace Roguecraft.Engine.Procedural.Dungeons
             _doorFactory = doorFactory;
             _potionFactory = potionFactory;
             _weaponFactory = weaponFactory;
+            _decorationFactory = decorationFactory;
+            _moveableDecorationFactory = moveableDecorationFactory;
 
             _dungeon = new Dungeon();
             for (int i = 0; i < _configuration.RoomsPerDungeon; i++)
             {
                 _dungeon.AddRoom();
             }
-            var longestPath = _dungeon.GetLongestPath();
-            _start = longestPath.First();
-            _end = longestPath.Last();
+            _longestPath = _dungeon.GetLongestPath();
+            _start = _longestPath.First();
+            _end = _longestPath.Last();
             _special = _dungeon.FindSpecialRoom();
         }
 
@@ -66,77 +75,119 @@ namespace Roguecraft.Engine.Procedural.Dungeons
         public void Initialize()
         {
             _collisionService.Initialize(Bounds);
-            AddWalls();
-            AddDoors();
-            AddPlayer();
-            AddEnemies();
-            _potionFactory.Add(new Vector2(_start.Left + 1.5f, _start.Top + 1.5f) * _configuration.WallSize);
-            _potionFactory.Add(new Vector2(_start.Left + 3.5f, _start.Top + 1.5f) * _configuration.WallSize);
-            _potionFactory.Add(new Vector2(_start.Left + 4.5f, _start.Top + 1.5f) * _configuration.WallSize);
-            _weaponFactory.Add(new Vector2(_start.Left + 1.5f, _start.Bottom - 1.5f) * _configuration.WallSize);
+
+            AddCells();
         }
 
-        private void AddDoors()
-        {
-            foreach (var (x, y) in _dungeon.Connections.Positions)
-            {
-                _doorFactory.Add(new Vector2(x, y) * _configuration.WallSize);
-            }
-        }
-
-        private void AddEnemies()
-        {
-            foreach (var room in _dungeon.Rooms)
-            {
-                if (room == _start || room == _end || room == _special)
-                {
-                    continue;
-                }
-                AddEnemy(room.FloatCenter);
-            }
-        }
-
-        private void AddEnemy(Vector2 position)
-        {
-            _enemyFactory.Add(position * _configuration.WallSize);
-        }
-
-        private void AddPlayer()
-        {
-            _heroFactory.Add((_start.FloatCenter) * _configuration.WallSize);
-        }
-
-        private void AddWalls()
+        private void AddCells()
         {
             var walls = new HashSet<Vector2>();
 
             var offset = new Point(-Math.Min(0, _dungeon.Rooms.Min(r => r.Left)), -Math.Min(0, _dungeon.Rooms.Min(r => r.Top)));
             var sizeBounds = new Point(_dungeon.Rooms.Max(r => r.Right) + offset.X, _dungeon.Rooms.Max(r => r.Bottom) + offset.Y);
-            var cells = new bool[sizeBounds.X + offset.X + 1, sizeBounds.Y + offset.Y + 1];
-
+            var cells = new char[sizeBounds.X + offset.X + 1, sizeBounds.Y + offset.Y + 1];
+            for (var x = 0; x < cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < cells.GetLength(1); y++)
+                {
+                    cells[x, y] = '_';
+                }
+            }
             foreach (var room in _dungeon.Rooms)
             {
-                for (int x = room.Left; x <= room.Right; x++)
+                var isInPath = _longestPath.Contains(room);
+                var isStart = _start == room;
+                var isEnd = _end == room;
+                var map = _roomDecorator.Decorate(_dungeon, room, isInPath, isStart, isEnd);
+                for (var i = 0; i < map.GetLength(0); i++)
                 {
-                    cells[offset.X + x, offset.Y + room.Top] = true;
-                    cells[offset.X + x, offset.Y + room.Bottom] = true;
-                }
-                for (int y = room.Top; y <= room.Bottom; y++)
-                {
-                    cells[offset.X + room.Left, offset.Y + y] = true;
-                    cells[offset.X + room.Right, offset.Y + y] = true;
+                    for (var j = 0; j < map.GetLength(1); j++)
+                    {
+                        cells[offset.X + room.Left + i, offset.Y + room.Top + j] = map[i, j];
+                    }
                 }
             }
 
-            for (int x = 0; x < cells.GetLength(0); x++)
+            for (var x = 0; x < cells.GetLength(0); x++)
             {
-                for (int y = 0; y < cells.GetLength(1); y++)
+                for (var y = 0; y < cells.GetLength(1); y++)
                 {
-                    if (!cells[x, y] || _dungeon.HasDoorAt((x - offset.X, y - offset.Y)))
+                    if (cells[x, y] != 'W')
                     {
                         continue;
                     }
-                    _wallFactory.Add(new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize));
+                    cells[x, y] = 'F';
+                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
+
+                    _wallFactory.Add(position);
+                }
+            }
+            for (var x = 0; x < cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < cells.GetLength(1); y++)
+                {
+                    if (cells[x, y] != 'D')
+                    {
+                        continue;
+                    }
+                    cells[x, y] = 'F';
+                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
+
+                    _doorFactory.Add(position);
+                }
+            }
+            for (var x = 0; x < cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < cells.GetLength(1); y++)
+                {
+                    if (cells[x, y] != 'S')
+                    {
+                        continue;
+                    }
+                    cells[x, y] = 'F';
+                    var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
+
+                    _heroFactory.Add(position);
+                }
+            }
+            for (var x = 0; x < cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < cells.GetLength(1); y++)
+                {
+                    if (cells[x, y] != 'E')
+                    {
+                        continue;
+                    }
+                    cells[x, y] = 'F';
+                    var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
+                    _enemyFactory.Add(position);
+                }
+            }
+            for (var x = 0; x < cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < cells.GetLength(1); y++)
+                {
+                    if (cells[x, y] != 'C')
+                    {
+                        continue;
+                    }
+                    cells[x, y] = 'F';
+                    var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
+
+                    _moveableDecorationFactory.Add(position);
+                }
+            }
+            for (var x = 0; x < cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < cells.GetLength(1); y++)
+                {
+                    if (cells[x, y] == 'F' || cells[x, y] == '_')
+                    {
+                        continue;
+                    }
+
+                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
+                    _decorationFactory.Add(position);
                 }
             }
         }

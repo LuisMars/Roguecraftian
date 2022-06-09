@@ -16,7 +16,7 @@ internal class ExtendedVisibility
     {
         _collisionService = collisionService;
         _visibilityComputer = new VisibilityComputer();
-        Radius = 1500;
+        Radius = 500;
         RadiusSquared = Radius * Radius;
     }
 
@@ -48,13 +48,16 @@ internal class ExtendedVisibility
         return triangles.ToList();
     }
 
+    internal IEnumerable<Actor> QueryCandidates(float multiplier = 1)
+    {
+        var viewBounds = new CircleF(Center, Radius * multiplier);
+
+        return _collisionService.QueryActors(viewBounds);
+    }
+
     private static void AddOccluders(IVisibilityComputer visibilityComputer, Actor sourceActor, Collision collidable, float radiusSquared, RectangleF viewBounds, Vector2 origin)
     {
-        if (sourceActor == collidable.Actor)
-        {
-            return;
-        }
-        if (collidable.IsSensor)
+        if (sourceActor == collidable.Actor || collidable.IsSensor || collidable.IsTransparent)
         {
             return;
         }

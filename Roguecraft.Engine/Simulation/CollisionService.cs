@@ -43,6 +43,11 @@ public class CollisionService
         CollisionTree.Insert(quadtreeData);
     }
 
+    public IEnumerable<Actor> QueryActors(IShapeF area)
+    {
+        return CollisionTree.Query(area).Select(d => d.Target.Actor).Distinct();
+    }
+
     public void Remove(Collision target)
     {
         if (!_targetDataDictionary.ContainsKey(target))
@@ -175,6 +180,10 @@ public class CollisionService
 
     private static void ReactToCollission(Actor actor)
     {
+        if (actor.Collision is null)
+        {
+            return;
+        }
         var collision = actor.Collision;
         var events = actor.Collision.InternalEvents;
         if (collision.IsFixed || collision.IsSensor || !events.Any())

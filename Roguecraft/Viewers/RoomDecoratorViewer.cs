@@ -101,7 +101,7 @@ public class RoomDecoratorViewer : Game
             'R' => Color.Crimson, // Ritual, pentagram...
             'E' => Color.Green, // Enemy
             '$' => Color.Gold, // Chest
-            'S' => Color.Pink, // Chest
+            'S' => Color.Pink, // Start
             _ => Color.Magenta
         };
         _spriteBatch.FillRectangle((x * tileSize) + offset, (y * tileSize) + offset, tileSize, tileSize, color);

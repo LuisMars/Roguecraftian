@@ -16,11 +16,13 @@ namespace Roguecraft.Engine.Content
             Load();
         }
 
+        public TextureRegion2D Chair { get; private set; }
         public TextureRegion2D Creature { get; private set; }
         public TextureRegion2D Dagger { get; private set; }
         public GameSound DaggerDraw { get; private set; }
         public TextureRegion2D Dead { get; private set; }
         public GameSound DeathSound { get; private set; }
+        public TextureRegion2D Decoration { get; private set; }
         public TextureRegion2D Door { get; private set; }
         public GameSound DoorCloseSound { get; private set; }
         public GameSound DoorOpenSound { get; private set; }
@@ -52,6 +54,8 @@ namespace Roguecraft.Engine.Content
             Creature = LoadTextureRegion("person");
             Enemy = LoadTextureRegion("enemy");
             Wall = LoadTextureRegion("wall");
+            Decoration = LoadTextureRegion("decoration");
+            Chair = LoadTextureRegion("chair");
             Door = LoadTextureRegion("door");
             Line = LoadTextureRegion("line");
             Potion = LoadTextureRegion("potion");

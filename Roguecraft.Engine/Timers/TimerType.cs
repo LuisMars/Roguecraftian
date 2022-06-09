@@ -9,4 +9,6 @@ public enum TimerType
     Fire,
     DrawDagger,
     Attack,
+    DoorOpen,
+    DoorClose,
 }

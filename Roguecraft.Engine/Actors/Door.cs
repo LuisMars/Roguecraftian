@@ -1,5 +1,6 @@
 ﻿using MonoGame.Extended.TextureAtlases;
 using Roguecraft.Engine.Actions;
+using Roguecraft.Engine.Timers;
 
 namespace Roguecraft.Engine.Actors
 {
@@ -24,6 +25,14 @@ namespace Roguecraft.Engine.Actors
             var texture = Texture;
             Texture = ToggledTexture;
             ToggledTexture = texture;
+            if (IsOpen)
+            {
+                Timers[TimerType.DoorOpen].Reset();
+            }
+            else
+            {
+                Timers[TimerType.DoorClose].Reset();
+            }
         }
     }
 }

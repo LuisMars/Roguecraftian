@@ -39,6 +39,8 @@ public class Collision
         }
     }
 
+    public bool IsTransparent { get; set; }
+
     public float Width
     {
         get
