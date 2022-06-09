@@ -5,25 +5,20 @@ VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Roguecraft", "Roguecraft\Roguecraft.csproj", "{329871A7-6761-4023-9491-037C899736B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Roguecraft.Engine", "Roguecraft.Engine\Roguecraft.Engine.csproj", "{F814B3D1-2F73-461E-812A-A0987B8E59DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Roguecraft.Engine", "Roguecraft.Engine\Roguecraft.Engine.csproj", "{F814B3D1-2F73-461E-812A-A0987B8E59DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		DungeonViewer|Any CPU = DungeonViewer|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{329871A7-6761-4023-9491-037C899736B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{329871A7-6761-4023-9491-037C899736B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{329871A7-6761-4023-9491-037C899736B9}.DungeonViewer|Any CPU.ActiveCfg = Debug|Any CPU
-		{329871A7-6761-4023-9491-037C899736B9}.DungeonViewer|Any CPU.Build.0 = Debug|Any CPU
 		{329871A7-6761-4023-9491-037C899736B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{329871A7-6761-4023-9491-037C899736B9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F814B3D1-2F73-461E-812A-A0987B8E59DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F814B3D1-2F73-461E-812A-A0987B8E59DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F814B3D1-2F73-461E-812A-A0987B8E59DF}.DungeonViewer|Any CPU.ActiveCfg = Debug|Any CPU
-		{F814B3D1-2F73-461E-812A-A0987B8E59DF}.DungeonViewer|Any CPU.Build.0 = Debug|Any CPU
 		{F814B3D1-2F73-461E-812A-A0987B8E59DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F814B3D1-2F73-461E-812A-A0987B8E59DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

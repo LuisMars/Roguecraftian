@@ -2,6 +2,14 @@
   "profiles": {
     "Roguecraft": {
       "commandName": "Project"
+    },
+    "DungeonViewer": {
+      "commandName": "Project",
+      "commandLineArgs": "dungeonViewer"
+    },
+    "RoomDecorator": {
+      "commandName": "Project",
+      "commandLineArgs": "roomDecorator"
     }
   }
 }
