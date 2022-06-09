@@ -16,6 +16,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
         private readonly Dungeon _dungeon;
         private readonly Room _end;
         private readonly IActorFactory _enemyFactory;
+        private readonly FloorDecorationFactory _floorDecorationFactory;
         private readonly IActorFactory _heroFactory;
         private readonly List<Room> _longestPath;
         private readonly MoveableDecorationFactory _moveableDecorationFactory;
@@ -35,7 +36,8 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                               IActorFactory potionFactory,
                               IActorFactory weaponFactory,
                               IActorFactory decorationFactory,
-                              MoveableDecorationFactory moveableDecorationFactory)
+                              MoveableDecorationFactory moveableDecorationFactory,
+                              FloorDecorationFactory floorDecorationFactory)
         {
             _configuration = configuration;
             _roomDecorator = new RoomDecorator();
@@ -48,7 +50,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
             _weaponFactory = weaponFactory;
             _decorationFactory = decorationFactory;
             _moveableDecorationFactory = moveableDecorationFactory;
-
+            _floorDecorationFactory = floorDecorationFactory;
             _dungeon = new Dungeon();
             for (int i = 0; i < _configuration.RoomsPerDungeon; i++)
             {
@@ -167,6 +169,27 @@ namespace Roguecraft.Engine.Procedural.Dungeons
             {
                 for (var y = 0; y < cells.GetLength(1); y++)
                 {
+                    if (cells[x, y] != 'T')
+                    {
+                        continue;
+                    }
+
+                    for (var i = 0; i < 2; i++)
+                    {
+                        for (var j = 0; j < 2; j++)
+                        {
+                            cells[x + i, y + j] = 'F';
+                        }
+                    }
+                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
+
+                    _moveableDecorationFactory.AddTable(position, new Vector2(2), "Table");
+                }
+            }
+            for (var x = 0; x < cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < cells.GetLength(1); y++)
+                {
                     if (cells[x, y] != 'C')
                     {
                         continue;
@@ -174,22 +197,85 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     cells[x, y] = 'F';
                     var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
 
-                    _moveableDecorationFactory.Add(position);
+                    _moveableDecorationFactory.AddChair(position);
                 }
             }
             for (var x = 0; x < cells.GetLength(0); x++)
             {
                 for (var y = 0; y < cells.GetLength(1); y++)
                 {
-                    if (cells[x, y] == 'F' || cells[x, y] == '_')
+                    if (cells[x, y] != 'A')
                     {
                         continue;
                     }
+                    cells[x, y] = 'F';
+                    var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
 
-                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
-                    _decorationFactory.Add(position);
+                    _weaponFactory.Add(position);
                 }
             }
+            for (var x = 0; x < cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < cells.GetLength(1); y++)
+                {
+                    if (cells[x, y] != 'B')
+                    {
+                        continue;
+                    }
+                    cells[x, y] = 'F';
+                    var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
+
+                    _potionFactory.Add(position);
+                }
+            }
+            for (var x = 0; x < cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < cells.GetLength(1); y++)
+                {
+                    if (cells[x, y] != 'R')
+                    {
+                        continue;
+                    }
+                    for (var i = 0; i < 4; i++)
+                    {
+                        for (var j = 0; j < 4; j++)
+                        {
+                            cells[x + i, y + j] = 'F';
+                        }
+                    }
+                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
+
+                    _floorDecorationFactory.Add(position, new Vector2(4), "Ritual");
+                }
+            }
+
+            for (var x = 0; x < cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < cells.GetLength(1); y++)
+                {
+                    if (cells[x, y] != 'J')
+                    {
+                        continue;
+                    }
+                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
+
+                    _moveableDecorationFactory.AddBarrel(position, "Barrel");
+                }
+            }
+
+            //for (var x = 0; x < cells.GetLength(0); x++)
+            //{
+            //    for (var y = 0; y < cells.GetLength(1); y++)
+            //    {
+            //        if (cells[x, y] == 'F' || cells[x, y] == '_')
+            //        {
+            //            continue;
+            //        }
+
+            //        var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
+            //        _decorationFactory.Add(position);
+            //    }
+            //}
         }
     }
 }

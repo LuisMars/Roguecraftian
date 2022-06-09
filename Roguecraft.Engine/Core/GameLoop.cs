@@ -26,7 +26,7 @@ public class GameLoop
         //{
         //}
 
-        foreach (var actor in _visibilityService.InActionRange())
+        foreach (var actor in _actorPool.Actors)
         {
             actor.CalculateVisibility(_visibilityService);
 

@@ -25,7 +25,7 @@ public class EnemyFactory : CreatureFactory<Enemy>
         var stats = new Stats
         {
             MaxHealth = 2,
-            Speed = Configuration.BaseCreatureSpeed * 0.85f,
+            Speed = Configuration.BaseCreatureSpeed * 0.95f,
             UnarmedAttack = new AttackAction(enemy, RandomGenerator)
         };
 
@@ -34,7 +34,7 @@ public class EnemyFactory : CreatureFactory<Enemy>
             Actor = enemy,
             Bounds = new CircleF
             {
-                Radius = Configuration.BaseCreatureAreaOfInfluenceRadius * 0.75f
+                Radius = Configuration.BaseCreatureAreaOfInfluenceRadius * 0.95f
             },
             IsSensor = true
         };

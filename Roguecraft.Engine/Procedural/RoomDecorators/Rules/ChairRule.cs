@@ -3,14 +3,12 @@
 public class ChairRule : ReplacementRule
 {
     public override char[,] Source { get; } = new char[,] {
-        { 'F', 'F', 'F' },
-        { '*', 'F', '*' },
-        { '*', 'T', '*' },
+        { 'F', '*' },
+        { 'T', '*' },
     };
 
     public override char[,] Target { get; } = new char[,] {
-        { 'F', 'F', 'F' },
-        { '*', 'C', '*' },
-        { '*', 'T', '*' },
+        { 'C', '*' },
+        { 'T', '*' },
     };
 }

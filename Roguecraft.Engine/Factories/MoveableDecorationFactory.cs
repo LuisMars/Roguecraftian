@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended;
+using MonoGame.Extended.TextureAtlases;
 using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Components;
 using Roguecraft.Engine.Content;
@@ -16,25 +17,56 @@ public class MoveableDecorationFactory : ActorFactoryBase<Wall>
     {
     }
 
+    private TextureRegion2D Texture { get; set; }
+
+    public void AddBarrel(Vector2 position, string? name = null)
+    {
+        position += new Vector2(Configuration.WallSize * 0.5f);
+        Add(position, name);
+        Texture = ContentRepository.Barrel;
+    }
+
+    public void AddChair(Vector2 position, string? name = null)
+    {
+        Add(position, "Chair");
+        Texture = ContentRepository.Chair;
+    }
+
+    public void AddTable(Vector2 position, Vector2 vector2, string? name = null)
+    {
+        Add(position, vector2, name);
+        Texture = ContentRepository.Table;
+    }
+
     protected override Wall Create(Vector2 position, string? name = null)
     {
         var wall = new Wall
         {
-            Color = Configuration.WallColor.ToColor(),
-            Texture = ContentRepository.Chair,
-            Name = name ?? "Wall",
+            Color = Configuration.WoodColor.ToColor(),
+            Texture = Texture ?? ContentRepository.Chair,
+            Name = name ?? "Moveable decoration",
             Position = position
         };
+        IShapeF bounds = new CircleF
+        {
+            Radius = Configuration.WallSize / 2f
+        };
+        if (Size != Vector2.One)
+        {
+            bounds = new RectangleF
+            {
+                Width = Configuration.WallSize * Size.X,
+                Height = Configuration.WallSize * Size.Y,
+            };
+        }
 
         wall.Collision = new Collision
         {
             Actor = wall,
-            Bounds = new CircleF
-            {
-                Radius = Configuration.WallSize / 2f
-            },
+            Bounds = bounds,
             IsTransparent = true,
         };
+
         CollisionService.Insert(wall.Collision);
         return wall;
     }

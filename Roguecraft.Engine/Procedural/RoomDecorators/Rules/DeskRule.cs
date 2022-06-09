@@ -10,7 +10,7 @@ public class DeskRule : ReplacementRule
 
     public override char[,] Target { get; } = new char[,] {
         { 'W', 'W', 'W' },
-        { 'Z', 'T', 'F' },
+        { 'Z', 'C', 'F' },
         { '*', 'F', 'F' },
     };
 }

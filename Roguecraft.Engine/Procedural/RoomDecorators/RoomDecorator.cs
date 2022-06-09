@@ -21,14 +21,15 @@ public class RoomDecorator
 
         var rules = new List<ReplacementRule>
         {
-            new ColumnRule(),
-            new ColumnToWallRule(),
-            new ColumnReductionRule(),
+            new BarrelRule(),
+            new BarrelToWallRule(),
+            new BarrelReductionRule(),
             new RoomShapeRule(),
             new ArmorStandRule(),
             new TableRule(),
-            new LongTableRule(),
+            //new LongTableRule(),
             new ChairRule(),
+            new ChestRule(),
             new BookshelfRule(),
             new LargeBookshelfRule()
         };

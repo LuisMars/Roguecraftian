@@ -16,7 +16,7 @@ internal class ExtendedVisibility
     {
         _collisionService = collisionService;
         _visibilityComputer = new VisibilityComputer();
-        Radius = 500;
+        Radius = 1000;
         RadiusSquared = Radius * Radius;
     }
 

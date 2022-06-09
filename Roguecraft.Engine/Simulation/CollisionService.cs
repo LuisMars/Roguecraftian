@@ -70,15 +70,18 @@ public class CollisionService
         {
             value.RemoveFromAllParents();
             var target = value.Target;
-            foreach (var item in CollisionTree.Query(target.Bounds))
+            if (!target.IsFixed)
             {
-                var collisionInfo = new CollisionArgs
+                foreach (var item in CollisionTree.Query(target.Bounds))
                 {
-                    Other = item.Target,
-                    PenetrationVector = CalculatePenetrationVector(value.Bounds, item.Bounds)
-                };
-                target.AddEvent(collisionInfo);
-                value.Bounds = value.Target.Bounds;
+                    var collisionInfo = new CollisionArgs
+                    {
+                        Other = item.Target,
+                        PenetrationVector = CalculatePenetrationVector(value.Bounds, item.Bounds)
+                    };
+                    target.AddEvent(collisionInfo);
+                    value.Bounds = value.Target.Bounds;
+                }
             }
 
             CollisionTree.Insert(value);

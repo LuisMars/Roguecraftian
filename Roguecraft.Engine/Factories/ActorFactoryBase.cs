@@ -20,13 +20,9 @@ public abstract class ActorFactoryBase<TActor> : IActorFactory where TActor : Ac
     protected CollisionService CollisionService { get; }
     protected Configuration Configuration { get; }
     protected ContentRepository ContentRepository { get; }
+    protected Vector2 Size { get; set; }
 
-    public void Add(float x, float y, string? name = null)
-    {
-        Add(new Vector2(x, y), name);
-    }
-
-    public void Add(Vector2 position, string? name = null)
+    public void Add(Vector2 position, Vector2 size, string? name = null)
     {
         var actor = Create(position, name);
         ActorPool.Add(actor);
@@ -34,6 +30,12 @@ public abstract class ActorFactoryBase<TActor> : IActorFactory where TActor : Ac
         {
             ActorPool.Hero = hero;
         }
+        Size = size;
+    }
+
+    public void Add(Vector2 position, string? name = null)
+    {
+        Add(position, Vector2.One, name);
     }
 
     protected abstract TActor Create(Vector2 position, string? name = null);

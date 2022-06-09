@@ -1,6 +1,6 @@
 ﻿namespace Roguecraft.Engine.Procedural.RoomDecorators.Rules;
 
-public class ColumnRule : ReplacementRule
+public class BarrelRule : ReplacementRule
 {
     public override char[,] Source { get; } = new char[,] {
         { 'W', 'W', 'W' },
@@ -10,7 +10,7 @@ public class ColumnRule : ReplacementRule
 
     public override char[,] Target { get; } = new char[,] {
         { 'W', 'W', 'W' },
-        { 'F', 'W', 'F' },
+        { 'F', 'J', 'F' },
         { 'F', 'F', 'F' },
     };
 }

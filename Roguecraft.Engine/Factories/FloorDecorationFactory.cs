@@ -9,9 +9,9 @@ using Roguecraft.Engine.Simulation;
 
 namespace Roguecraft.Engine.Factories;
 
-public class DecorationFactory : ActorFactoryBase<Wall>
+public class FloorDecorationFactory : ActorFactoryBase<Wall>
 {
-    public DecorationFactory(Configuration configuration, ActorPool actorPool, CollisionService collisionService, ContentRepository contentRepository) :
+    public FloorDecorationFactory(Configuration configuration, ActorPool actorPool, CollisionService collisionService, ContentRepository contentRepository) :
                   base(configuration, actorPool, collisionService, contentRepository)
     {
     }
@@ -20,9 +20,9 @@ public class DecorationFactory : ActorFactoryBase<Wall>
     {
         var wall = new Wall
         {
-            Color = Configuration.WoodColor.ToColor(),
-            Texture = ContentRepository.Decoration,
-            Name = name ?? "Decoration",
+            Color = Configuration.BloodColor.ToColor(),
+            Texture = ContentRepository.Ritual,
+            Name = name ?? "Floor decoration",
             Position = position
         };
 
@@ -31,11 +31,12 @@ public class DecorationFactory : ActorFactoryBase<Wall>
             Actor = wall,
             Bounds = new RectangleF
             {
-                Width = Configuration.WallSize,
-                Height = Configuration.WallSize,
+                Width = Configuration.WallSize * Size.X,
+                Height = Configuration.WallSize * Size.Y,
             },
             IsFixed = true,
             IsTransparent = true,
+            IsSensor = true
         };
         CollisionService.Insert(wall.Collision);
         return wall;

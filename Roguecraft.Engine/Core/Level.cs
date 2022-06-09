@@ -26,6 +26,7 @@ namespace Roguecraft.Engine.Core
         private readonly DoorFactory _doorFactory;
         private readonly DungeonService _dungeonService;
         private readonly EnemyFactory _enemyFactory;
+        private readonly FloorDecorationFactory _floorDecorationFactory;
         private readonly FrameCounter _frameCounter;
         private readonly GameLoop _gameLoop;
         private readonly GraphicsDeviceManager _graphics;
@@ -68,8 +69,19 @@ namespace Roguecraft.Engine.Core
             _weaponFactory = new WeaponFactory(_configuration, _actorPool, _collisionService, _contentRepository, _randomGenerator);
             _decorationFactory = new DecorationFactory(_configuration, _actorPool, _collisionService, _contentRepository);
             _moveableDecorationFactory = new MoveableDecorationFactory(_configuration, _actorPool, _collisionService, _contentRepository);
+            _floorDecorationFactory = new FloorDecorationFactory(_configuration, _actorPool, _collisionService, _contentRepository);
 
-            _dungeonService = new DungeonService(_configuration, _collisionService, _heroFactory, _enemyFactory, _wallFactory, _doorFactory, _potionFactory, _weaponFactory, _decorationFactory, _moveableDecorationFactory);
+            _dungeonService = new DungeonService(_configuration,
+                                                 _collisionService,
+                                                 _heroFactory,
+                                                 _enemyFactory,
+                                                 _wallFactory,
+                                                 _doorFactory,
+                                                 _potionFactory,
+                                                 _weaponFactory,
+                                                 _decorationFactory,
+                                                 _moveableDecorationFactory,
+                                                 _floorDecorationFactory);
 
             _spriteBatch = new SpriteBatch(_graphicsDevice);
 

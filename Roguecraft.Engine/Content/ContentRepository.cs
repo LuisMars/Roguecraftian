@@ -16,7 +16,10 @@ namespace Roguecraft.Engine.Content
             Load();
         }
 
+        public TextureRegion2D Barrel { get; private set; }
+        public TextureRegion2D Bookshelf { get; private set; }
         public TextureRegion2D Chair { get; private set; }
+        public TextureRegion2D Chest { get; private set; }
         public TextureRegion2D Creature { get; private set; }
         public TextureRegion2D Dagger { get; private set; }
         public GameSound DaggerDraw { get; private set; }
@@ -45,8 +48,10 @@ namespace Roguecraft.Engine.Content
         public TextureRegion2D ProgressBack { get; private set; }
         public TextureRegion2D ProgressFrame { get; private set; }
         public TextureRegion2D ProgressFront { get; private set; }
+        public TextureRegion2D Ritual { get; private set; }
         public GameSound SlowDownSound { get; private set; }
         public GameSound SpeedUpSound { get; private set; }
+        public TextureRegion2D Table { get; private set; }
         public TextureRegion2D Wall { get; private set; }
 
         private void Load()
@@ -56,6 +61,12 @@ namespace Roguecraft.Engine.Content
             Wall = LoadTextureRegion("wall");
             Decoration = LoadTextureRegion("decoration");
             Chair = LoadTextureRegion("chair");
+            Ritual = LoadTextureRegion("pentagram");
+            Bookshelf = LoadTextureRegion("bookshelf");
+            Barrel = LoadTextureRegion("barrel");
+            Chest = LoadTextureRegion("chest");
+            Table = LoadTextureRegion("table");
+
             Door = LoadTextureRegion("door");
             Line = LoadTextureRegion("line");
             Potion = LoadTextureRegion("potion");
