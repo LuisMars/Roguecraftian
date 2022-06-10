@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
 using Roguecraft.Engine.Actions;
 using Roguecraft.Engine.Components;
@@ -39,6 +40,7 @@ public abstract class Actor
         }
     }
 
+    public SpriteEffects SpriteEffects { get; set; } = SpriteEffects.None;
     public TextureRegion2D Texture { get; set; }
     public TimerManager Timers { get; } = new TimerManager();
     public VisibilityProperties Visibility { get; set; } = new();

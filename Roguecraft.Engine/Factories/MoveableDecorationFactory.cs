@@ -17,7 +17,7 @@ public class MoveableDecorationFactory : ActorFactoryBase<Wall>
     {
     }
 
-    private TextureRegion2D Texture { get; set; }
+    private TextureRegion2D? Texture { get; set; }
 
     public void AddBarrel(Vector2 position, string? name = null)
     {

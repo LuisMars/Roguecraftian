@@ -34,50 +34,65 @@ public class TextureRenderer
                              actor.Angle,
                              actor.Origin,
                              actor.Scale,
-                             SpriteEffects.None,
+                             actor.SpriteEffects,
                              GetLayer(actor.Position));
-            var texture = _fist;
-            var itemColor = actor.Color;
-            if (actor is not Creature creature)
-            {
-                continue;
-            }
-            if (creature.EquipedItem is not null)
-            {
-                color = creature.EquipedItem.Color;
-                texture = creature.EquipedItem.Texture;
-            }
-            var angle = MathF.PI * 0.25f;
-            var timer = creature.Timers[TimerType.Attack];
-            if (timer.IsActive)
-            {
-                angle = MathF.PI;
-                if (timer.Percentage < 0.25f)
-                {
-                    angle *= 2 * timer.Percentage + 0.25f;
-                }
-                else if (timer.Percentage < 0.75f)
-                {
-                    angle *= 0.75f - 1.5f * (timer.Percentage - 0.25f);
-                }
-                else
-                {
-                    angle *= timer.Percentage - 0.75f;
-                }
-            }
-            spriteBatch.Draw(texture,
-                             actor.Position,
-                             color,
-                             actor.Angle - angle,
-                             actor.Origin + new Vector2(-texture.Width, 0),
-                             creature.Scale * 0.75f,
-                             SpriteEffects.FlipHorizontally,
-                             GetLayer(actor.Position) * 1.001f);
+            DrawCreatureArms(spriteBatch, actor);
         }
     }
 
-    private float GetLayer(Vector2 position)
+    private static float GetLayer(Vector2 position, float offset = 0)
     {
-        return 0.5f + position.Y / 100000f + position.X / 10000000000f;
+        return 0.5f + (position.Y + offset) / 100000f + position.X / 10000000000f;
+    }
+
+    private void DrawCreatureArms(SpriteBatch spriteBatch, Actor actor)
+    {
+        if (actor is not Creature creature)
+        {
+            return;
+        }
+
+        var color = creature.Color;
+        var texture = _fist;
+        var armColor = color;
+        if (creature.EquipedItem is not null)
+        {
+            armColor = creature.EquipedItem.Color;
+            texture = creature.EquipedItem.Texture;
+        }
+        var angle = MathF.PI * 0.25f;
+        var timer = creature.Timers[TimerType.Attack];
+        if (timer.IsActive)
+        {
+            angle = MathF.PI;
+            if (timer.Percentage < 0.25f)
+            {
+                angle *= 2 * timer.Percentage + 0.25f;
+            }
+            else if (timer.Percentage < 0.75f)
+            {
+                angle *= 0.75f - 1.5f * (timer.Percentage - 0.25f);
+            }
+            else
+            {
+                angle *= timer.Percentage - 0.75f;
+            }
+        }
+        spriteBatch.Draw(texture,
+                         creature.Position,
+                         armColor,
+                         creature.Angle - angle,
+                         creature.Origin + new Vector2(-texture.Width, 0),
+                         creature.Scale * 0.75f,
+                         SpriteEffects.FlipHorizontally,
+                         GetLayer(actor.Position, 1));
+        spriteBatch.Draw(_fist,
+                         creature.Position,
+                         color,
+                         creature.Angle - MathF.PI * -0.25f,
+                         creature.Origin + new Vector2(texture.Width, 0),
+                         creature.Scale * 0.75f,
+                         SpriteEffects.None,
+                         GetLayer(actor.Position, 1));
     }
 }
