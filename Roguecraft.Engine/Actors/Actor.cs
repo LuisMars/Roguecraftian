@@ -22,7 +22,15 @@ public abstract class Actor
     {
         get
         {
-            return Collision.Origin * Texture.Width;
+            return new Vector2(0.5f, 0.5f) * (Texture?.Width ?? 0);
+        }
+    }
+
+    public Vector2 DrawingOffset
+    {
+        get
+        {
+            return (Collision?.Origin ?? Vector2.Zero) * (Texture?.Width ?? 0) * Scale;
         }
     }
 

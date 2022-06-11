@@ -28,8 +28,9 @@ public class TextureRenderer
             {
                 continue;
             }
+
             spriteBatch.Draw(actor.Texture,
-                             actor.Position,
+                             actor.Position + actor.DrawingOffset,
                              color,
                              actor.Angle,
                              actor.Origin,

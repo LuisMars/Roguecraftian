@@ -124,7 +124,7 @@ public class VisibilityRenderer
             }
             if (bounds is RectangleF rectangle)
             {
-                DrawSolidRectangle(rectangle.TopLeft, rectangle.Width, rectangle.Height, Color.White);
+                DrawSolidRectangle(entity.Position, rectangle.Width, rectangle.Height, Color.White);
             }
         }
 

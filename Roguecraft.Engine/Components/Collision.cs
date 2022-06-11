@@ -32,8 +32,8 @@ public class Collision
         {
             return Bounds switch
             {
-                RectangleF => Vector2.Zero,
-                CircleF => new Vector2(0.5f, 0.5f),
+                RectangleF => new Vector2(0.5f, 0.5f),
+                CircleF => Vector2.Zero,
                 _ => Vector2.Zero
             };
         }
