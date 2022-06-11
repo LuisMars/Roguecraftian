@@ -17,18 +17,22 @@ public class EnemyFactory : CreatureFactory<Enemy>
     public EnemyFactory(Configuration configuration, ActorPool actorPool, CollisionService collisionService, ContentRepository contentRepository, RandomGenerator randomGenerator) :
         base(configuration, actorPool, collisionService, contentRepository, randomGenerator)
     {
-        ;
     }
 
     protected override void OnCreate(Enemy enemy)
     {
         var stats = new Stats
         {
-            MaxHealth = 2,
+            MaxHealth = 3,
             Speed = Configuration.BaseCreatureSpeed * 0.95f,
             UnarmedAttack = new AttackAction(enemy, RandomGenerator)
         };
-
+        enemy.Alignement = new Alignement
+        {
+            Group = 0b010,
+            Hostile = 0b001,
+            Friendly = 0b010
+        };
         enemy.AreaOfInfluence = new Collision
         {
             Actor = enemy,

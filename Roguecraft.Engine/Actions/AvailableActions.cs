@@ -40,15 +40,30 @@ public class AvailableActions
 
     private GameAction GetNextAction(ActionTriggerArgs args)
     {
+        var mouseAction = GetNextAction(args, true);
+        if (mouseAction is not null && mouseAction is not NullAction)
+        {
+            return mouseAction;
+        }
+        var normalAction = GetNextAction(args, false);
+        if (normalAction is not null)
+        {
+            return normalAction;
+        }
+        return _nullAction;
+    }
+
+    private GameAction GetNextAction(ActionTriggerArgs args, bool useMouse)
+    {
         foreach (var (trigger, action) in Actions)
         {
-            if (!trigger.Trigger(args) || !action.TryPrepare())
+            if (!trigger.Trigger(args) || action.IsIgnored(useMouse) || !action.TryPrepare(useMouse))
             {
                 continue;
             }
 
             return action;
         }
-        return _nullAction;
+        return null;
     }
 }

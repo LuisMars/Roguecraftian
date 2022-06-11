@@ -7,6 +7,17 @@ public class Weapon : Item
 {
     public AttackAction AttackAction { get; set; }
 
+    protected override void OnDefaultAction(Creature creature)
+    {
+        creature.Timers[TimerType.DrawDagger].Reset();
+        AttackAction.Creature = creature;
+        if (creature.EquipedItem != null)
+        {
+            creature.Inventory.Add(creature.EquipedItem);
+        }
+        creature.EquipedItem = this;
+    }
+
     protected override AttackAction OnGetAttack()
     {
         return AttackAction;
@@ -14,12 +25,5 @@ public class Weapon : Item
 
     protected override void OnPickUp(Creature creature)
     {
-    }
-
-    protected override void OnDefaultAction(Creature creature)
-    {
-        creature.Timers[TimerType.DrawDagger].Reset();
-        AttackAction.Creature = creature;
-        creature.EquipedItem = this;
     }
 }

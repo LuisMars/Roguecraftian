@@ -1,5 +1,7 @@
-﻿using Roguecraft.Engine.Actors;
+﻿using MonoGame.Extended;
+using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Helpers;
+using Roguecraft.Engine.Input;
 using Roguecraft.Engine.Timers;
 
 namespace Roguecraft.Engine.Actions.Combat;
@@ -8,11 +10,15 @@ public class AttackAction : GameAction
 {
     private readonly RandomGenerator _random;
 
-    public AttackAction(RandomGenerator random) : this(null, random)
+    public AttackAction(RandomGenerator random) : this(null, random, null)
     {
     }
 
-    public AttackAction(Creature actor, RandomGenerator random) : base(actor)
+    public AttackAction(Creature actor, RandomGenerator random) : this(actor, random, null)
+    {
+    }
+
+    public AttackAction(Creature actor, RandomGenerator random, InputManager inputManager) : base(actor, inputManager)
     {
         EngeryCost = 500;
         _random = random;
@@ -27,13 +33,17 @@ public class AttackAction : GameAction
         return _random.FromRange(MinDamage, MaxDamage);
     }
 
-    public override bool TryPrepare()
+    public override bool TryPrepare(bool useMouse)
     {
         if (Creature.Energy < 0)
         {
             return false;
         }
-        var creatureEvent = Creature.AreaOfInfluence.Closest<Creature>(x => !x.Other.IsSensor && x.Other.Actor != Creature);
+        var creatureEvent = GetSelected<Creature>(useMouse,
+            x => !x.Other.IsSensor &&
+            x.Other.Actor != Creature &&
+            Creature.Alignement.IsHostileTo(((Creature)x.Other.Actor).Alignement));
+
         if (creatureEvent is null)
         {
             return false;
@@ -58,6 +68,7 @@ public class AttackAction : GameAction
     protected override void OnPerform(float deltaTime)
     {
         Creature.Timers[TimerType.Attack].Reset(0.5f);
+        Creature.Angle = (Target.Position - Creature.Position).ToAngle();
         var damageDealt = OnAttack(deltaTime);
         if (damageDealt == 0)
         {

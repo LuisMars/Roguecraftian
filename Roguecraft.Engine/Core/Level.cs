@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using Roguecraft.Engine.Cameras;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Factories;
@@ -132,6 +133,12 @@ namespace Roguecraft.Engine.Core
             _inputManager.Update();
             deltaTime = _timeManager.GetDeltaTime(deltaTime);
             _gameLoop.Update(deltaTime);
+
+            if (_inputManager.State.IsMouseUsed)
+            {
+                var hero = _actorPool.Hero;
+                hero.Angle = (_inputManager.State.MousePosition - hero.Position).ToAngle();
+            }
             _soundService.Play();
             _particleRenderer.Update(deltaTime);
             _gameLoop.UpdateTimers(deltaTime);

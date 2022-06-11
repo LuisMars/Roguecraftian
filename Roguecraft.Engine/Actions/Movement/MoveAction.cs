@@ -10,6 +10,7 @@ public class MoveAction : GameAction
     public MoveAction(Creature creature) : base(creature)
     {
         EngeryCost = 0;
+        IgnoreOnMouse = true;
     }
 
     public Vector2 Direction { get; protected set; }

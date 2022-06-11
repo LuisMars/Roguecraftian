@@ -21,6 +21,6 @@ internal class WeaponFactory : PickupItemFactory<Weapon>
     {
         weapon.Texture = ContentRepository.Dagger;
         weapon.Color = Configuration.SteelColor.ToColor();
-        weapon.AttackAction = new AttackAction(_randomGenerator) { MinDamage = 1, MaxDamage = 3 };
+        weapon.AttackAction = new AttackAction(_randomGenerator) { MinDamage = 1, MaxDamage = 4 };
     }
 }

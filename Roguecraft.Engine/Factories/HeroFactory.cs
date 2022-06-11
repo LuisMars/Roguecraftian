@@ -36,7 +36,13 @@ public class HeroFactory : CreatureFactory<Hero>
         {
             MaxHealth = 20,
             Speed = Configuration.BaseCreatureSpeed,
-            UnarmedAttack = new AttackAction(hero, RandomGenerator) { MinDamage = 1 }
+            UnarmedAttack = new AttackAction(hero, RandomGenerator) { MinDamage = 1, MaxDamage = 2 }
+        };
+        hero.Alignement = new Alignement
+        {
+            Group = 0b001,
+            Hostile = 0b010,
+            Friendly = 0b001
         };
         hero.UnderTexture = ContentRepository.UnderPlayer;
         hero.UnderColor = Configuration.UnderPlayerColor.ToColor();
@@ -59,12 +65,12 @@ public class HeroFactory : CreatureFactory<Hero>
 
         hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.InventoryNext } }, new MoveInventoryAction(hero, true));
         hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.InventoryPrev } }, new MoveInventoryAction(hero, false));
-        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.InventoryUse } }, new UseInventoryAction(hero));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.InventoryUse } }, new UseInventoryAction(hero, _inputManager));
 
-        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.QuickAction } }, new AttackSelectionAction(hero));
-        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.PickUp } }, new PickupItemAction(hero));
-        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.QuickAction } }, new QuickAction(hero));
-        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.QuickAction } }, new ToggleDoorAction(hero));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.QuickAction } }, new AttackSelectionAction(hero, _inputManager));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.PickUp } }, new PickupItemAction(hero, _inputManager));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.QuickAction } }, new QuickAction(hero, _inputManager));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.QuickAction } }, new ToggleDoorAction(hero, _inputManager));
 
         hero.AvailableActions.Add(new InputActionTrigger { LeftStick = true }, new JoystickMovementAction(hero, _inputManager));
         hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.FollowMouse } }, new MouseMovementAction(hero, _inputManager));

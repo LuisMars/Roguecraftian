@@ -76,6 +76,11 @@ public class Collision
         return LastEvents.FirstOrDefault(e => e.Other.Actor is TActor && (extraConditions?.Invoke(e) ?? true));
     }
 
+    public IEnumerable<CollisionArgs> Where<TActor>(Func<CollisionArgs, bool>? extraConditions = null) where TActor : Actor
+    {
+        return LastEvents.Where(e => e.Other.Actor is TActor && (extraConditions?.Invoke(e) ?? true));
+    }
+
     internal void AddEvent(CollisionArgs collisionInfo)
     {
         InternalEvents.Add(collisionInfo);

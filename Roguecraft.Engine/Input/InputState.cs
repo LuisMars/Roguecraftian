@@ -46,6 +46,7 @@ public class InputState
         { InputAction.InventoryNext, (g, g2) => g.DeltaScrollWheelValue > 0 },
         { InputAction.InventoryPrev, (g, g2) => g.DeltaScrollWheelValue < 0 },
         { InputAction.InventoryUse, (g, g2) => g.MiddleButton == ButtonState.Pressed && g2.MiddleButton == ButtonState.Released },
+        { InputAction.PickUp, (g, g2) => g.MiddleButton == ButtonState.Pressed && g2.MiddleButton == ButtonState.Released },
         { InputAction.FollowMouse, (g, g2) => g.RightButton == ButtonState.Pressed },
         { InputAction.QuickAction, (g, g2) => g.LeftButton == ButtonState.Pressed && g2.LeftButton == ButtonState.Released },
     };
@@ -68,6 +69,16 @@ public class InputState
         _previousMouseState = previousMouseState;
         _cameraService = cameraService;
     }
+
+    public bool IsMouseEvent
+    {
+        get
+        {
+            return _mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released;
+        }
+    }
+
+    public bool IsMouseUsed => _mouseState.DeltaPosition != Point.Zero && _previousMouseState.DeltaPosition != Point.Zero;
 
     internal Vector2 LeftJostick => _gamePadState.ThumbSticks.Left * _invertJoystickY;
     internal Vector2 MousePosition => _cameraService.ScreenToWorld(_mouseState.Position.ToVector2());

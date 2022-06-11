@@ -70,7 +70,7 @@ public class CollisionService
         {
             value.RemoveFromAllParents();
             var target = value.Target;
-            if (!target.IsFixed)
+            if (!target.IsFixed || target.IsSensor)
             {
                 foreach (var item in CollisionTree.Query(target.Bounds))
                 {
@@ -80,7 +80,6 @@ public class CollisionService
                         PenetrationVector = CalculatePenetrationVector(value.Bounds, item.Bounds)
                     };
                     target.AddEvent(collisionInfo);
-                    value.Bounds = value.Target.Bounds;
                 }
             }
 

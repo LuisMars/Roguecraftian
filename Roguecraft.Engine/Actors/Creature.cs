@@ -7,12 +7,12 @@ namespace Roguecraft.Engine.Actors;
 
 public abstract class Creature : Actor
 {
+    public Alignement Alignement { get; set; } = new();
     public Collision AreaOfInfluence { get; set; }
 
     public AvailableActions AvailableActions { get; set; }
 
     public Vector2 Direction { get; set; }
-
     public float DistanceWalked { get; set; }
     public float Energy { get; set; }
     public Item EquipedItem { get; set; }

@@ -22,10 +22,6 @@ public class GameLoop
         _collisionService.RemoveDead();
         _visibilityService.Update(_actorPool.Hero);
 
-        //foreach (var actor in _visibilityService.InVisibilityRange())
-        //{
-        //}
-
         foreach (var actor in _actorPool.Actors)
         {
             actor.CalculateVisibility(_visibilityService);

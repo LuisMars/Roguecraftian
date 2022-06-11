@@ -24,12 +24,17 @@ public class ChaseHeroAction : MoveAction
         return direction;
     }
 
-    public override bool TryPrepare()
+    public override bool TryPrepare(bool useMouse)
     {
+        if (Creature.AreaOfInfluence.Any<Hero>(x => !x.Other.IsSensor))
+        {
+            return false;
+        }
         if (Creature.Visibility.IsVisibleByHero)
         {
             LastKnownPosition = Hero.Position;
             var distance = (LastKnownPosition - Creature.Position).LengthSquared();
+
             GreatestDistance = Math.Max(GreatestDistance, distance);
             return true;
         }
