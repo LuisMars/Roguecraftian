@@ -21,10 +21,6 @@ public class ChaseHeroAction : MoveAction
         var direction = LastKnownPosition - Creature.Position;
         direction /= Creature.Stats.Speed * 2;
         direction = direction.ClampMagnitude(1, out _);
-        if (Creature.AreaOfInfluence.Any<Hero>())
-        {
-            direction = direction * 0.5f + new Vector2(direction.Y, -direction.X) * 0.5f;
-        }
         return direction;
     }
 

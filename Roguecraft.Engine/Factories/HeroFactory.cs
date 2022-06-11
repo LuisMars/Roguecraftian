@@ -38,7 +38,8 @@ public class HeroFactory : CreatureFactory<Hero>
             Speed = Configuration.BaseCreatureSpeed,
             UnarmedAttack = new AttackAction(hero, RandomGenerator) { MinDamage = 1 }
         };
-
+        hero.UnderTexture = ContentRepository.UnderPlayer;
+        hero.UnderColor = Configuration.UnderPlayerColor.ToColor();
         hero.AreaOfInfluence = new Collision
         {
             Actor = hero,

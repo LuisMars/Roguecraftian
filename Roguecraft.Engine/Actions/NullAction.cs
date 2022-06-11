@@ -11,6 +11,12 @@ public class NullAction : GameAction
 
     protected override void OnPerform(float deltaTime)
     {
+        var wasStill = Creature.Direction == Vector2.Zero;
+        Creature.StillFrames++;
         Creature.Direction = Vector2.Zero;
+        if (wasStill)
+        {
+            Creature.IsStill = Creature.StillFrames > 30;
+        }
     }
 }

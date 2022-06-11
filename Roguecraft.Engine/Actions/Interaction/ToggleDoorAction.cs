@@ -18,13 +18,8 @@ public class ToggleDoorAction : GameAction
             return false;
         }
 
-        var door = Creature.AreaOfInfluence.FirstOrDefault<Door>();
+        var door = Creature.AreaOfInfluence.Closest<Door>(x => !x.Other.Actor.Collision.InternalEvents.Any(e => e.PenetrationVector.LengthSquared() < 100));
         if (door is null)
-        {
-            return false;
-        }
-        var isInsideDoor = Creature.Collision.FirstOrDefault<Door>(e => e.PenetrationVector.LengthSquared() > 100);
-        if (isInsideDoor is not null)
         {
             return false;
         }

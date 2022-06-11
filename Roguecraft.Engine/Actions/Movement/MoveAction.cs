@@ -25,9 +25,12 @@ public class MoveAction : GameAction
     {
         var direction = GetDirection();
         Creature.Direction = direction;
+
         var speed = direction * Creature.Stats.Speed * deltaTime;
         Creature.RealSpeed = speed;
         Creature.Position += speed;
+        Creature.IsStill = false;
+        Creature.StillFrames = 0;
 
         Creature.DistanceWalked += speed.Length();
         Creature.Angle = direction.ToAngle();

@@ -64,7 +64,7 @@ public class ParticleRenderer
                 {
                     continue;
                 }
-                particle.Trigger(creature.Position);
+                particle.Trigger(creature.Position, 0.01f);
             }
             TriggerFootsteps(creature);
         }
@@ -94,7 +94,7 @@ public class ParticleRenderer
         stepOffset.Normalize();
         stepOffset = stepOffset.Rotate(MathF.PI * 0.25f);
         stepOffset *= _stepDrawOffset;
-        _footstepParticle.Trigger(creature.Position + stepOffset, 0);
-        _footstepParticle.Trigger(creature.Position - stepOffset, 0);
+        _footstepParticle.Trigger(creature.Position + stepOffset, 0.01f);
+        _footstepParticle.Trigger(creature.Position - stepOffset, 0.01f);
     }
 }

@@ -3,12 +3,14 @@
 public class StairsRule : ReplacementRule
 {
     public override char[,] Source { get; } = new char[,] {
-        { 'W', 'W' },
-        { 'F', 'F' },
+        { 'F', 'F', 'F' },
+        { 'F', 'F', 'F' },
+        { 'F', 'F', 'F' },
     };
 
     public override char[,] Target { get; } = new char[,] {
-        { 'W', 'W' },
-        { 'S', 'W' },
+        { 'F', 'F', 'F' },
+        { 'F', 'S', 'F' },
+        { 'F', 'F', 'F' },
     };
 }

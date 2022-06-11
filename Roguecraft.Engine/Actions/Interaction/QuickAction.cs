@@ -18,7 +18,7 @@ public class QuickAction : GameAction
             return false;
         }
 
-        var door = Creature.AreaOfInfluence.FirstOrDefault<Item>();
+        var door = Creature.AreaOfInfluence.Closest<Item>();
         if (door is null)
         {
             return false;

@@ -38,12 +38,13 @@ public class TextureRenderer
                              actor.SpriteEffects,
                              GetLayer(actor.Position));
             DrawCreatureArms(spriteBatch, actor);
+            DrawUnderPlayer(spriteBatch, actor);
         }
     }
 
     private static float GetLayer(Vector2 position, float offset = 0)
     {
-        return 0.5f + (position.Y + offset) / 100000f + position.X / 10000000000f;
+        return 0.5f + (position.Y + offset * 100) / 100000f + position.X / 10000000000f;
     }
 
     private void DrawCreatureArms(SpriteBatch spriteBatch, Actor actor)
@@ -61,39 +62,65 @@ public class TextureRenderer
             armColor = creature.EquipedItem.Color;
             texture = creature.EquipedItem.Texture;
         }
-        var angle = MathF.PI * 0.25f;
-        var timer = creature.Timers[TimerType.Attack];
-        if (timer.IsActive)
+        var rightArmAngle = MathF.PI * 0.25f;
+        var leftArmAngle = MathF.PI * -0.25f;
+        var attackTimer = creature.Timers[TimerType.Attack];
+        var hurtTimer = creature.Timers[TimerType.Hurt];
+        if (attackTimer.IsActive)
         {
-            angle = MathF.PI;
-            if (timer.Percentage < 0.25f)
+            rightArmAngle = MathF.PI;
+            if (attackTimer.Percentage < 0.25f)
             {
-                angle *= 2 * timer.Percentage + 0.25f;
+                rightArmAngle *= 2 * attackTimer.Percentage + 0.25f;
             }
-            else if (timer.Percentage < 0.75f)
+            else if (attackTimer.Percentage < 0.75f)
             {
-                angle *= 0.75f - 1.5f * (timer.Percentage - 0.25f);
+                rightArmAngle *= 0.75f - 1.5f * (attackTimer.Percentage - 0.25f);
             }
             else
             {
-                angle *= timer.Percentage - 0.75f;
+                rightArmAngle *= attackTimer.Percentage - 0.75f;
             }
+
+            leftArmAngle = MathF.PI * -attackTimer.Percentage * 0.25f;
+        }
+        if (hurtTimer.IsActive)
+        {
+            var value = hurtTimer.Percentage * 0.25f;
+            rightArmAngle = MathF.PI * value;
+            leftArmAngle = MathF.PI * -value;
         }
         spriteBatch.Draw(texture,
                          creature.Position,
                          armColor,
-                         creature.Angle - angle,
+                         creature.Angle - rightArmAngle,
                          creature.Origin + new Vector2(-texture.Width, 0),
                          creature.Scale * 0.75f,
                          SpriteEffects.FlipHorizontally,
-                         GetLayer(actor.Position, 1));
+                         GetLayer(actor.Position, 10f));
         spriteBatch.Draw(_fist,
                          creature.Position,
                          color,
-                         creature.Angle - MathF.PI * -0.25f,
+                         creature.Angle - leftArmAngle,
                          creature.Origin + new Vector2(texture.Width, 0),
                          creature.Scale * 0.75f,
                          SpriteEffects.None,
-                         GetLayer(actor.Position, 1));
+                         GetLayer(actor.Position, 10f));
+    }
+
+    private void DrawUnderPlayer(SpriteBatch spriteBatch, Actor actor)
+    {
+        if (actor is not Hero hero)
+        {
+            return;
+        }
+        spriteBatch.Draw(hero.UnderTexture,
+                         hero.Position + new Vector2(hero.AreaOfInfluence.Width * -(0.28125f)),
+                         hero.UnderColor,
+                         0,
+                         hero.Origin,
+                         new Vector2(hero.AreaOfInfluence.Width / hero.UnderTexture.Width) * 1.125f,
+                         hero.SpriteEffects,
+                         0);
     }
 }

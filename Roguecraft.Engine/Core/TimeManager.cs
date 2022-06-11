@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Roguecraft.Engine.Content;
+﻿using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Input;
 using Roguecraft.Engine.Sound;
 
@@ -34,7 +33,7 @@ public class TimeManager
     {
         var originalDelta = deltaTime;
         var fullEnergy = _actorPool.Hero.Energy == 0;
-        var isStill = _actorPool.Hero.Direction == Vector2.Zero;
+        var isStill = _actorPool.Hero.IsStill;
 
         if (isStill && fullEnergy)
         {
@@ -42,7 +41,7 @@ public class TimeManager
             JustStartedSlowingDown = !IsSlowingDown;
             IsSlowingDown = true;
         }
-        else if (DeltaTime != 0 && DeltaTime < deltaTime)
+        else if (!isStill && DeltaTime != 0 && DeltaTime < deltaTime)
         {
             JustStartedSpeedingUp = !IsSpeedingUp;
             IsSpeedingUp = true;

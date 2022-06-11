@@ -47,7 +47,7 @@ public class CameraService
 
     private void Shake()
     {
-        _camera.Position += MathUtils.RandomVector(128);
-        _camera.Rotation += (MathUtils.RandomNormal() - 0.5f) * 0.0625f;
+        _camera.Position += MathUtils.RandomVector(64);
+        _camera.Rotation += (MathUtils.RandomNormal() - 0.5f) * 0.125f;
     }
 }

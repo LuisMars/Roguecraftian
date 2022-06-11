@@ -28,7 +28,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
         private readonly Room _start;
         private readonly IActorFactory _wallFactory;
         private readonly IActorFactory _weaponFactory;
-
+        private readonly Random _random = new Random();
         public DungeonService(Configuration configuration,
                               CollisionService collisionService,
                               IActorFactory heroFactory,
@@ -221,7 +221,14 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     }
                     var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
 
-                    _weaponFactory.Add(position);
+                    if (_random.NextSingle() > 0.5f)
+                    {
+                        _potionFactory.Add(position);
+                    }
+                    else
+                    {
+                        _weaponFactory.Add(position);
+                    }
                 }
             }
             for (var x = 0; x < cells.GetLength(0); x++)

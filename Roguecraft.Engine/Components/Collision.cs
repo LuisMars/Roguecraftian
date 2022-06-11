@@ -26,6 +26,8 @@ public class Collision
     public bool IsFixed { get; set; }
     public bool IsSensor { get; set; }
 
+    public bool IsTransparent { get; set; }
+
     public Vector2 Origin
     {
         get
@@ -38,8 +40,6 @@ public class Collision
             };
         }
     }
-
-    public bool IsTransparent { get; set; }
 
     public float Width
     {
@@ -60,6 +60,15 @@ public class Collision
     public bool Any<TActor>(Func<CollisionArgs, bool>? extraConditions = null) where TActor : Actor
     {
         return LastEvents.Any(e => e.Other.Actor is TActor && (extraConditions?.Invoke(e) ?? true));
+    }
+
+    public CollisionArgs? Closest<TActor>(Func<CollisionArgs, bool>? extraConditions = null) where TActor : Actor
+    {
+        var closest = LastEvents
+            .Where(e => e.Other.Actor is TActor && (extraConditions?.Invoke(e) ?? true))
+            .MinBy(e => (e.Other.Actor.Position - Actor.Position).LengthSquared());
+
+        return closest;
     }
 
     public CollisionArgs? FirstOrDefault<TActor>(Func<CollisionArgs, bool>? extraConditions = null) where TActor : Actor

@@ -17,7 +17,6 @@ public class InputManager
         {
             LastGamePadState = GamePadState;
         }
-
         State = new InputState(GamePadState, LastGamePadState, KeyboardExtended.GetState(), MouseExtended.GetState());
     }
 }

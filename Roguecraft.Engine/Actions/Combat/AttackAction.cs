@@ -33,7 +33,7 @@ public class AttackAction : GameAction
         {
             return false;
         }
-        var creatureEvent = Creature.AreaOfInfluence.FirstOrDefault<Creature>(x => !x.Other.IsSensor && x.Other.Actor != Creature);
+        var creatureEvent = Creature.AreaOfInfluence.Closest<Creature>(x => !x.Other.IsSensor && x.Other.Actor != Creature);
         if (creatureEvent is null)
         {
             return false;
@@ -63,6 +63,6 @@ public class AttackAction : GameAction
         {
             return;
         }
-        Target.Timers[TimerType.Hurt].Reset();
+        Target.Timers[TimerType.Hurt].Reset(0.5f);
     }
 }

@@ -20,6 +20,7 @@
         public string SteelColor { get; } = "#b2d9e4";
         public int StepDrawOffset { get; } = 6;
         public int StepFrequencyBase { get; } = 200;
+        public string UnderPlayerColor { get; } = "222b40";
         public string WallColor { get; } = "#485e71";
         public int WallSize { get; } = 100;
         public string WoodColor { get; } = "66523D";

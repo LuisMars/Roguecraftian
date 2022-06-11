@@ -53,6 +53,7 @@ namespace Roguecraft.Engine.Content
         public GameSound SlowDownSound { get; private set; }
         public GameSound SpeedUpSound { get; private set; }
         public TextureRegion2D Table { get; private set; }
+        public TextureRegion2D UnderPlayer { get; private set; }
         public TextureRegion2D Wall { get; private set; }
 
         private void Load()
@@ -68,6 +69,8 @@ namespace Roguecraft.Engine.Content
             Chest = LoadTextureRegion("chest");
             Table = LoadTextureRegion("table");
             Bed = LoadTextureRegion("bed");
+
+            UnderPlayer = LoadTextureRegion("under_player");
 
             Door = LoadTextureRegion("door");
             Line = LoadTextureRegion("line");

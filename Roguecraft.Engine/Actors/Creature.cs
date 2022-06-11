@@ -14,22 +14,19 @@ public abstract class Creature : Actor
     public Vector2 Direction { get; set; }
 
     public float DistanceWalked { get; set; }
-
     public float Energy { get; set; }
-
     public Item EquipedItem { get; set; }
-
     public Vector2 FootstepDistance { get; set; }
-
     public int Health { get; set; }
-
     public Inventory Inventory { get; set; } = new Inventory();
+    public bool IsStill { get; set; }
     public Vector2 LastPosition { get; set; }
 
     public Vector2 RealSpeed { get; set; }
     public Vector2 Speed => Position - LastPosition;
 
     public Stats Stats { get; set; }
+    public int StillFrames { get; set; }
 
     public override void ClearSimulationData()
     {
