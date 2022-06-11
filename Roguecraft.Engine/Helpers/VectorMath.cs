@@ -16,13 +16,11 @@ public static class VectorMath
         return Math.Abs(area) < 1f;
     }
 
-    public static Vector2 ClampMagnitude(this Vector2 vector, float maxLength, out bool changed)
+    public static Vector2 ClampMagnitude(this Vector2 vector, float maxLength)
     {
-        changed = true;
         float sqrMagnitude = vector.LengthSquared();
         if (sqrMagnitude <= maxLength * maxLength)
         {
-            changed = false;
             return vector;
         }
         float mag = MathF.Sqrt(sqrMagnitude);
@@ -65,9 +63,9 @@ public static class VectorMath
         return new Vector2(p1.X + s * (p2.X - p1.X), p1.Y + s * (p2.Y - p1.Y));
     }
 
-    public static Vector2 MaxDistance(this Vector2 vector, Vector2 other, float maxLength, out bool changed)
+    public static Vector2 MaxDistance(this Vector2 vector, Vector2 other, float maxLength)
     {
         var d = vector - other;
-        return d.ClampMagnitude(maxLength, out changed) + other;
+        return d.ClampMagnitude(maxLength) + other;
     }
 }

@@ -102,6 +102,11 @@ namespace Roguecraft.Engine.Cameras
             return Vector2.Transform(coord, GetViewTransformationMatrix());
         }
 
+        public Vector2 ToWorld(Vector2 screen)
+        {
+            return Vector2.Transform(screen, Matrix.Invert(GetViewTransformationMatrix()));
+        }
+
         public void Update(int width, int height)
         {
             ScreenWidth = width;

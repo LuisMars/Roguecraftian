@@ -57,7 +57,9 @@ namespace Roguecraft.Engine.Core
             _configuration = new Configuration();
             _frameCounter = new FrameCounter();
             _actorPool = new ActorPool();
-            _inputManager = new InputManager();
+
+            _cameraService = new CameraService(_actorPool, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
+            _inputManager = new InputManager(_cameraService);
 
             _collisionService = new CollisionService(_actorPool);
             _randomGenerator = new RandomGenerator();
@@ -84,8 +86,6 @@ namespace Roguecraft.Engine.Core
                                                  _floorDecorationFactory);
 
             _spriteBatch = new SpriteBatch(_graphicsDevice);
-
-            _cameraService = new CameraService(_actorPool, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
 
             _visibilityService = new VisibilityService(_collisionService);
             _visibilityRenderer = new VisibilityRenderer(_actorPool, _graphicsDevice, _cameraService, _contentRepository, _visibilityService, _configuration);

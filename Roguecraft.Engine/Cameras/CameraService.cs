@@ -21,6 +21,11 @@ public class CameraService
         return _camera.GetViewTransformationMatrix();
     }
 
+    public Vector2 ScreenToWorld(Vector2 screen)
+    {
+        return _camera.ToWorld(screen);
+    }
+
     internal void Update(int width, int height, float deltaTime)
     {
         var hero = _actorPool.Hero;

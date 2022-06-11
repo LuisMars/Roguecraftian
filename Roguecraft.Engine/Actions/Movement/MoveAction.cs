@@ -7,7 +7,7 @@ namespace Roguecraft.Engine.Actions.Movement;
 
 public class MoveAction : GameAction
 {
-    public MoveAction(Creature actor) : base(actor)
+    public MoveAction(Creature creature) : base(creature)
     {
         EngeryCost = 0;
     }
@@ -17,7 +17,7 @@ public class MoveAction : GameAction
     public virtual Vector2 GetDirection()
     {
         var direction = Vector2.Lerp(Direction, Creature.Direction, 0.85f);
-        direction = direction.ClampMagnitude(1, out _);
+        direction = direction.ClampMagnitude(1);
         return direction;
     }
 

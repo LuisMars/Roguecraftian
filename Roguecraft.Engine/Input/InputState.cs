@@ -1,11 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input;
+using Roguecraft.Engine.Cameras;
 
 namespace Roguecraft.Engine.Input;
 
 public class InputState
 {
+    private readonly CameraService _cameraService;
+
     private readonly Dictionary<InputAction, Func<GamePadState, GamePadState, bool>> _gamePadMapping = new()
     {
         { InputAction.MoveUp, (g, g2) => g.DPad.Up == ButtonState.Pressed },
@@ -38,24 +41,36 @@ public class InputState
         { InputAction.InventoryUse, (Keys.Q, true) },
     };
 
-    private readonly Dictionary<InputAction, Func<MouseStateExtended, bool>> _mouseMapping = new()
+    private readonly Dictionary<InputAction, Func<MouseStateExtended, MouseStateExtended, bool>> _mouseMapping = new()
     {
-        { InputAction.InventoryNext, g => g.DeltaScrollWheelValue > 0 },
-        { InputAction.InventoryPrev, g => g.DeltaScrollWheelValue < 0 },
+        { InputAction.InventoryNext, (g, g2) => g.DeltaScrollWheelValue > 0 },
+        { InputAction.InventoryPrev, (g, g2) => g.DeltaScrollWheelValue < 0 },
+        { InputAction.InventoryUse, (g, g2) => g.MiddleButton == ButtonState.Pressed && g2.MiddleButton == ButtonState.Released },
+        { InputAction.FollowMouse, (g, g2) => g.RightButton == ButtonState.Pressed },
+        { InputAction.QuickAction, (g, g2) => g.LeftButton == ButtonState.Pressed && g2.LeftButton == ButtonState.Released },
     };
 
     private readonly MouseStateExtended _mouseState;
     private readonly GamePadState _previousGamePadState;
+    private readonly MouseStateExtended _previousMouseState;
 
-    public InputState(GamePadState gamePadState, GamePadState previousGamePadState, KeyboardStateExtended keyboardState, MouseStateExtended mouseState)
+    public InputState(GamePadState gamePadState,
+                      GamePadState previousGamePadState,
+                      KeyboardStateExtended keyboardState,
+                      MouseStateExtended mouseState,
+                      MouseStateExtended previousMouseState,
+                      CameraService cameraService)
     {
         _gamePadState = gamePadState;
         _previousGamePadState = previousGamePadState;
         _keyboardState = keyboardState;
         _mouseState = mouseState;
+        _previousMouseState = previousMouseState;
+        _cameraService = cameraService;
     }
 
     internal Vector2 LeftJostick => _gamePadState.ThumbSticks.Left * _invertJoystickY;
+    internal Vector2 MousePosition => _cameraService.ScreenToWorld(_mouseState.Position.ToVector2());
 
     public bool IsButtonDown(InputAction input)
     {
@@ -105,6 +120,6 @@ public class InputState
             return false;
         }
 
-        return checkButton(_mouseState);
+        return checkButton(_mouseState, _previousMouseState);
     }
 }

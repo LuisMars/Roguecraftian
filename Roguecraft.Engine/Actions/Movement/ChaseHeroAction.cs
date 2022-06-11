@@ -20,7 +20,7 @@ public class ChaseHeroAction : MoveAction
     {
         var direction = LastKnownPosition - Creature.Position;
         direction /= Creature.Stats.Speed * 2;
-        direction = direction.ClampMagnitude(1, out _);
+        direction = direction.ClampMagnitude(1);
         return direction;
     }
 

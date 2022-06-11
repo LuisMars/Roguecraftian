@@ -10,5 +10,6 @@ public enum InputAction
     QuickAction,
     InventoryNext,
     InventoryPrev,
-    InventoryUse
+    InventoryUse,
+    FollowMouse
 }

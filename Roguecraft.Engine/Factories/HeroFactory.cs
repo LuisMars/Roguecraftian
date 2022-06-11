@@ -67,6 +67,7 @@ public class HeroFactory : CreatureFactory<Hero>
         hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.QuickAction } }, new ToggleDoorAction(hero));
 
         hero.AvailableActions.Add(new InputActionTrigger { LeftStick = true }, new JoystickMovementAction(hero, _inputManager));
+        hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.FollowMouse } }, new MouseMovementAction(hero, _inputManager));
 
         hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.MoveUp, InputAction.MoveLeft }, Except = new() { InputAction.MoveDown, InputAction.MoveRight } }, new MoveDirectionAction(hero, new Vector2(-1, -1)));
         hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.MoveUp, InputAction.MoveRight }, Except = new() { InputAction.MoveDown, InputAction.MoveLeft } }, new MoveDirectionAction(hero, new Vector2(1, -1)));
