@@ -1,9 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended;
+using Roguecraft.Engine.Helpers;
 
-namespace Roguecraft.Engine.Visibility;
+namespace Roguecraft.Engine.Geometry;
 
-public class TriangleF
+public struct TriangleF : IEquatable<TriangleF>, IEquatableByRef<TriangleF>, IShapeF
 {
     public TriangleF(Vector2 vertexA, Vector2 vertexB, Vector2 vertexC)
     {
@@ -13,6 +14,27 @@ public class TriangleF
         VertexA = vertexA;
         VertexB = vertexB;
         VertexC = vertexC;
+        var asPoints = new List<Point2>()
+        {
+            vertexA,
+            vertexB,
+            vertexC
+        };
+        Bounds = RectangleF.CreateFrom(asPoints);
+    }
+
+    public RectangleF Bounds { get; set; }
+
+    public Point2 Position
+    {
+        get
+        {
+            return Vertices.Sum(x => x) / 3f;
+        }
+        set
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public Segment2[] Segments { get; set; } = new Segment2[3];
@@ -20,6 +42,16 @@ public class TriangleF
     public Vector2 VertexB { get; set; }
     public Vector2 VertexC { get; set; }
     public List<Vector2> Vertices => new() { VertexA, VertexB, VertexC };
+
+    public static bool operator !=(TriangleF left, TriangleF right)
+    {
+        return !(left == right);
+    }
+
+    public static bool operator ==(TriangleF left, TriangleF right)
+    {
+        return left.Equals(right);
+    }
 
     public bool Contains(Vector2 pt)
     {
@@ -36,11 +68,31 @@ public class TriangleF
         return !(has_neg && has_pos);
     }
 
+    public bool Equals(TriangleF other)
+    {
+        return Vertices.SequenceEqual(other.Vertices);
+    }
+
+    public bool Equals(ref TriangleF other)
+    {
+        return Vertices.SequenceEqual(other.Vertices);
+    }
+
+    public override bool Equals(object obj)
+    {
+        return obj is TriangleF f && Equals(f);
+    }
+
+    public override int GetHashCode()
+    {
+        return Vertices.Sum(x => x.GetHashCode());
+    }
+
     public bool Intersects(RectangleF rectangle)
     {
-        return Segments[0].Intersects(rectangle, out _) ||
-               Segments[1].Intersects(rectangle, out _) ||
-               Segments[2].Intersects(rectangle, out _);
+        var copy = new RectangleF(rectangle.Position, rectangle.Size);
+        copy.Inflate(0.9f, 0.9f);
+        return copy.Intersects(Bounds);
     }
 
     public bool Intersects(CircleF circle)

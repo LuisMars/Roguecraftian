@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Roguecraft.Engine.Visibility;
+namespace Roguecraft.Engine.Geometry;
 
 /// <summary>
 /// The end-point of a segment

@@ -24,13 +24,13 @@ public abstract class ActorFactoryBase<TActor> : IActorFactory where TActor : Ac
 
     public void Add(Vector2 position, Vector2 size, string? name = null)
     {
+        Size = size;
         var actor = Create(position, name);
         ActorPool.Add(actor);
         if (actor is Hero hero)
         {
             ActorPool.Hero = hero;
         }
-        Size = size;
     }
 
     public void Add(Vector2 position, string? name = null)

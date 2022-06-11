@@ -25,6 +25,7 @@ public abstract class PickupItemFactory<TItem> : ActorFactoryBase<TItem> where T
         OnCreate(item);
         item.Collision = new Collision
         {
+            IsTransparent = true,
             IsSensor = true,
             Actor = item,
             Bounds = new CircleF

@@ -20,7 +20,9 @@ public class InputState
     };
 
     private readonly GamePadState _gamePadState;
+
     private readonly Vector2 _invertJoystickY = new(1, -1);
+
     private readonly KeyboardStateExtended _keyboardState;
 
     private readonly Dictionary<InputAction, (Keys Key, bool JustPressed)> _keysMapping = new()
@@ -36,13 +38,21 @@ public class InputState
         { InputAction.InventoryUse, (Keys.Q, true) },
     };
 
+    private readonly Dictionary<InputAction, Func<MouseStateExtended, bool>> _mouseMapping = new()
+    {
+        { InputAction.InventoryNext, g => g.DeltaScrollWheelValue > 0 },
+        { InputAction.InventoryPrev, g => g.DeltaScrollWheelValue < 0 },
+    };
+
+    private readonly MouseStateExtended _mouseState;
     private readonly GamePadState _previousGamePadState;
 
-    public InputState(GamePadState gamePadState, GamePadState previousGamePadState, KeyboardStateExtended keyboardState)
+    public InputState(GamePadState gamePadState, GamePadState previousGamePadState, KeyboardStateExtended keyboardState, MouseStateExtended mouseState)
     {
         _gamePadState = gamePadState;
         _previousGamePadState = previousGamePadState;
         _keyboardState = keyboardState;
+        _mouseState = mouseState;
     }
 
     internal Vector2 LeftJostick => _gamePadState.ThumbSticks.Left * _invertJoystickY;
@@ -54,6 +64,10 @@ public class InputState
             return true;
         }
         if (IsGamePadButtonDown(input))
+        {
+            return true;
+        }
+        if (IsMouseDown(input))
         {
             return true;
         }
@@ -82,5 +96,15 @@ public class InputState
             return _keyboardState.WasKeyJustUp(value.Key);
         }
         return _keyboardState.IsKeyDown(value.Key);
+    }
+
+    private bool IsMouseDown(InputAction input)
+    {
+        if (!_mouseMapping.TryGetValue(input, out var checkButton))
+        {
+            return false;
+        }
+
+        return checkButton(_mouseState);
     }
 }

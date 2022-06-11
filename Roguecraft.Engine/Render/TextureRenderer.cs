@@ -32,7 +32,7 @@ public class TextureRenderer
             spriteBatch.Draw(actor.Texture,
                              actor.Position + actor.DrawingOffset,
                              color,
-                             actor.Angle,
+                             actor.DrawingAngle,
                              actor.Origin,
                              actor.Scale,
                              actor.SpriteEffects,

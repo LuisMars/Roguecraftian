@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using Roguecraft.Engine.Core;
 using Roguecraft.Engine.Factories;
+using Roguecraft.Engine.Helpers;
 using Roguecraft.Engine.Procedural.RoomDecorators;
 using Roguecraft.Engine.Simulation;
 
@@ -133,7 +134,6 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     {
                         continue;
                     }
-                    //cells[x, y] = '_';
                     var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
                     _wallFactory.Add(position);
@@ -147,7 +147,6 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     {
                         continue;
                     }
-                    //cells[x, y] = 'F';
                     var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
                     _doorFactory.Add(position);
@@ -161,7 +160,6 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     {
                         continue;
                     }
-                    //cells[x, y] = 'F';
                     var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
 
                     _heroFactory.Add(position);
@@ -175,7 +173,6 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     {
                         continue;
                     }
-                    //cells[x, y] = 'F';
                     var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
                     _enemyFactory.Add(position);
                 }
@@ -189,18 +186,16 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                         continue;
                     }
 
-                    //for (var i = 0; i < 2; i++)
-                    //{
-                    //    for (var j = 0; j < 2; j++)
-                    //    {
-                    //        cells[x + i, y + j] = 'F';
-                    //    }
-                    //}
+                    for (var i = 0; i < 2; i++)
+                    {
+                        for (var j = 0; j < 2; j++)
+                        {
+                            cells[x + i, y + j] = 'F';
+                        }
+                    }
                     var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
                     _moveableDecorationFactory.AddTable(position, new Vector2(2), "Table");
-                    x += 2;
-                    y += 2;
                 }
             }
             for (var x = 0; x < cells.GetLength(0); x++)
@@ -211,7 +206,6 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     {
                         continue;
                     }
-                    //cells[x, y] = 'F';
                     var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
 
                     _moveableDecorationFactory.AddChair(position);
@@ -225,7 +219,6 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     {
                         continue;
                     }
-                    //cells[x, y] = 'F';
                     var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
 
                     _weaponFactory.Add(position);
@@ -239,27 +232,24 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     {
                         continue;
                     }
-                    //cells[x, y] = 'F';
-                    var width = 1;
                     var height = 1;
+                    var rotation = TextureRotation.None;
                     var spriteEffect = SpriteEffects.None;
-                    if (cells[x - 1, y] == 'W')
+                    if (cells[x, y - 1] == 'W')
                     {
-                        spriteEffect = SpriteEffects.FlipVertically;
+                        rotation = TextureRotation.HalfTurn;
                     }
-                    //if (cells[x + 1, y] == 'B')
-                    //{
-                    //    width = 2;
-                    //    cells[x + 1, y] = 'F';
-                    //}
-                    //if (cells[x, y + 1] == 'B')
-                    //{
-                    //    height = 2;
-                    //    cells[x, y + 1] = 'F';
-                    //}
+                    else if (cells[x + 1, y] == 'W')
+                    {
+                        rotation = TextureRotation.AntiClockwise;
+                    }
+                    else if (cells[x - 1, y] == 'W')
+                    {
+                        rotation = TextureRotation.Clockwise;
+                    }
                     var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
-                    _decorationFactory.AddBookshelf(position, new Vector2(width, height), spriteEffect);
+                    _decorationFactory.AddBookshelf(position, Vector2.One, spriteEffect, rotation);
                 }
             }
             for (var x = 0; x < cells.GetLength(0); x++)
@@ -270,18 +260,16 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     {
                         continue;
                     }
-                    //for (var i = 0; i < 4; i++)
-                    //{
-                    //    for (var j = 0; j < 4; j++)
-                    //    {
-                    //        cells[x + i, y + j] = 'F';
-                    //    }
-                    //}
+                    for (var i = 0; i < 4; i++)
+                    {
+                        for (var j = 0; j < 4; j++)
+                        {
+                            cells[x + i, y + j] = 'F';
+                        }
+                    }
                     var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
                     _floorDecorationFactory.Add(position, new Vector2(4), "Ritual");
-                    x += 4;
-                    y += 4;
                 }
             }
 
@@ -299,19 +287,50 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                 }
             }
 
-            //for (var x = 0; x < cells.GetLength(0); x++)
-            //{
-            //    for (var y = 0; y < cells.GetLength(1); y++)
-            //    {
-            //        if (cells[x, y] == 'F' || cells[x, y] == '_')
-            //        {
-            //            continue;
-            //        }
+            for (var x = 0; x < cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < cells.GetLength(1); y++)
+                {
+                    if (cells[x, y] != '$')
+                    {
+                        continue;
+                    }
+                    var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
 
-            //        var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
-            //        _decorationFactory.Add(position);
-            //    }
-            //}
+                    _potionFactory.Add(position);
+                }
+            }
+
+            for (var x = 0; x < cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < cells.GetLength(1); y++)
+                {
+                    if (cells[x, y] != 'Z')
+                    {
+                        continue;
+                    }
+                    var width = 1;
+                    var height = 1;
+                    var rotation = TextureRotation.None;
+                    var spriteEffect = SpriteEffects.None;
+
+                    cells[x, y] = 'F';
+                    if (cells[x, y + 1] == 'Z')
+                    {
+                        cells[x, y + 1] = 'F';
+                        height++;
+                    }
+                    else if (cells[x + 1, y] == 'Z')
+                    {
+                        width++;
+                        cells[x + 1, y] = 'F';
+                        rotation = TextureRotation.AntiClockwise;
+                    }
+
+                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
+                    _decorationFactory.AddBed(position, new Vector2(width, height), spriteEffect, rotation);
+                }
+            }
         }
     }
 }

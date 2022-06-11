@@ -1,15 +1,20 @@
-﻿namespace Roguecraft.Engine.Visibility;
+﻿using Roguecraft.Engine.Actors;
+
+namespace Roguecraft.Engine.Geometry;
 
 /// <summary>
 /// Represents an occluding line segment in the visibility mesh
 /// </summary>
 internal class Segment
 {
-    internal Segment()
+    internal Segment(Actor actor)
     {
+        Actor = actor;
         P1 = null;
         P2 = null;
     }
+
+    public Actor Actor { get; }
 
     /// <summary>
     /// First end-point of the segment
@@ -23,19 +28,12 @@ internal class Segment
 
     public override bool Equals(object obj)
     {
-        if (obj is Segment other)
-        {
-            return P1.Equals(other.P1) &&
-                    P2.Equals(other.P2);
-        }
-
-        return false;
+        return obj is Segment other && P1.Equals(other.P1) && P2.Equals(other.P2);
     }
 
     public override int GetHashCode()
     {
-        return P1.GetHashCode() +
-                P2.GetHashCode();
+        return P1.GetHashCode() + P2.GetHashCode();
     }
 
     public override string ToString()

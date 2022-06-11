@@ -1,4 +1,4 @@
-﻿namespace Roguecraft.Engine.Visibility;
+﻿namespace Roguecraft.Engine.Geometry;
 
 internal class EndPointComparer : IComparer<EndPoint>
 {

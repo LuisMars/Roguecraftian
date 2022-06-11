@@ -20,7 +20,7 @@ internal class WeaponFactory : PickupItemFactory<Weapon>
     protected override void OnCreate(Weapon weapon)
     {
         weapon.Texture = ContentRepository.Dagger;
-        weapon.Color = Configuration.PotionColor.ToColor();
+        weapon.Color = Configuration.SteelColor.ToColor();
         weapon.AttackAction = new AttackAction(_randomGenerator) { MinDamage = 1, MaxDamage = 3 };
     }
 }

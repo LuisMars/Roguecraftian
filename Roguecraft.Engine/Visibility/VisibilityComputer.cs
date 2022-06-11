@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended;
+using Roguecraft.Engine.Actors;
+using Roguecraft.Engine.Geometry;
 using Roguecraft.Engine.Helpers;
 using System.Collections.Concurrent;
 
@@ -37,9 +39,9 @@ public class VisibilityComputer : IVisibilityComputer
     /// <summary>
     /// Add a line shaped occluder
     /// </summary>
-    public void AddLineOccluder(Vector2 p1, Vector2 p2)
+    public void AddLineOccluder(Vector2 p1, Vector2 p2, Actor actor)
     {
-        AddSegment(p1, p2);
+        AddSegment(p1, p2, actor);
     }
 
     /// <summary>
@@ -57,11 +59,11 @@ public class VisibilityComputer : IVisibilityComputer
     /// Computes the visibility polygon and returns the vertices
     /// of the triangle fan (minus the center vertex)
     /// </summary>
-    public List<Vector2> Compute()
+    public List<Vector2> Compute(out List<Actor> actors)
     {
         var output = new List<Vector2>();
         var open = new LinkedList<Segment>();
-
+        actors = new List<Actor>();
         UpdateSegments();
 
         var endpoints = _endpoints.ToList();
@@ -115,6 +117,7 @@ public class VisibilityComputer : IVisibilityComputer
                     if (pass == 1)
                     {
                         AddTriangle(output, currentAngle, p.Angle, currentOld);
+                        actors.Add(currentOld.Actor);
                     }
                     currentAngle = p.Angle;
                 }
@@ -179,9 +182,9 @@ public class VisibilityComputer : IVisibilityComputer
     // Add a segment, where the first point shows up in the
     // visualization but the second one does not. (Every endpoint is
     // part of two segments, but we want to only show them once.)
-    private void AddSegment(Vector2 p1, Vector2 p2)
+    private void AddSegment(Vector2 p1, Vector2 p2, Actor actor)
     {
-        var segment = new Segment();
+        var segment = new Segment(actor);
         var endPoint1 = new EndPoint();
         var endPoint2 = new EndPoint();
 
@@ -246,7 +249,7 @@ public class VisibilityComputer : IVisibilityComputer
         for (int i = 10; i <= 360; i += 10)
         {
             var current = circle.BoundaryPointAt(MathHelper.ToRadians(i));
-            AddSegment(last, current);
+            AddSegment(last, current, null);
             last = current;
         }
     }
@@ -255,7 +258,7 @@ public class VisibilityComputer : IVisibilityComputer
     private void UpdateSegments()
     {
         //Parallel.ForEach(_segments, segment =>
-        foreach (Segment segment in _segments)
+        foreach (var segment in _segments)
         {
             // NOTE: future optimization: we could record the quadrant
             // and the y/x or x/y ratio, and sort by (quadrant,

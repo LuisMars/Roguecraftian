@@ -17,6 +17,7 @@ namespace Roguecraft.Engine.Content
         }
 
         public TextureRegion2D Barrel { get; private set; }
+        public TextureRegion2D Bed { get; private set; }
         public TextureRegion2D Bookshelf { get; private set; }
         public TextureRegion2D Chair { get; private set; }
         public TextureRegion2D Chest { get; private set; }
@@ -66,6 +67,7 @@ namespace Roguecraft.Engine.Content
             Barrel = LoadTextureRegion("barrel");
             Chest = LoadTextureRegion("chest");
             Table = LoadTextureRegion("table");
+            Bed = LoadTextureRegion("bed");
 
             Door = LoadTextureRegion("door");
             Line = LoadTextureRegion("line");

@@ -18,25 +18,44 @@ public class DecorationFactory : ActorFactoryBase<Wall>
     {
     }
 
+    private Color? Color { get; set; }
+    private TextureRotation Rotation { get; set; }
     private SpriteEffects? SpriteEffect { get; set; }
     private TextureRegion2D? Texture { get; set; }
 
-    public void AddBookshelf(Vector2 position, Vector2 size, SpriteEffects spriteEffect)
+    public void AddBed(Vector2 position, Vector2 size, SpriteEffects spriteEffect, TextureRotation rotated)
     {
-        Add(position, size, "Bookshelf");
+        Color = Configuration.BedColor.ToColor();
+        Texture = ContentRepository.Bed;
+        SpriteEffect = spriteEffect;
+        Rotation = rotated;
+        Add(position, size, "Bed");
+    }
+
+    public void AddBookshelf(Vector2 position, Vector2 size, SpriteEffects spriteEffect, TextureRotation rotated)
+    {
         Texture = ContentRepository.Bookshelf;
         SpriteEffect = spriteEffect;
+        Rotation = rotated;
+        Add(position, size, "Bookshelf");
+    }
+
+    public void AddGeneric(Vector2 position)
+    {
+        Texture = ContentRepository.Decoration;
+        Add(position);
     }
 
     protected override Wall Create(Vector2 position, string? name = null)
     {
         var wall = new Wall
         {
-            Color = Configuration.WoodColor.ToColor(),
+            Color = Color ?? Configuration.WoodColor.ToColor(),
             Texture = Texture ?? ContentRepository.Decoration,
             Name = name ?? "Decoration",
             Position = position,
-            SpriteEffects = SpriteEffect ?? SpriteEffects.None
+            SpriteEffects = SpriteEffect ?? SpriteEffects.None,
+            TextureRotation = Rotation
         };
 
         wall.Collision = new Collision

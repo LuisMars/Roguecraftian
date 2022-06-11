@@ -2,6 +2,7 @@
 using MonoGame.Extended;
 using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Components;
+using Roguecraft.Engine.Geometry;
 using Roguecraft.Engine.Simulation;
 using System.Collections.Concurrent;
 
@@ -37,7 +38,15 @@ internal class ExtendedVisibility
             AddOccluders(_visibilityComputer, sourceActor, collidable, radiusSquared, viewBounds, Center);
         }
 
-        var points = _visibilityComputer.Compute();
+        var points = _visibilityComputer.Compute(out var actors);
+        foreach (var actor in actors)
+        {
+            if (actor is null)
+            {
+                continue;
+            }
+            actor.Visibility.IsDectectedAsVisible = true;
+        }
         var triangles = new ConcurrentBag<TriangleF>();
 
         for (var i = 0; i < points.Count; i++)
@@ -70,11 +79,17 @@ internal class ExtendedVisibility
             }
             circle.Radius *= 0.75f;
             var sides = 6f;
-            for (int i = 0; i < sides / 2; i++)
+            //for (int i = 0; i < sides / 2; i++)
+            //{
+            //    var pointA = circle.BoundaryPointAt(MathHelper.ToRadians(i * 360 / sides));
+            //    var pointB = circle.BoundaryPointAt(MathHelper.ToRadians((i + 3) * 360 / sides));
+            //    visibilityComputer.AddLineOccluder(pointA, pointB, collidable.Actor);
+            //}
+            for (int i = 0; i < (sides / 2) + 1; i++)
             {
                 var pointA = circle.BoundaryPointAt(MathHelper.ToRadians(i * 360 / sides));
-                var pointB = circle.BoundaryPointAt(MathHelper.ToRadians((i + 3) * 360 / sides));
-                visibilityComputer.AddLineOccluder(pointA, pointB);
+                var pointB = circle.BoundaryPointAt(MathHelper.ToRadians((i + 1) * 360 / sides));
+                visibilityComputer.AddLineOccluder(pointA, pointB, collidable.Actor);
             }
             return;
         }
@@ -85,8 +100,12 @@ internal class ExtendedVisibility
             {
                 return;
             }
-            visibilityComputer.AddLineOccluder(rect.TopLeft, rect.BottomRight);
-            visibilityComputer.AddLineOccluder(rect.BottomLeft, rect.TopRight);
+            //visibilityComputer.AddLineOccluder(rect.TopLeft, rect.BottomRight, collidable.Actor);
+            //visibilityComputer.AddLineOccluder(rect.BottomLeft, rect.TopRight, collidable.Actor);
+            visibilityComputer.AddLineOccluder(rect.TopLeft, rect.TopRight, collidable.Actor);
+            visibilityComputer.AddLineOccluder(rect.TopRight, rect.BottomRight, collidable.Actor);
+            visibilityComputer.AddLineOccluder(rect.BottomRight, rect.BottomLeft, collidable.Actor);
+            visibilityComputer.AddLineOccluder(rect.BottomLeft, rect.TopLeft, collidable.Actor);
         }
     }
 

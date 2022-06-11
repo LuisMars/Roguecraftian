@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using Roguecraft.Engine.Actors;
+using Roguecraft.Engine.Geometry;
 using Roguecraft.Engine.Simulation;
 
 namespace Roguecraft.Engine.Visibility;
@@ -40,7 +41,7 @@ public class VisibilityService
 
     internal bool IsVisible(Vector2 position, IShapeF shape)
     {
-        if ((_extendedVisibility.Center - position).LengthSquared() > _extendedVisibility.RadiusSquared * 1.5f)
+        if ((_extendedVisibility.Center - position).LengthSquared() > _extendedVisibility.RadiusSquared * 1.25f)
         {
             return false;
         }

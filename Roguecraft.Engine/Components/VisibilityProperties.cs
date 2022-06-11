@@ -5,4 +5,5 @@ public class VisibilityProperties
     public bool CanBeDrawn => TimesSeen > 2;
     public bool IsVisibleByHero { get; set; }
     public int TimesSeen { get; set; }
+    public bool IsDectectedAsVisible { get; internal set; }
 }

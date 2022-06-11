@@ -1,6 +1,6 @@
 ﻿using MonoGame.Extended;
 
-namespace Roguecraft.Engine.Visibility;
+namespace Roguecraft.Engine.Geometry;
 
 public static class Segment2Extensions
 {

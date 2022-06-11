@@ -22,20 +22,20 @@ public class MoveableDecorationFactory : ActorFactoryBase<Wall>
     public void AddBarrel(Vector2 position, string? name = null)
     {
         position += new Vector2(Configuration.WallSize * 0.5f);
-        Add(position, name);
         Texture = ContentRepository.Barrel;
+        Add(position, name);
     }
 
     public void AddChair(Vector2 position, string? name = null)
     {
-        Add(position, "Chair");
         Texture = ContentRepository.Chair;
+        Add(position, "Chair");
     }
 
     public void AddTable(Vector2 position, Vector2 vector2, string? name = null)
     {
-        Add(position, vector2, name);
         Texture = ContentRepository.Table;
+        Add(position, vector2, name);
     }
 
     protected override Wall Create(Vector2 position, string? name = null)

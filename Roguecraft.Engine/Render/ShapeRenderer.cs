@@ -34,7 +34,7 @@ public class ShapeRenderer
         }
         foreach (var triangle in _visibilityService.Triangles)
         {
-            spriteBatch.DrawLine(triangle.VertexA, triangle.VertexB, Color.White);
+            spriteBatch.DrawLine(triangle.VertexA, triangle.VertexB, Color.Red, 5, 1);
         }
     }
 
