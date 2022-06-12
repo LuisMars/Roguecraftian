@@ -46,7 +46,7 @@ public class InputState
         { InputAction.InventoryNext, (g, g2) => g.DeltaScrollWheelValue > 0 },
         { InputAction.InventoryPrev, (g, g2) => g.DeltaScrollWheelValue < 0 },
         { InputAction.InventoryUse, (g, g2) => g.MiddleButton == ButtonState.Pressed && g2.MiddleButton == ButtonState.Released },
-        { InputAction.PickUp, (g, g2) => g.MiddleButton == ButtonState.Pressed && g2.MiddleButton == ButtonState.Released },
+        { InputAction.PickUp, (g, g2) => g.RightButton == ButtonState.Pressed && g2.RightButton == ButtonState.Released },
         { InputAction.FollowMouse, (g, g2) => g.RightButton == ButtonState.Pressed },
         { InputAction.QuickAction, (g, g2) => g.LeftButton == ButtonState.Pressed && g2.LeftButton == ButtonState.Released },
     };

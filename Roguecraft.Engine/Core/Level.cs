@@ -8,6 +8,8 @@ using Roguecraft.Engine.Factories;
 using Roguecraft.Engine.Helpers;
 using Roguecraft.Engine.Input;
 using Roguecraft.Engine.Procedural.Dungeons;
+using Roguecraft.Engine.Random;
+using Roguecraft.Engine.Random.Dice;
 using Roguecraft.Engine.Render;
 using Roguecraft.Engine.Simulation;
 using Roguecraft.Engine.Sound;
@@ -24,6 +26,7 @@ namespace Roguecraft.Engine.Core
         private readonly ContentManager _content;
         private readonly ContentRepository _contentRepository;
         private readonly DecorationFactory _decorationFactory;
+        private readonly DiceRoller _diceRoller;
         private readonly DoorFactory _doorFactory;
         private readonly DungeonService _dungeonService;
         private readonly EnemyFactory _enemyFactory;
@@ -58,23 +61,24 @@ namespace Roguecraft.Engine.Core
             _configuration = new Configuration();
             _frameCounter = new FrameCounter();
             _actorPool = new ActorPool();
-
-            _cameraService = new CameraService(_actorPool, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
+            _randomGenerator = new RandomGenerator();
+            _diceRoller = new DiceRoller(_randomGenerator);
+            _cameraService = new CameraService(_randomGenerator, _actorPool, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
             _inputManager = new InputManager(_cameraService);
 
             _collisionService = new CollisionService(_actorPool);
-            _randomGenerator = new RandomGenerator();
-            _heroFactory = new HeroFactory(_configuration, _actorPool, _collisionService, _contentRepository, _randomGenerator, _inputManager);
-            _enemyFactory = new EnemyFactory(_configuration, _actorPool, _collisionService, _contentRepository, _randomGenerator);
+            _heroFactory = new HeroFactory(_configuration, _actorPool, _collisionService, _contentRepository, _diceRoller, _inputManager);
+            _enemyFactory = new EnemyFactory(_configuration, _actorPool, _collisionService, _contentRepository, _diceRoller);
             _wallFactory = new WallFactory(_configuration, _actorPool, _collisionService, _contentRepository);
             _doorFactory = new DoorFactory(_configuration, _actorPool, _collisionService, _contentRepository);
             _potionFactory = new PotionFactory(_configuration, _actorPool, _collisionService, _contentRepository);
-            _weaponFactory = new WeaponFactory(_configuration, _actorPool, _collisionService, _contentRepository, _randomGenerator);
+            _weaponFactory = new WeaponFactory(_configuration, _actorPool, _collisionService, _contentRepository, _diceRoller);
             _decorationFactory = new DecorationFactory(_configuration, _actorPool, _collisionService, _contentRepository);
             _moveableDecorationFactory = new MoveableDecorationFactory(_configuration, _actorPool, _collisionService, _contentRepository);
             _floorDecorationFactory = new FloorDecorationFactory(_configuration, _actorPool, _collisionService, _contentRepository);
 
-            _dungeonService = new DungeonService(_configuration,
+            _dungeonService = new DungeonService(_randomGenerator,
+                                                 _configuration,
                                                  _collisionService,
                                                  _heroFactory,
                                                  _enemyFactory,
@@ -97,7 +101,7 @@ namespace Roguecraft.Engine.Core
             _particleRenderer = new ParticleRenderer(_configuration, _contentRepository, _actorPool);
             _hudRenderer = new HudRenderer(_actorPool, _contentRepository, _configuration, _frameCounter);
 
-            _soundService = new SoundService(_actorPool, _contentRepository);
+            _soundService = new SoundService(_randomGenerator, _actorPool, _contentRepository);
             _timeManager = new TimeManager(_inputManager, _soundService, _contentRepository, _actorPool);
 
             _dungeonService.Initialize();

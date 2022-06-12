@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Input;
 using Roguecraft.Engine.Procedural.Dungeons;
+using Roguecraft.Engine.Random;
 using System.Collections.Generic;
 
 namespace Roguecraft.Viewers;
@@ -11,13 +12,14 @@ namespace Roguecraft.Viewers;
 public class DungeonViewer : Game
 {
     private readonly GraphicsDeviceManager _graphics;
+    private readonly RandomGenerator _random;
     private readonly SpriteBatch _spriteBatch;
-
     private double elapsed = 0;
 
     public DungeonViewer()
     {
-        Dungeon = new Dungeon();
+        _random = new RandomGenerator();
+        Dungeon = new Dungeon(_random);
         _graphics = new GraphicsDeviceManager(this)
         {
             GraphicsProfile = GraphicsProfile.HiDef
@@ -105,7 +107,7 @@ public class DungeonViewer : Game
         }
         if (state.WasKeyJustDown(Keys.R))
         {
-            Dungeon = new Dungeon();
+            Dungeon = new Dungeon(_random);
             SpecialRooms.Clear();
         }
         elapsed += gameTime.ElapsedGameTime.TotalSeconds;

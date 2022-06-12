@@ -8,14 +8,20 @@ using Roguecraft.Engine.Components;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Core;
 using Roguecraft.Engine.Helpers;
+using Roguecraft.Engine.Random;
+using Roguecraft.Engine.Random.Dice;
 using Roguecraft.Engine.Simulation;
 
 namespace Roguecraft.Engine.Factories;
 
 public class EnemyFactory : CreatureFactory<Enemy>
 {
-    public EnemyFactory(Configuration configuration, ActorPool actorPool, CollisionService collisionService, ContentRepository contentRepository, RandomGenerator randomGenerator) :
-        base(configuration, actorPool, collisionService, contentRepository, randomGenerator)
+    public EnemyFactory(Configuration configuration,
+                        ActorPool actorPool,
+                        CollisionService collisionService,
+                        ContentRepository contentRepository,
+                        DiceRoller diceRoller) :
+        base(configuration, actorPool, collisionService, contentRepository, diceRoller)
     {
     }
 
@@ -25,7 +31,7 @@ public class EnemyFactory : CreatureFactory<Enemy>
         {
             MaxHealth = 3,
             Speed = Configuration.BaseCreatureSpeed * 0.95f,
-            UnarmedAttack = new AttackAction(enemy, RandomGenerator)
+            UnarmedAttack = new AttackAction(enemy, DiceRoller) { DiceRoll = new DiceRoll("1d3-1") }
         };
         enemy.Alignement = new Alignement
         {

@@ -1,13 +1,18 @@
 ﻿using MonoGame.Extended.Collections;
 using Roguecraft.Engine.Procedural.Dungeons;
 using Roguecraft.Engine.Procedural.RoomDecorators.Rules;
+using Roguecraft.Engine.Random;
 
 namespace Roguecraft.Engine.Procedural.RoomDecorators;
 
 public class RoomDecorator
 {
-    private readonly Random _random = new Random();
-    //public List<ReplacementRule> Rules { get; set; } = new();
+    private readonly RandomGenerator _random;
+
+    public RoomDecorator(RandomGenerator random)
+    {
+        _random = random;
+    }
 
     public char[,] Decorate(Dungeon dungeon, Room room, bool isInMainPath, bool isStart, bool isEnd)
     {

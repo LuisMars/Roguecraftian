@@ -1,4 +1,4 @@
-﻿using MonoGame.Extended.Collections;
+﻿using Roguecraft.Engine.Random;
 
 namespace Roguecraft.Engine.Procedural.RoomDecorators;
 
@@ -7,7 +7,7 @@ public abstract class ReplacementRule
     public abstract char[,] Source { get; }
     public abstract char[,] Target { get; }
 
-    public bool TryApply(Random random, char[,] map)
+    public bool TryApply(RandomGenerator random, char[,] map)
     {
         foreach (var (x, y) in RandomizeOrder(random, map))
         {
@@ -59,7 +59,7 @@ public abstract class ReplacementRule
         return copy;
     }
 
-    private IEnumerable<(int X, int Y)> RandomizeOrder(Random random, char[,] map)
+    private IEnumerable<(int X, int Y)> RandomizeOrder(RandomGenerator random, char[,] map)
     {
         var list = new List<(int X, int Y)>();
         for (var i = 0; i < map.GetLength(0); i++)

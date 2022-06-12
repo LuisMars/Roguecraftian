@@ -5,6 +5,7 @@ using Roguecraft.Engine.Core;
 using Roguecraft.Engine.Factories;
 using Roguecraft.Engine.Helpers;
 using Roguecraft.Engine.Procedural.RoomDecorators;
+using Roguecraft.Engine.Random;
 using Roguecraft.Engine.Simulation;
 
 namespace Roguecraft.Engine.Procedural.Dungeons
@@ -23,13 +24,15 @@ namespace Roguecraft.Engine.Procedural.Dungeons
         private readonly List<Room> _longestPath;
         private readonly MoveableDecorationFactory _moveableDecorationFactory;
         private readonly IActorFactory _potionFactory;
+        private readonly RandomGenerator _random;
         private readonly RoomDecorator _roomDecorator;
         private readonly Room _special;
         private readonly Room _start;
         private readonly IActorFactory _wallFactory;
         private readonly IActorFactory _weaponFactory;
-        private readonly Random _random = new Random();
-        public DungeonService(Configuration configuration,
+
+        public DungeonService(RandomGenerator randomGenerator,
+                              Configuration configuration,
                               CollisionService collisionService,
                               IActorFactory heroFactory,
                               IActorFactory enemyFactory,
@@ -41,8 +44,9 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                               MoveableDecorationFactory moveableDecorationFactory,
                               FloorDecorationFactory floorDecorationFactory)
         {
+            _random = randomGenerator;
             _configuration = configuration;
-            _roomDecorator = new RoomDecorator();
+            _roomDecorator = new RoomDecorator(_random);
             _collisionService = collisionService;
             _heroFactory = heroFactory;
             _enemyFactory = enemyFactory;
@@ -53,7 +57,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
             _decorationFactory = decorationFactory;
             _moveableDecorationFactory = moveableDecorationFactory;
             _floorDecorationFactory = floorDecorationFactory;
-            _dungeon = new Dungeon();
+            _dungeon = new Dungeon(_random);
             for (int i = 0; i < _configuration.RoomsPerDungeon; i++)
             {
                 _dungeon.AddRoom();
@@ -221,7 +225,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     }
                     var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
 
-                    if (_random.NextSingle() > 0.5f)
+                    if (_random.Float() > 0.5f)
                     {
                         _potionFactory.Add(position);
                     }

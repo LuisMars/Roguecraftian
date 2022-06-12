@@ -1,29 +1,39 @@
 ﻿using Microsoft.Xna.Framework;
-using MonoGame.Extended;
+using Warband.Engines.Random;
 
-namespace Roguecraft.Engine.Helpers;
+namespace Roguecraft.Engine.Random;
 
-public static class MathUtils
+public class RandomGenerator : XXHash
 {
-    private static readonly Random _random = new();
+    private int RandomIndex { get; set; }
 
-    public static T Choice<T>(this List<T> list)
+    public float Float()
     {
-        return list[_random.Next(list.Count - 1)];
+        return Value(RandomIndex++);
     }
 
-    public static float RandomNormal()
+    public int Next(int min, int max)
+    {
+        return Range(min, max + 1, RandomIndex++);
+    }
+
+    public int Next(int max)
+    {
+        return Next(0, max);
+    }
+
+    public float RandomNormal()
     {
         var u = 0f;
         var v = 0f;
         while (u == 0)
         {
-            u = (float)_random.NextDouble(); //Converting [0,1) to (0,1)
+            u = Value(RandomIndex++); //Converting [0,1) to (0,1)
         }
 
         while (v == 0)
         {
-            v = (float)_random.NextDouble();
+            v = Value(RandomIndex++);
         }
 
         var num = MathF.Sqrt(-2.0f * MathF.Log(u)) * MathF.Cos(2.0f * MathF.PI * v);
@@ -36,13 +46,8 @@ public static class MathUtils
         return num;
     }
 
-    public static Vector2 RandomVector(int size)
+    public Vector2 RandomVector(int size)
     {
         return new Vector2((RandomNormal() - 0.5f) * size, (RandomNormal() - 0.5f) * size);
-    }
-
-    internal static float Layer(Transform2 transform)
-    {
-        return 0.5f + transform.Position.Y / 100000f;
     }
 }

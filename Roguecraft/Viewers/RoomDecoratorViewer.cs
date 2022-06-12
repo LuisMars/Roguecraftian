@@ -5,6 +5,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Input;
 using Roguecraft.Engine.Procedural.Dungeons;
 using Roguecraft.Engine.Procedural.RoomDecorators;
+using Roguecraft.Engine.Random;
 using System.Collections.Generic;
 
 namespace Roguecraft.Viewers;
@@ -12,12 +13,14 @@ namespace Roguecraft.Viewers;
 public class RoomDecoratorViewer : Game
 {
     private readonly GraphicsDeviceManager _graphics;
+    private readonly RandomGenerator _random;
     private readonly SpriteBatch _spriteBatch;
 
     public RoomDecoratorViewer()
     {
-        Dungeon = new Dungeon();
-        RoomDecorator = new RoomDecorator();
+        _random = new RandomGenerator();
+        Dungeon = new Dungeon(_random);
+        RoomDecorator = new RoomDecorator(_random);
         _graphics = new GraphicsDeviceManager(this)
         {
             GraphicsProfile = GraphicsProfile.HiDef

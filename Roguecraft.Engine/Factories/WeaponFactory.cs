@@ -3,24 +3,30 @@ using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Core;
 using Roguecraft.Engine.Helpers;
+using Roguecraft.Engine.Random;
+using Roguecraft.Engine.Random.Dice;
 using Roguecraft.Engine.Simulation;
 
 namespace Roguecraft.Engine.Factories;
 
 internal class WeaponFactory : PickupItemFactory<Weapon>
 {
-    private readonly RandomGenerator _randomGenerator;
+    private readonly DiceRoller _diceRoller;
 
-    public WeaponFactory(Configuration configuration, ActorPool actorPool, CollisionService collisionService, ContentRepository contentRepository, RandomGenerator randomGenerator)
+    public WeaponFactory(Configuration configuration,
+                         ActorPool actorPool,
+                         CollisionService collisionService,
+                         ContentRepository contentRepository,
+                         DiceRoller diceRoller)
             : base(configuration, actorPool, collisionService, contentRepository)
     {
-        _randomGenerator = randomGenerator;
+        _diceRoller = diceRoller;
     }
 
     protected override void OnCreate(Weapon weapon)
     {
         weapon.Texture = ContentRepository.Dagger;
         weapon.Color = Configuration.SteelColor.ToColor();
-        weapon.AttackAction = new AttackAction(_randomGenerator) { MinDamage = 1, MaxDamage = 4 };
+        weapon.AttackAction = new AttackAction(_diceRoller) { DiceRoll = new DiceRoll("1d4") };
     }
 }

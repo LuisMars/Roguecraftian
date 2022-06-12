@@ -2,6 +2,7 @@
 using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Core;
+using Roguecraft.Engine.Random;
 using Roguecraft.Engine.Timers;
 
 namespace Roguecraft.Engine.Sound;
@@ -10,10 +11,12 @@ public class SoundService
 {
     private readonly ActorPool _actorPool;
     private readonly ContentRepository _contentRepository;
+    private readonly RandomGenerator _random;
     private readonly Dictionary<TimerType, GameSound> _sounds = new();
 
-    public SoundService(ActorPool actorPool, ContentRepository contentRepository)
+    public SoundService(RandomGenerator random, ActorPool actorPool, ContentRepository contentRepository)
     {
+        _random = random;
         _actorPool = actorPool;
         _contentRepository = contentRepository;
         _sounds = new Dictionary<TimerType, GameSound>
@@ -39,7 +42,7 @@ public class SoundService
             volume = MathF.Min(1, 50000 / distSqrt);
         }
         var pan = Math.Clamp((origin.X - listener.X) / 10000f, -1, 1);
-        sound.PlayRandom(volume, pan);
+        sound.PlayRandom(_random, volume, pan);
     }
 
     public void Play(GameSound sound) => sound.Play();

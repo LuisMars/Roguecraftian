@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Audio;
-using Roguecraft.Engine.Helpers;
+using Roguecraft.Engine.Random;
 
 namespace Roguecraft.Engine.Sound;
 
@@ -24,18 +24,18 @@ public class GameSound
         _sounds = soundEffects.ToList();
     }
 
-    public bool PlayRandom(float volume, float pan)
+    public void Play()
     {
-        return _sounds.Choice().Play(volume, MathUtils.RandomNormal(), pan);
+        _sounds[0].Play();
     }
 
-    public bool PlayRandomNote(float volume, float pan)
+    public bool PlayRandom(RandomGenerator random, float volume, float pan)
     {
-        return _sounds.Choice().Play(volume, _scale.Choice(), pan);
+        return _sounds.Choice(random).Play(volume, random.RandomNormal(), pan);
     }
 
-    internal void Play()
+    public bool PlayRandomNote(RandomGenerator random, float volume, float pan)
     {
-        _sounds.Choice().Play();
+        return _sounds.Choice(random).Play(volume, _scale.Choice(random), pan);
     }
 }

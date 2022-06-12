@@ -1,36 +1,36 @@
 ﻿using MonoGame.Extended;
 using Roguecraft.Engine.Actors;
-using Roguecraft.Engine.Helpers;
 using Roguecraft.Engine.Input;
+using Roguecraft.Engine.Random;
+using Roguecraft.Engine.Random.Dice;
 using Roguecraft.Engine.Timers;
 
 namespace Roguecraft.Engine.Actions.Combat;
 
 public class AttackAction : GameAction
 {
-    private readonly RandomGenerator _random;
+    private readonly DiceRoller _diceRoller;
 
-    public AttackAction(RandomGenerator random) : this(null, random, null)
+    public AttackAction(DiceRoller diceRoller) : this(null, diceRoller, null)
     {
     }
 
-    public AttackAction(Creature actor, RandomGenerator random) : this(actor, random, null)
+    public AttackAction(Creature actor, DiceRoller diceRoller) : this(actor, diceRoller, null)
     {
     }
 
-    public AttackAction(Creature actor, RandomGenerator random, InputManager inputManager) : base(actor, inputManager)
+    public AttackAction(Creature actor, DiceRoller diceRoller, InputManager inputManager) : base(actor, inputManager)
     {
         EngeryCost = 500;
-        _random = random;
+        _diceRoller = diceRoller;
     }
 
-    public int MaxDamage { get; init; } = 1;
-    public int MinDamage { get; init; } = 0;
+    public DiceRoll DiceRoll { get; set; }
     public Creature Target { get; private set; }
 
     public int GetDamage()
     {
-        return _random.FromRange(MinDamage, MaxDamage);
+        return _diceRoller.Roll(DiceRoll);
     }
 
     public override bool TryPrepare(bool useMouse)

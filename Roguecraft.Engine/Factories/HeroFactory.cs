@@ -11,6 +11,8 @@ using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Core;
 using Roguecraft.Engine.Helpers;
 using Roguecraft.Engine.Input;
+using Roguecraft.Engine.Random;
+using Roguecraft.Engine.Random.Dice;
 using Roguecraft.Engine.Simulation;
 
 namespace Roguecraft.Engine.Factories;
@@ -23,9 +25,9 @@ public class HeroFactory : CreatureFactory<Hero>
                        ActorPool actorPool,
                        CollisionService collisionService,
                        ContentRepository contentRepository,
-                       RandomGenerator randomGenerator,
+                       DiceRoller diceRoller,
                        InputManager inputManager) :
-        base(configuration, actorPool, collisionService, contentRepository, randomGenerator)
+        base(configuration, actorPool, collisionService, contentRepository, diceRoller)
     {
         _inputManager = inputManager;
     }
@@ -36,7 +38,7 @@ public class HeroFactory : CreatureFactory<Hero>
         {
             MaxHealth = 20,
             Speed = Configuration.BaseCreatureSpeed,
-            UnarmedAttack = new AttackAction(hero, RandomGenerator) { MinDamage = 1, MaxDamage = 2 }
+            UnarmedAttack = new AttackAction(hero, DiceRoller) { DiceRoll = new DiceRoll("1d3") }
         };
         hero.Alignement = new Alignement
         {

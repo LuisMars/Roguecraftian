@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Roguecraft.Engine.Core;
-using Roguecraft.Engine.Helpers;
+using Roguecraft.Engine.Random;
 using Roguecraft.Engine.Timers;
 
 namespace Roguecraft.Engine.Cameras;
@@ -9,11 +9,13 @@ public class CameraService
 {
     private readonly ActorPool _actorPool;
     private readonly Camera2D _camera;
+    private readonly RandomGenerator _random;
 
-    public CameraService(ActorPool actorPool, int width, int height)
+    public CameraService(RandomGenerator randomGenerator, ActorPool actorPool, int width, int height)
     {
         _camera = new Camera2D(width, height);
         _actorPool = actorPool;
+        _random = randomGenerator;
     }
 
     public Matrix GetViewTransformationMatrix()
@@ -52,7 +54,7 @@ public class CameraService
 
     private void Shake()
     {
-        _camera.Position += MathUtils.RandomVector(64);
-        _camera.Rotation += (MathUtils.RandomNormal() - 0.5f) * 0.125f;
+        _camera.Position += _random.RandomVector(64);
+        _camera.Rotation += (_random.RandomNormal() - 0.5f) * 0.125f;
     }
 }

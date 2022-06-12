@@ -5,20 +5,24 @@ using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Components;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Core;
-using Roguecraft.Engine.Helpers;
+using Roguecraft.Engine.Random.Dice;
 using Roguecraft.Engine.Simulation;
 
 namespace Roguecraft.Engine.Factories;
 
 public abstract class CreatureFactory<TActor> : ActorFactoryBase<TActor> where TActor : Creature, new()
 {
-    public CreatureFactory(Configuration configuration, ActorPool actorPool, CollisionService collisionService, ContentRepository contentRepository, RandomGenerator randomGenerator) :
+    public CreatureFactory(Configuration configuration,
+                           ActorPool actorPool,
+                           CollisionService collisionService,
+                           ContentRepository contentRepository,
+                           DiceRoller diceRoller) :
                       base(configuration, actorPool, collisionService, contentRepository)
     {
-        RandomGenerator = randomGenerator;
+        DiceRoller = diceRoller;
     }
 
-    protected RandomGenerator RandomGenerator { get; }
+    protected DiceRoller DiceRoller { get; }
 
     protected override TActor Create(Vector2 position, string? name = null)
     {

@@ -1,4 +1,4 @@
-﻿using MonoGame.Extended;
+﻿using Roguecraft.Engine.Random;
 using System.Diagnostics;
 
 namespace Roguecraft.Engine.Procedural.Dungeons;
@@ -9,12 +9,12 @@ public class Dungeon
     private const int MaxDungeonSize = 100;
     private const int MaxRoomSize = 20;
     private const int MinRoomSize = 2;
-    private readonly FastRandom _random;
+    private readonly RandomGenerator _random;
     private readonly List<WayPointConnection> _waypointsConnections = new();
 
-    public Dungeon()
+    public Dungeon(RandomGenerator random)
     {
-        _random = new FastRandom((int)(DateTime.Now.Ticks % int.MaxValue));
+        _random = random;
     }
 
     public RoomConnections Connections { get; set; } = new();
@@ -237,10 +237,10 @@ public class Dungeon
         {
             corridorChange += 0.149f;
         }
-        var isCorridor = _random.NextSingle() > corridorChange;
+        var isCorridor = _random.Float() > corridorChange;
         if (isCorridor)
         {
-            var isHorizontal = _random.NextSingle() > 0.5f;
+            var isHorizontal = _random.Float() > 0.5f;
             if (isHorizontal)
             {
                 height = MinRoomSize;
@@ -254,7 +254,7 @@ public class Dungeon
 
         if (width * height > MaxDungeonSize)
         {
-            if (_random.NextSingle() > 0.5f)
+            if (_random.Float() > 0.5f)
             {
                 width = MaxDungeonSize / height;
             }
