@@ -41,6 +41,8 @@ public class Collision
         }
     }
 
+    public Vector2 PenetrationVector { get; set; }
+
     public float Width
     {
         get
@@ -89,6 +91,7 @@ public class Collision
 
     internal void Clear()
     {
+        PenetrationVector = new Vector2();
         LastEvents.Clear();
     }
 

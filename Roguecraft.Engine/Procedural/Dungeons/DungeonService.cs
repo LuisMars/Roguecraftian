@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Core;
 using Roguecraft.Engine.Factories;
 using Roguecraft.Engine.Helpers;
@@ -14,49 +15,25 @@ namespace Roguecraft.Engine.Procedural.Dungeons
     {
         private readonly CollisionService _collisionService;
         private readonly Configuration _configuration;
-        private readonly DecorationFactory _decorationFactory;
-        private readonly IActorFactory _doorFactory;
         private readonly Dungeon _dungeon;
         private readonly Room _end;
-        private readonly IActorFactory _enemyFactory;
-        private readonly FloorDecorationFactory _floorDecorationFactory;
-        private readonly IActorFactory _heroFactory;
         private readonly List<Room> _longestPath;
-        private readonly MoveableDecorationFactory _moveableDecorationFactory;
-        private readonly IActorFactory _potionFactory;
         private readonly RandomGenerator _random;
         private readonly RoomDecorator _roomDecorator;
+        private readonly Spawner _spawner;
         private readonly Room _special;
         private readonly Room _start;
-        private readonly IActorFactory _wallFactory;
-        private readonly IActorFactory _weaponFactory;
 
         public DungeonService(RandomGenerator randomGenerator,
                               Configuration configuration,
                               CollisionService collisionService,
-                              IActorFactory heroFactory,
-                              IActorFactory enemyFactory,
-                              IActorFactory wallFactory,
-                              IActorFactory doorFactory,
-                              IActorFactory potionFactory,
-                              IActorFactory weaponFactory,
-                              DecorationFactory decorationFactory,
-                              MoveableDecorationFactory moveableDecorationFactory,
-                              FloorDecorationFactory floorDecorationFactory)
+                              Spawner spawner)
         {
             _random = randomGenerator;
             _configuration = configuration;
             _roomDecorator = new RoomDecorator(_random);
             _collisionService = collisionService;
-            _heroFactory = heroFactory;
-            _enemyFactory = enemyFactory;
-            _wallFactory = wallFactory;
-            _doorFactory = doorFactory;
-            _potionFactory = potionFactory;
-            _weaponFactory = weaponFactory;
-            _decorationFactory = decorationFactory;
-            _moveableDecorationFactory = moveableDecorationFactory;
-            _floorDecorationFactory = floorDecorationFactory;
+            _spawner = spawner;
             _dungeon = new Dungeon(_random);
             for (int i = 0; i < _configuration.RoomsPerDungeon; i++)
             {
@@ -140,7 +117,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     }
                     var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
-                    _wallFactory.Add(position);
+                    _spawner.Add<Wall>(position);
                 }
             }
             for (var x = 0; x < cells.GetLength(0); x++)
@@ -153,7 +130,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     }
                     var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
-                    _doorFactory.Add(position);
+                    _spawner.Add<Door>(position);
                 }
             }
             for (var x = 0; x < cells.GetLength(0); x++)
@@ -166,7 +143,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     }
                     var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
 
-                    _heroFactory.Add(position);
+                    _spawner.Add<Hero>(position);
                 }
             }
             for (var x = 0; x < cells.GetLength(0); x++)
@@ -178,7 +155,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                         continue;
                     }
                     var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
-                    _enemyFactory.Add(position);
+                    _spawner.Add<Enemy>(position);
                 }
             }
             for (var x = 0; x < cells.GetLength(0); x++)
@@ -199,7 +176,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     }
                     var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
-                    _moveableDecorationFactory.AddTable(position, new Vector2(2), "Table");
+                    _spawner.AddTable(position, new Vector2(2), "Table");
                 }
             }
             for (var x = 0; x < cells.GetLength(0); x++)
@@ -212,7 +189,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     }
                     var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
 
-                    _moveableDecorationFactory.AddChair(position);
+                    _spawner.AddChair(position);
                 }
             }
             for (var x = 0; x < cells.GetLength(0); x++)
@@ -227,11 +204,11 @@ namespace Roguecraft.Engine.Procedural.Dungeons
 
                     if (_random.Float() > 0.5f)
                     {
-                        _potionFactory.Add(position);
+                        _spawner.Add<Potion>(position);
                     }
                     else
                     {
-                        _weaponFactory.Add(position);
+                        _spawner.Add<Weapon>(position);
                     }
                 }
             }
@@ -260,7 +237,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     }
                     var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
-                    _decorationFactory.AddBookshelf(position, Vector2.One, spriteEffect, rotation);
+                    _spawner.AddBookshelf(position, Vector2.One, spriteEffect, rotation);
                 }
             }
             for (var x = 0; x < cells.GetLength(0); x++)
@@ -280,7 +257,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     }
                     var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
-                    _floorDecorationFactory.Add(position, new Vector2(4), "Ritual");
+                    _spawner.AddFloorDecoration(position, new Vector2(4), "Ritual");
                 }
             }
 
@@ -294,7 +271,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     }
                     var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
-                    _moveableDecorationFactory.AddBarrel(position, "Barrel");
+                    _spawner.AddBarrel(position, "Barrel");
                 }
             }
 
@@ -308,7 +285,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     }
                     var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
 
-                    _potionFactory.Add(position);
+                    _spawner.Add<Potion>(position);
                 }
             }
 
@@ -339,7 +316,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     }
 
                     var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
-                    _decorationFactory.AddBed(position, new Vector2(width, height), spriteEffect, rotation);
+                    _spawner.AddBed(position, new Vector2(width, height), spriteEffect, rotation);
                 }
             }
         }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Roguecraft.Engine.Core;
+using Roguecraft.Engine.IoC;
 using System;
 
 namespace Roguecraft;
@@ -10,6 +11,7 @@ public class Main : Game
     private readonly GraphicsDeviceManager _graphics;
 
     private readonly Level _level;
+    private readonly Services _services;
 
     public Main()
     {
@@ -26,8 +28,8 @@ public class Main : Game
         _graphics.SynchronizeWithVerticalRetrace = false; //Vsync
         IsFixedTimeStep = true;
         TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0f / 60);
-
-        _level = new Level(GraphicsDevice, _graphics, Content);
+        _services = new Services(GraphicsDevice, _graphics, Content);
+        _level = _services.Level;
     }
 
     protected override void Draw(GameTime gameTime)

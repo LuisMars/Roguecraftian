@@ -45,7 +45,7 @@ public class GameLoop
         {
             actor.ClearSimulationData();
         }
-        for (int steps = 0; steps < 2; steps++)
+        for (int steps = 0; steps < 1; steps++)
         {
             _collisionService.Update();
         }

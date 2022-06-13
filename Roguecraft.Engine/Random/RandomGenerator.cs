@@ -1,10 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
-using Warband.Engines.Random;
 
 namespace Roguecraft.Engine.Random;
 
 public class RandomGenerator : XXHash
 {
+    public RandomGenerator() : base()
+    {
+    }
+
     private int RandomIndex { get; set; }
 
     public float Float()

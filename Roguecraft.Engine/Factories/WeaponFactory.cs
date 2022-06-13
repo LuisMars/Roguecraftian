@@ -9,7 +9,7 @@ using Roguecraft.Engine.Simulation;
 
 namespace Roguecraft.Engine.Factories;
 
-internal class WeaponFactory : PickupItemFactory<Weapon>
+public class WeaponFactory : PickupItemFactory<Weapon>
 {
     private readonly DiceRoller _diceRoller;
 

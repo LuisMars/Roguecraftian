@@ -192,9 +192,10 @@ public class CollisionService
         {
             return;
         }
-
-        actor.Position -= events.Where(x => !x.Other.IsSensor)
+        var penetration = events.Where(x => !x.Other.IsSensor)
                                 .Sum(x => x.PenetrationVector);
+        actor.Collision.PenetrationVector = penetration;
+        actor.Position -= penetration;
     }
 
     private void ReactToCollission()

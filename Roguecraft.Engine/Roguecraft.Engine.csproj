@@ -12,6 +12,7 @@
     <PackageReference Include="MonoGame.Extended.Input" Version="3.8.0" />
     <PackageReference Include="MonoGame.Extended.Particles" Version="3.8.0" />
     <PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" />
+    <PackageReference Include="Ninject" Version="3.3.6" />
   </ItemGroup>
 
 </Project>

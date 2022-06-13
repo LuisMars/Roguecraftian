@@ -11,16 +11,21 @@ public class CameraService
     private readonly Camera2D _camera;
     private readonly RandomGenerator _random;
 
-    public CameraService(RandomGenerator randomGenerator, ActorPool actorPool, int width, int height)
+    public CameraService(RandomGenerator randomGenerator, ActorPool actorPool)
     {
-        _camera = new Camera2D(width, height);
         _actorPool = actorPool;
+        _camera = new Camera2D(10, 10);
         _random = randomGenerator;
     }
 
     public Matrix GetViewTransformationMatrix()
     {
         return _camera.GetViewTransformationMatrix();
+    }
+
+    public void Init(int width, int height)
+    {
+        _camera.Update(width, height);
     }
 
     public Vector2 ScreenToWorld(Vector2 screen)

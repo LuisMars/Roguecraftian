@@ -78,7 +78,7 @@ public class InputState
         }
     }
 
-    public bool IsMouseUsed => _mouseState.DeltaPosition != Point.Zero && _previousMouseState.DeltaPosition != Point.Zero;
+    public bool IsMouseUsed => _mouseState.DeltaPosition.ToVector2().LengthSquared() > 50/* && _previousMouseState.DeltaPosition.ToVector2().LengthSquared() > 5*/;
 
     internal Vector2 LeftJostick => _gamePadState.ThumbSticks.Left * _invertJoystickY;
     internal Vector2 MousePosition => _cameraService.ScreenToWorld(_mouseState.Position.ToVector2());
