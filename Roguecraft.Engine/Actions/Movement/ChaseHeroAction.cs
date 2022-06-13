@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Helpers;
 
@@ -9,6 +10,7 @@ public class ChaseHeroAction : MoveAction
     public ChaseHeroAction(Creature actor, Hero hero) : base(actor)
     {
         Hero = hero;
+        SmoothDirection = true;
     }
 
     private float GreatestDistance { get; set; }
@@ -19,8 +21,25 @@ public class ChaseHeroAction : MoveAction
     public override Vector2 GetDirection()
     {
         var direction = LastKnownPosition - Creature.Position;
+        foreach (var collision in Creature.AreaOfInfluence.InternalEvents)
+        {
+            if (collision.Other.IsSensor || collision.Other.Actor == Creature)
+            {
+                continue;
+            }
+            if (collision.Other.Bounds is CircleF)
+            {
+                direction += Creature.Position - (Vector2)collision.Other.Bounds.Position;
+            }
+            if (collision.Other.Bounds is RectangleF rectangle)
+            {
+                direction += Creature.Position - (Vector2)rectangle.Center;
+            }
+        }
+
         direction /= Creature.Stats.Speed * 2;
         direction = direction.ClampMagnitude(1);
+
         return direction;
     }
 

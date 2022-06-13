@@ -187,14 +187,15 @@ public class CollisionService
             return;
         }
         var collision = actor.Collision;
+
         var events = actor.Collision.InternalEvents;
+
         if (collision.IsFixed || collision.IsSensor || !events.Any())
         {
             return;
         }
         var penetration = events.Where(x => !x.Other.IsSensor)
                                 .Sum(x => x.PenetrationVector);
-        actor.Collision.PenetrationVector = penetration;
         actor.Position -= penetration;
     }
 

@@ -14,6 +14,7 @@ public class MoveAction : GameAction
     }
 
     public Vector2 Direction { get; protected set; }
+    protected bool SmoothDirection { get; set; }
 
     public virtual Vector2 GetDirection()
     {
@@ -25,6 +26,10 @@ public class MoveAction : GameAction
     protected override void OnPerform(float deltaTime)
     {
         var direction = GetDirection();
+        if (SmoothDirection)
+        {
+            direction = Vector2.Lerp(Creature.Direction, direction, deltaTime);
+        }
         Creature.Direction = direction;
 
         var speed = direction * Creature.Stats.Speed * deltaTime;
