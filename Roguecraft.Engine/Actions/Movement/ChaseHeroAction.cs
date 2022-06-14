@@ -27,14 +27,12 @@ public class ChaseHeroAction : MoveAction
             {
                 continue;
             }
-            if (collision.Other.Bounds is CircleF)
+            direction += collision.Other.Bounds switch
             {
-                direction += Creature.Position - (Vector2)collision.Other.Bounds.Position;
-            }
-            if (collision.Other.Bounds is RectangleF rectangle)
-            {
-                direction += Creature.Position - (Vector2)rectangle.Center;
-            }
+                CircleF circle => Creature.Position - (Vector2)circle.Position,
+                RectangleF rectangle => Creature.Position - (Vector2)rectangle.Center,
+                _ => Vector2.Zero
+            };
         }
 
         direction /= Creature.Stats.Speed * 2;

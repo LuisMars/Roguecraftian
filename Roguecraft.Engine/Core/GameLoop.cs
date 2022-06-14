@@ -1,4 +1,5 @@
-﻿using Roguecraft.Engine.Simulation;
+﻿using Microsoft.Xna.Framework.Input;
+using Roguecraft.Engine.Simulation;
 using Roguecraft.Engine.Visibility;
 
 namespace Roguecraft.Engine.Core;
@@ -49,5 +50,8 @@ public class GameLoop
         {
             _collisionService.Update();
         }
+
+        var strength = 1f * _actorPool.Hero.Timers.JustTriggeredTypes.Count();
+        GamePad.SetVibration(0, strength, strength);
     }
 }
