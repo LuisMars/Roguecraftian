@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
-using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Core;
 using Roguecraft.Engine.Helpers;
@@ -86,12 +85,12 @@ public class HudRenderer
         spriteBatch.Draw(_inventorySelector, equipedStart, _color);
         if (hero.EquipedItem is not null)
         {
-            var scale = new Vector2(64f / hero.EquipedItem.Texture.Width);
+            var scale = new Vector2(64f / hero.EquipedItem.Sprite.Width);
             equipedStart += new Vector2(8);
 
-            spriteBatch.Draw(hero.EquipedItem.Texture,
+            spriteBatch.Draw(hero.EquipedItem.Sprite.Texture,
                              equipedStart,
-                             hero.EquipedItem.Color,
+                             hero.EquipedItem.Sprite.Color,
                              0f,
                              Vector2.Zero,
                              scale,
@@ -110,13 +109,13 @@ public class HudRenderer
                 inventoryStart += new Vector2(0, 64);
                 continue;
             }
-            var itemScale = new Vector2(64f / item.Texture.Width);
-            var color = item.Color;
+            var itemScale = new Vector2(64f / item.Sprite.Width);
+            var color = item.Sprite.Color;
             if (i != hero.Inventory.CurrentIndex)
             {
                 color = Color.Lerp(color, Color.Black, 0.5f);
             }
-            spriteBatch.Draw(item.Texture,
+            spriteBatch.Draw(item.Sprite.Texture,
                              inventoryStart,
                              color,
                              0f,

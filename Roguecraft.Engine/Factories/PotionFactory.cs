@@ -1,5 +1,6 @@
 ﻿using Roguecraft.Engine.Actions.Effects;
 using Roguecraft.Engine.Actors;
+using Roguecraft.Engine.Components;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Core;
 using Roguecraft.Engine.Helpers;
@@ -17,7 +18,7 @@ public class PotionFactory : PickupItemFactory<Potion>
     protected override void OnCreate(Potion potion)
     {
         potion.HealAction = new HealAction();
-        potion.Texture = ContentRepository.Potion;
-        potion.Color = Configuration.PotionColor.ToColor();
+
+        potion.Sprite = new ActorSprite(potion, ContentRepository.Potion, Configuration.PotionColor.ToColor());
     }
 }

@@ -21,7 +21,6 @@ public class MoveableDecorationFactory : ActorFactoryBase<Wall>
 
     public void AddBarrel(Vector2 position, string? name = null)
     {
-        position += new Vector2(Configuration.WallSize * 0.5f);
         Texture = ContentRepository.Barrel;
         Add(position, name);
     }
@@ -42,11 +41,12 @@ public class MoveableDecorationFactory : ActorFactoryBase<Wall>
     {
         var wall = new Wall
         {
-            Color = Configuration.WoodColor.ToColor(),
-            Texture = Texture ?? ContentRepository.Chair,
             Name = name ?? "Moveable decoration",
             Position = position
         };
+
+        wall.Sprite = new ActorSprite(wall, Texture ?? ContentRepository.Chair, Configuration.WoodColor.ToColor());
+
         IShapeF bounds = new CircleF
         {
             Radius = Configuration.WallSize / 2f

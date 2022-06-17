@@ -32,10 +32,7 @@ public class ShapeRenderer
                 DrawShape(spriteBatch, actor, aoi);
             }
         }
-        foreach (var triangle in _visibilityService.Triangles)
-        {
-            spriteBatch.DrawLine(triangle.VertexA, triangle.VertexB, Color.Red, 5, 1);
-        }
+        //DrawVisibility(spriteBatch);
     }
 
     private static void DrawShape(SpriteBatch spriteBatch, Actor actor, IShapeF? shape)
@@ -49,10 +46,20 @@ public class ShapeRenderer
         if (shape is CircleF circle)
         {
             spriteBatch.DrawCircle(circle, 16, Color.White);
+            spriteBatch.DrawCircle(circle.Center, 10, 6, Color.White);
         }
         if (shape is RectangleF rectangle)
         {
             spriteBatch.DrawRectangle(rectangle, Color.White);
+            spriteBatch.DrawCircle(rectangle.Center, 10, 6, Color.White);
+        }
+    }
+
+    private void DrawVisibility(SpriteBatch spriteBatch)
+    {
+        foreach (var triangle in _visibilityService.Triangles)
+        {
+            spriteBatch.DrawLine(triangle.VertexA, triangle.VertexB, Color.Red, 5, 1);
         }
     }
 }

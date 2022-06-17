@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.TextureAtlases;
 using Roguecraft.Engine.Actors;
@@ -20,24 +19,29 @@ public class DecorationFactory : ActorFactoryBase<Wall>
 
     private Color? Color { get; set; }
     private TextureRotation Rotation { get; set; }
-    private SpriteEffects? SpriteEffect { get; set; }
     private TextureRegion2D? Texture { get; set; }
 
-    public void AddBed(Vector2 position, Vector2 size, SpriteEffects spriteEffect, TextureRotation rotated)
+    public void AddBed(Vector2 position, Vector2 size, TextureRotation rotated)
     {
         Color = Configuration.BedColor.ToColor();
         Texture = ContentRepository.Bed;
-        SpriteEffect = spriteEffect;
         Rotation = rotated;
         Add(position, size, "Bed");
     }
 
-    public void AddBookshelf(Vector2 position, Vector2 size, SpriteEffects spriteEffect, TextureRotation rotated)
+    public void AddBookshelf(Vector2 position, TextureRotation rotated)
     {
         Texture = ContentRepository.Bookshelf;
-        SpriteEffect = spriteEffect;
         Rotation = rotated;
-        Add(position, size, "Bookshelf");
+        Add(position, Vector2.One, "Bookshelf");
+    }
+
+    public void AddCouch(Vector2 position, Vector2 size, TextureRotation rotated)
+    {
+        Color = Configuration.BedColor.ToColor();
+        Texture = ContentRepository.Coach;
+        Rotation = rotated;
+        Add(position, size, "Bed");
     }
 
     public void AddGeneric(Vector2 position)
@@ -50,11 +54,11 @@ public class DecorationFactory : ActorFactoryBase<Wall>
     {
         var wall = new Wall
         {
-            Color = Color ?? Configuration.WoodColor.ToColor(),
-            Texture = Texture ?? ContentRepository.Decoration,
             Name = name ?? "Decoration",
             Position = position,
-            SpriteEffects = SpriteEffect ?? SpriteEffects.None,
+        };
+        wall.Sprite = new ActorSprite(wall, Texture ?? ContentRepository.Decoration, Color ?? Configuration.WoodColor.ToColor())
+        {
             TextureRotation = Rotation
         };
 

@@ -21,6 +21,7 @@ namespace Roguecraft.Engine.Content
         public TextureRegion2D Bookshelf { get; private set; }
         public TextureRegion2D Chair { get; private set; }
         public TextureRegion2D Chest { get; private set; }
+        public TextureRegion2D Coach { get; private set; }
         public TextureRegion2D Creature { get; private set; }
         public TextureRegion2D Dagger { get; private set; }
         public GameSound DaggerDraw { get; private set; }
@@ -67,6 +68,7 @@ namespace Roguecraft.Engine.Content
             Bookshelf = LoadTextureRegion("bookshelf");
             Barrel = LoadTextureRegion("barrel");
             Chest = LoadTextureRegion("chest");
+            Coach = LoadTextureRegion("coach");
             Table = LoadTextureRegion("table");
             Bed = LoadTextureRegion("bed");
 

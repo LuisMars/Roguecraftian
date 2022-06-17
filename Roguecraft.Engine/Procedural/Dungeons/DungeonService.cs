@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Core;
@@ -62,6 +61,25 @@ namespace Roguecraft.Engine.Procedural.Dungeons
             _collisionService.Initialize(Bounds);
 
             AddCells();
+        }
+
+        private static TextureRotation GetRotation(char[,] cells, int x, int y)
+        {
+            var rotation = TextureRotation.None;
+            if (cells[x, y + 1] == 'W')
+            {
+                rotation = TextureRotation.HalfTurn;
+            }
+            else if (cells[x - 1, y] == 'W')
+            {
+                rotation = TextureRotation.AntiClockwise;
+            }
+            else if (cells[x + 1, y] == 'W')
+            {
+                rotation = TextureRotation.Clockwise;
+            }
+
+            return rotation;
         }
 
         private void AddCells()
@@ -141,7 +159,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     {
                         continue;
                     }
-                    var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
+                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
                     _spawner.Add<Hero>(position);
                 }
@@ -154,7 +172,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     {
                         continue;
                     }
-                    var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
+                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
                     _spawner.Add<Enemy>(position);
                 }
             }
@@ -187,7 +205,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     {
                         continue;
                     }
-                    var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
+                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
                     _spawner.AddChair(position);
                 }
@@ -200,7 +218,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     {
                         continue;
                     }
-                    var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
+                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
                     if (_random.Float() > 0.5f)
                     {
@@ -220,24 +238,12 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     {
                         continue;
                     }
-                    var height = 1;
-                    var rotation = TextureRotation.None;
-                    var spriteEffect = SpriteEffects.None;
-                    if (cells[x, y - 1] == 'W')
-                    {
-                        rotation = TextureRotation.HalfTurn;
-                    }
-                    else if (cells[x + 1, y] == 'W')
-                    {
-                        rotation = TextureRotation.AntiClockwise;
-                    }
-                    else if (cells[x - 1, y] == 'W')
-                    {
-                        rotation = TextureRotation.Clockwise;
-                    }
+
+                    var rotation = GetRotation(cells, x, y);
+
                     var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
-                    _spawner.AddBookshelf(position, Vector2.One, spriteEffect, rotation);
+                    _spawner.AddBookshelf(position, rotation);
                 }
             }
             for (var x = 0; x < cells.GetLength(0); x++)
@@ -283,7 +289,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     {
                         continue;
                     }
-                    var position = new Vector2((x - offset.X + 0.5f) * _configuration.WallSize, (y - offset.Y + 0.5f) * _configuration.WallSize);
+                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
                     _spawner.Add<Potion>(position);
                 }
@@ -299,8 +305,6 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     }
                     var width = 1;
                     var height = 1;
-                    var rotation = TextureRotation.None;
-                    var spriteEffect = SpriteEffects.None;
 
                     cells[x, y] = 'F';
                     if (cells[x, y + 1] == 'Z')
@@ -312,11 +316,40 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     {
                         width++;
                         cells[x + 1, y] = 'F';
-                        rotation = TextureRotation.AntiClockwise;
                     }
 
+                    var rotation = GetRotation(cells, x, y);
                     var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
-                    _spawner.AddBed(position, new Vector2(width, height), spriteEffect, rotation);
+                    _spawner.AddBed(position, new Vector2(width, height), rotation);
+                }
+            }
+            for (var x = 0; x < cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < cells.GetLength(1); y++)
+                {
+                    if (cells[x, y] != 'c')
+                    {
+                        continue;
+                    }
+                    var width = 1;
+                    var height = 1;
+
+                    cells[x, y] = 'F';
+                    if (cells[x, y + 1] == 'c')
+                    {
+                        cells[x, y + 1] = 'F';
+                        height++;
+                    }
+                    else if (cells[x + 1, y] == 'c')
+                    {
+                        width++;
+                        cells[x + 1, y] = 'F';
+                    }
+
+                    var rotation = GetRotation(cells, x, y);
+
+                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
+                    _spawner.AddCouch(position, new Vector2(width, height), rotation);
                 }
             }
         }

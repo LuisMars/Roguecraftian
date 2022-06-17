@@ -4,13 +4,13 @@ public class DeskRule : ReplacementRule
 {
     public override char[,] Source { get; } = new char[,] {
         { 'W', 'W', 'W' },
-        { 'Z', 'F', 'F' },
-        { '*', 'F', 'F' },
+        { 'Z', 'F', 'W' },
+        { '*', '*', '*' },
     };
 
     public override char[,] Target { get; } = new char[,] {
         { 'W', 'W', 'W' },
-        { 'Z', 'C', 'F' },
-        { '*', 'F', 'F' },
+        { 'Z', 'C', 'W' },
+        { '*', '*', '*' },
     };
 }

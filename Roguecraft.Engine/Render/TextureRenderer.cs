@@ -21,21 +21,21 @@ public class TextureRenderer
 
     public void Render(SpriteBatch spriteBatch)
     {
-        foreach (var actor in _actorPool.Actors.Where(a => a.Texture is not null))
+        foreach (var actor in _actorPool.Actors.Where(a => a.Sprite.Texture is not null))
         {
-            var color = actor.Color;
+            var color = actor.Sprite.Color;
             if (!actor.Visibility.IsVisibleByHero && !actor.Visibility.CanBeDrawn)
             {
                 continue;
             }
 
-            spriteBatch.Draw(actor.Texture,
-                             actor.Position + actor.DrawingOffset,
+            spriteBatch.Draw(actor.Sprite.Texture,
+                             actor.Sprite.Position,
                              color,
-                             actor.DrawingAngle,
-                             actor.Origin,
-                             actor.Scale,
-                             actor.SpriteEffects,
+                             actor.Sprite.Angle,
+                             actor.Sprite.Origin,
+                             actor.Sprite.Scale,
+                             actor.Sprite.Effects,
                              GetLayer(actor.Position));
             DrawCreatureArms(spriteBatch, actor);
             DrawUnderPlayer(spriteBatch, actor);
@@ -54,13 +54,13 @@ public class TextureRenderer
             return;
         }
 
-        var color = creature.Color;
+        var color = creature.Sprite.Color;
         var texture = _fist;
         var armColor = color;
         if (creature.EquipedItem is not null)
         {
-            armColor = creature.EquipedItem.Color;
-            texture = creature.EquipedItem.Texture;
+            armColor = creature.EquipedItem.Sprite.Color;
+            texture = creature.EquipedItem.Sprite.Texture;
         }
         var rightArmAngle = MathF.PI * 0.25f;
         var leftArmAngle = MathF.PI * -0.25f;
@@ -91,19 +91,19 @@ public class TextureRenderer
             leftArmAngle = MathF.PI * -value;
         }
         spriteBatch.Draw(texture,
-                         creature.Position,
+                         creature.Sprite.Position,
                          armColor,
-                         creature.Angle - rightArmAngle,
-                         creature.Origin + new Vector2(-texture.Width, 0),
-                         creature.Scale * 0.75f,
+                         creature.Sprite.Angle - rightArmAngle,
+                         creature.Sprite.Origin + new Vector2(-texture.Width, 0),
+                         creature.Sprite.Scale * 0.75f,
                          SpriteEffects.FlipHorizontally,
                          GetLayer(actor.Position, 10f));
         spriteBatch.Draw(_fist,
-                         creature.Position,
+                         creature.Sprite.Position,
                          color,
                          creature.Angle - leftArmAngle,
-                         creature.Origin + new Vector2(texture.Width, 0),
-                         creature.Scale * 0.75f,
+                         creature.Sprite.Origin + new Vector2(texture.Width, 0),
+                         creature.Sprite.Scale * 0.75f,
                          SpriteEffects.None,
                          GetLayer(actor.Position, 10f));
     }
@@ -115,12 +115,12 @@ public class TextureRenderer
             return;
         }
         spriteBatch.Draw(hero.UnderTexture,
-                         hero.Position + new Vector2(hero.AreaOfInfluence.Width * -(0.28125f)),
+                         hero.Sprite.Position + new Vector2(hero.AreaOfInfluence.Width * -(0.28125f)),
                          hero.UnderColor,
                          0,
-                         hero.Origin,
+                         hero.Sprite.Origin,
                          new Vector2(hero.AreaOfInfluence.Width / hero.UnderTexture.Width) * 1.125f,
-                         hero.SpriteEffects,
+                         hero.Sprite.Effects,
                          0);
     }
 }

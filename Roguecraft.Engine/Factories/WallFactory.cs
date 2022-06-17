@@ -20,11 +20,10 @@ public class WallFactory : ActorFactoryBase<Wall>
     {
         var wall = new Wall
         {
-            Color = Configuration.WallColor.ToColor(),
-            Texture = ContentRepository.Wall,
             Name = name ?? "Wall",
             Position = position
         };
+        wall.Sprite = new ActorSprite(wall, ContentRepository.Wall, Configuration.WallColor.ToColor());
 
         wall.Collision = new Collision
         {

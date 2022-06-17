@@ -1,5 +1,6 @@
 ﻿using Roguecraft.Engine.Actions.Combat;
 using Roguecraft.Engine.Actors;
+using Roguecraft.Engine.Components;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Core;
 using Roguecraft.Engine.Helpers;
@@ -25,8 +26,7 @@ public class WeaponFactory : PickupItemFactory<Weapon>
 
     protected override void OnCreate(Weapon weapon)
     {
-        weapon.Texture = ContentRepository.Dagger;
-        weapon.Color = Configuration.SteelColor.ToColor();
         weapon.AttackAction = new AttackAction(_diceRoller) { DiceRoll = new DiceRoll("1d4") };
+        weapon.Sprite = new ActorSprite(weapon, ContentRepository.Dagger, Configuration.SteelColor.ToColor());
     }
 }

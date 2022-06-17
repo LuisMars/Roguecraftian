@@ -60,9 +60,9 @@ public class HeroFactory : CreatureFactory<Hero>
         CollisionService.Insert(hero.AreaOfInfluence);
 
         hero.Name = "Hero";
-        hero.Texture = ContentRepository.Creature;
         hero.Stats = stats;
-        hero.Color = Configuration.PlayerColor.ToColor();
+        hero.Sprite = new ActorSprite(hero, ContentRepository.Creature, Configuration.PlayerColor.ToColor());
+
         hero.InputManager = _inputManager;
 
         hero.AvailableActions.Add(new InputActionTrigger { Keys = new() { InputAction.InventoryNext } }, new MoveInventoryAction(hero, true));

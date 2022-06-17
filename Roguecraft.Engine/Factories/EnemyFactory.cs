@@ -51,9 +51,8 @@ public class EnemyFactory : CreatureFactory<Enemy>
         CollisionService.Insert(enemy.AreaOfInfluence);
 
         enemy.Name = "Enemy";
-        enemy.Texture = ContentRepository.Enemy;
         enemy.Stats = stats;
-        enemy.Color = Configuration.EnemyColor.ToColor();
+        enemy.Sprite = new ActorSprite(enemy, ContentRepository.Enemy, Configuration.EnemyColor.ToColor());
         enemy.Hero = ActorPool.Hero;
 
         enemy.AvailableActions.Add(new DeathTrigger(), new DieAction(enemy));

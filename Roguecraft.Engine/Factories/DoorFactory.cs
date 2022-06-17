@@ -20,11 +20,10 @@ public class DoorFactory : ActorFactoryBase<Door>
     {
         var wall = new Door
         {
-            Color = Configuration.WallColor.ToColor(),
-            Texture = ContentRepository.Door,
             Name = name ?? "Door",
             Position = position
         };
+        wall.Sprite = new ActorSprite(wall, ContentRepository.Door, Configuration.WallColor.ToColor());
 
         wall.Collision = new Collision
         {

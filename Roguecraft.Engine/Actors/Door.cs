@@ -22,8 +22,8 @@ namespace Roguecraft.Engine.Actors
         {
             IsOpen = !IsOpen;
             Collision.IsSensor = IsOpen;
-            var texture = Texture;
-            Texture = ToggledTexture;
+            var texture = Sprite.Texture;
+            Sprite.Texture = ToggledTexture;
             ToggledTexture = texture;
             if (IsOpen)
             {

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Helpers;
 
@@ -72,19 +71,24 @@ public class Spawner
         _moveableDecorationFactory.AddBarrel(position, name);
     }
 
-    public void AddBed(Vector2 position, Vector2 vector2, SpriteEffects spriteEffect, TextureRotation rotation)
+    public void AddBed(Vector2 position, Vector2 vector2, TextureRotation rotation)
     {
-        _decorationFactory.AddBed(position, vector2, spriteEffect, rotation);
+        _decorationFactory.AddBed(position, vector2, rotation);
     }
 
-    public void AddBookshelf(Vector2 position, Vector2 size, SpriteEffects spriteEffect, TextureRotation rotation)
+    public void AddBookshelf(Vector2 position, TextureRotation rotation)
     {
-        _decorationFactory.AddBookshelf(position, size, spriteEffect, rotation);
+        _decorationFactory.AddBookshelf(position, rotation);
     }
 
     public void AddChair(Vector2 position)
     {
         _moveableDecorationFactory.AddChair(position);
+    }
+
+    public void AddCouch(Vector2 position, Vector2 vector2, TextureRotation rotation)
+    {
+        _decorationFactory.AddCouch(position, vector2, rotation);
     }
 
     public void AddFloorDecoration(Vector2 position, Vector2 size, string name)

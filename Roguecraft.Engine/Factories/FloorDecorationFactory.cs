@@ -20,11 +20,10 @@ public class FloorDecorationFactory : ActorFactoryBase<Wall>
     {
         var wall = new Wall
         {
-            Color = Configuration.BloodColor.ToColor(),
-            Texture = ContentRepository.Ritual,
             Name = name ?? "Floor decoration",
             Position = position
         };
+        wall.Sprite = new ActorSprite(wall, ContentRepository.Ritual, Configuration.BloodColor.ToColor());
 
         wall.Collision = new Collision
         {

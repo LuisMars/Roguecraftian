@@ -32,11 +32,11 @@ public class RoomDecorator
             new RoomShapeRule(),
             new ArmorStandRule(),
             new TableRule(),
-            //new LongTableRule(),
             new ChairRule(),
             new ChestRule(),
             new BookshelfRule(),
-            new LargeBookshelfRule()
+            new LargeBookshelfRule(),
+            new CouchRule(),
         };
         if (!isInMainPath)
         {

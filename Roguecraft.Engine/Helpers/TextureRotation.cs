@@ -2,8 +2,8 @@
 
 public enum TextureRotation
 {
-    None,
-    Clockwise,
-    AntiClockwise,
-    HalfTurn
+    None = 0,
+    Clockwise = 1,
+    HalfTurn = 2,
+    AntiClockwise = 3
 }

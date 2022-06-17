@@ -13,6 +13,7 @@ namespace Roguecraft.Engine.Render
         private readonly GraphicsDevice _graphicsDevice;
         private readonly HudRenderer _hudRenderer;
         private readonly ParticleRenderer _particleRenderer;
+        private readonly ShapeRenderer _shapeRenderer;
 
         private readonly SpriteBatch _spriteBatch;
         private readonly TextureRenderer _textureRenderer;
@@ -28,6 +29,7 @@ namespace Roguecraft.Engine.Render
                              ParticleRenderer particleRenderer,
                              VisibilityRenderer visibilityRenderer,
                              HudRenderer hudRenderer,
+                             ShapeRenderer shapeRenderer,
                              FrameCounter frameCounter)
         {
             _timeManager = timeManager;
@@ -38,6 +40,7 @@ namespace Roguecraft.Engine.Render
             _particleRenderer = particleRenderer;
             _visibilityRenderer = visibilityRenderer;
             _hudRenderer = hudRenderer;
+            _shapeRenderer = shapeRenderer;
             _frameCounter = frameCounter;
             _spriteBatch = new SpriteBatch(_graphicsDevice);
         }

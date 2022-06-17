@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Content;
 using Roguecraft.Engine.Core;
@@ -26,6 +27,10 @@ public abstract class ActorFactoryBase<TActor> : IActorFactory where TActor : Ac
     {
         Size = size;
         var actor = Create(position, name);
+        if (actor.Collision.Bounds is CircleF circle)
+        {
+            actor.Position += new Vector2(circle.Radius);
+        }
         ActorPool.Add(actor);
         if (actor is Hero hero)
         {

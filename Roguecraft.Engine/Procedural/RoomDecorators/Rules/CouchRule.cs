@@ -1,6 +1,6 @@
 ﻿namespace Roguecraft.Engine.Procedural.RoomDecorators.Rules;
 
-public class BedRule : ReplacementRule
+public class CouchRule : ReplacementRule
 {
     public override char[,] Source { get; } = new char[,] {
         { 'W', 'W', 'W', 'W' },
@@ -11,7 +11,7 @@ public class BedRule : ReplacementRule
 
     public override char[,] Target { get; } = new char[,] {
         { 'W', 'W', 'W', 'W' },
-        { '*', 'Z', 'Z', '*' },
+        { '*', 'c', 'c', '*' },
         { '*', 'F', 'F', '*' },
         { '*', '*', '*', '*' },
     };
