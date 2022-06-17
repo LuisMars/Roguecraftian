@@ -39,13 +39,13 @@ public class EnemyFactory : CreatureFactory<Enemy>
             Hostile = 0b001,
             Friendly = 0b010
         };
-        enemy.AreaOfInfluence = new Collision
+
+        var bounds = new CircleF
         {
-            Actor = enemy,
-            Bounds = new CircleF
-            {
-                Radius = Configuration.BaseCreatureAreaOfInfluenceRadius * 0.95f
-            },
+            Radius = Configuration.BaseCreatureAreaOfInfluenceRadius * 0.95f
+        };
+        enemy.AreaOfInfluence = new Collision(enemy, bounds)
+        {
             IsSensor = true
         };
         CollisionService.Insert(enemy.AreaOfInfluence);

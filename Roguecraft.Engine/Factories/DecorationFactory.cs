@@ -62,16 +62,16 @@ public class DecorationFactory : ActorFactoryBase<Wall>
             TextureRotation = Rotation
         };
 
-        wall.Collision = new Collision
+        var bounds = new RectangleF
         {
-            Actor = wall,
-            Bounds = new RectangleF
-            {
-                Width = Configuration.WallSize * Size.X,
-                Height = Configuration.WallSize * Size.Y,
-            },
+            Width = Configuration.WallSize * Size.X,
+            Height = Configuration.WallSize * Size.Y,
+        };
+
+        wall.Collision = new Collision(wall, bounds)
+        {
             IsFixed = true,
-            IsTransparent = true,
+            IsTransparent = true
         };
         CollisionService.Insert(wall.Collision);
         return wall;

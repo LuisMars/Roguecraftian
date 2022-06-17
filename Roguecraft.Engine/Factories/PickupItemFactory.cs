@@ -23,15 +23,15 @@ public abstract class PickupItemFactory<TItem> : ActorFactoryBase<TItem> where T
             Name = name ?? "Item"
         };
         OnCreate(item);
-        item.Collision = new Collision
+
+        var bounds = new CircleF
+        {
+            Radius = Configuration.BaseCreatureRadius
+        };
+        item.Collision = new Collision(item, bounds)
         {
             IsTransparent = true,
             IsSensor = true,
-            Actor = item,
-            Bounds = new CircleF
-            {
-                Radius = Configuration.BaseCreatureRadius
-            }
         };
 
         CollisionService.Insert(item.Collision);

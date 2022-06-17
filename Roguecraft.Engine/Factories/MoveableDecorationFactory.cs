@@ -60,10 +60,8 @@ public class MoveableDecorationFactory : ActorFactoryBase<Wall>
             };
         }
 
-        wall.Collision = new Collision
+        wall.Collision = new Collision(wall, bounds)
         {
-            Actor = wall,
-            Bounds = bounds,
             IsTransparent = true,
         };
 

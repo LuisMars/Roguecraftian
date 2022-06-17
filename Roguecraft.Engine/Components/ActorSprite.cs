@@ -100,7 +100,7 @@ public class ActorSprite
         }
     }
 
-    public TextureRegion2D? Texture { get; set; }
+    public TextureRegion2D Texture { get; set; }
     public TextureRotation TextureRotation { get; set; } = TextureRotation.None;
     public float Width => Texture?.Width ?? 0;
     private Collision Collision => Actor.Collision;

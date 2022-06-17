@@ -48,13 +48,13 @@ public class HeroFactory : CreatureFactory<Hero>
         };
         hero.UnderTexture = ContentRepository.UnderPlayer;
         hero.UnderColor = Configuration.UnderPlayerColor.ToColor();
-        hero.AreaOfInfluence = new Collision
+
+        var bounds = new CircleF
         {
-            Actor = hero,
-            Bounds = new CircleF
-            {
-                Radius = Configuration.BaseCreatureAreaOfInfluenceRadius
-            },
+            Radius = Configuration.BaseCreatureAreaOfInfluenceRadius
+        };
+        hero.AreaOfInfluence = new Collision(hero, bounds)
+        {
             IsSensor = true
         };
         CollisionService.Insert(hero.AreaOfInfluence);

@@ -7,8 +7,14 @@ namespace Roguecraft.Engine.Components;
 
 public class Collision
 {
-    public Actor Actor { get; set; }
-    public IShapeF Bounds { get; set; }
+    public Collision(Actor actor, IShapeF bounds)
+    {
+        Actor = actor;
+        Bounds = bounds;
+    }
+
+    public Actor Actor { get; }
+    public IShapeF Bounds { get; }
 
     public float Height
     {

@@ -20,7 +20,6 @@ namespace Roguecraft.Engine.Procedural.Dungeons
         private readonly RandomGenerator _random;
         private readonly RoomDecorator _roomDecorator;
         private readonly Spawner _spawner;
-        private readonly Room _special;
         private readonly Room _start;
 
         public DungeonService(RandomGenerator randomGenerator,
@@ -41,7 +40,6 @@ namespace Roguecraft.Engine.Procedural.Dungeons
             _longestPath = _dungeon.GetLongestPath();
             _start = _longestPath.First();
             _end = _longestPath.Last();
-            _special = _dungeon.FindSpecialRoom();
         }
 
         public RectangleF Bounds

@@ -35,14 +35,11 @@ public abstract class CreatureFactory<TActor> : ActorFactoryBase<TActor> where T
         OnCreate(creature);
         creature.Health = creature.Stats.MaxHealth;
 
-        creature.Collision = new Collision
+        var bounds = new CircleF
         {
-            Actor = creature,
-            Bounds = new CircleF
-            {
-                Radius = Configuration.BaseCreatureRadius
-            }
+            Radius = Configuration.BaseCreatureRadius
         };
+        creature.Collision = new Collision(creature, bounds);
         CollisionService.Insert(creature.Collision);
 
         return creature;

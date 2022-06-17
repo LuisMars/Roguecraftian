@@ -25,14 +25,13 @@ public class DoorFactory : ActorFactoryBase<Door>
         };
         wall.Sprite = new ActorSprite(wall, ContentRepository.Door, Configuration.WallColor.ToColor());
 
-        wall.Collision = new Collision
+        var bounds = new RectangleF
         {
-            Actor = wall,
-            Bounds = new RectangleF
-            {
-                Width = Configuration.WallSize,
-                Height = Configuration.WallSize,
-            },
+            Width = Configuration.WallSize,
+            Height = Configuration.WallSize,
+        };
+        wall.Collision = new Collision(wall, bounds)
+        {
             IsFixed = true
         };
         CollisionService.Insert(wall.Collision);

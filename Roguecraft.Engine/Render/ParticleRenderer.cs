@@ -13,12 +13,7 @@ namespace Roguecraft.Engine.Render;
 public class ParticleRenderer
 {
     private readonly ActorPool _actorPool;
-
-    private readonly ParticleEffect _bloodPaticle;
-    private readonly ParticleEffect _deathParticle;
-    private readonly ParticleEffect _fireParticle;
     private readonly ParticleEffect _footstepParticle;
-    private readonly ParticleEffect _healParticle;
     private readonly Dictionary<TimerType, ParticleEffect> _particles = new();
     private readonly float _stepDrawOffset;
     private readonly float _stepFrequencyBaseSquared;

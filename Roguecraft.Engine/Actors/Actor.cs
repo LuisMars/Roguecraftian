@@ -21,10 +21,7 @@ public abstract class Actor
 
     public void AfterUpdate(float deltaTime) => UpdateTimers(deltaTime);
 
-    public virtual void CalculateVisibility(VisibilityService visibilityService)
-    {
-        Visibility.Calculate(Position, Collision, visibilityService);
-    }
+    public virtual void CalculateVisibility(VisibilityService visibilityService) => Visibility.Calculate(Position, Collision, visibilityService);
 
     public virtual void ClearSimulationData() => Collision?.Clear();
 
