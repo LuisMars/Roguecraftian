@@ -90,9 +90,9 @@ public struct TriangleF : IEquatable<TriangleF>, IEquatableByRef<TriangleF>, ISh
 
     public bool Intersects(RectangleF rectangle)
     {
-        var copy = new RectangleF(rectangle.Position, rectangle.Size);
-        copy.Inflate(0.9f, 0.9f);
-        return copy.Intersects(Bounds);
+        return Segments[0].Intersects(rectangle) ||
+               Segments[1].Intersects(rectangle) ||
+               Segments[2].Intersects(rectangle);
     }
 
     public bool Intersects(CircleF circle)
@@ -110,12 +110,12 @@ public struct TriangleF : IEquatable<TriangleF>, IEquatableByRef<TriangleF>, ISh
         }
         if (shape is RectangleF rectangle)
         {
-            return Intersects((CircleF)rectangle);
+            return Intersects(rectangle);
         }
         return false;
     }
 
-    private float Sign(Vector2 p1, Vector2 p2, Vector2 p3)
+    private static float Sign(Vector2 p1, Vector2 p2, Vector2 p3)
     {
         return (p1.X - p3.X) * (p2.Y - p3.Y) - (p2.X - p3.X) * (p1.Y - p3.Y);
     }

@@ -32,7 +32,7 @@ public class ShapeRenderer
                 DrawShape(spriteBatch, actor, aoi);
             }
         }
-        //DrawVisibility(spriteBatch);
+        DrawVisibility(spriteBatch);
     }
 
     private static void DrawShape(SpriteBatch spriteBatch, Actor actor, IShapeF? shape)
