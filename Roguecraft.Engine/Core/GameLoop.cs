@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using Roguecraft.Engine.Simulation;
+using Roguecraft.Engine.Timers;
 using Roguecraft.Engine.Visibility;
 
 namespace Roguecraft.Engine.Core;
@@ -29,6 +30,7 @@ public class GameLoop
 
             actor.TakeTurn(deltaTime)?.Perform(deltaTime);
         }
+        _actorPool.AddNewActors();
         UpdateSimulation(deltaTime);
     }
 
@@ -51,7 +53,12 @@ public class GameLoop
             _collisionService.Update();
         }
 
-        var strength = 1f * _actorPool.Hero.Timers.JustTriggeredTypes.Count();
+        var strength = 0.5f * (1f - _actorPool.Hero.Timers[TimerType.Hurt].Percentage);
+        strength += 0.125f * (1f - _actorPool.Hero.Timers[TimerType.Attack].Percentage);
+        if (_actorPool.Hero.Timers.JustTriggeredTypes.Any())
+        {
+            strength += 1;
+        }
         GamePad.SetVibration(0, strength, strength);
     }
 }

@@ -12,7 +12,7 @@ public abstract class Actor
 {
     public float Angle { get; set; }
     public Collision Collision { get; set; }
-    public bool IsPickedUp { get; protected set; }
+    public bool IsPickedUp { get; set; }
     public string Name { get; set; }
     public Vector2 Position { get; set; }
     public ActorSprite Sprite { get; set; }

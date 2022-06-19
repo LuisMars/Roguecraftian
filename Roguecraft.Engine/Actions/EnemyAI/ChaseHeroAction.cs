@@ -1,9 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended;
+using Roguecraft.Engine.Actions.Movement;
 using Roguecraft.Engine.Actors;
 using Roguecraft.Engine.Helpers;
 
-namespace Roguecraft.Engine.Actions.Movement;
+namespace Roguecraft.Engine.Actions.EnemyAI;
 
 public class ChaseHeroAction : MoveAction
 {

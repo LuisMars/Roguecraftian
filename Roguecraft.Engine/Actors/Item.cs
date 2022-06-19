@@ -1,4 +1,7 @@
 ﻿using Roguecraft.Engine.Actions.Combat;
+using Roguecraft.Engine.Core;
+using Roguecraft.Engine.Random;
+using Roguecraft.Engine.Simulation;
 using Roguecraft.Engine.Timers;
 
 namespace Roguecraft.Engine.Actors;
@@ -9,6 +12,15 @@ public abstract class Item : Actor
     {
         IsPickedUp = true;
         OnDefaultAction(creature);
+    }
+
+    public void Drop(Creature creture, RandomGenerator randomGenerator, CollisionService collisionService, ActorPool actorPool)
+    {
+        IsPickedUp = false;
+        Position = creture.Position + randomGenerator.RandomVector((int)creture.Collision.Width);
+        actorPool.AddLater(this);
+        Collision.Update();
+        collisionService.Insert(Collision);
     }
 
     public AttackAction GetAttack()
@@ -22,6 +34,11 @@ public abstract class Item : Actor
         creature.Timers[TimerType.Pickup].Reset();
         creature.Inventory.Add(this);
         OnPickUp(creature);
+    }
+
+    public virtual bool TryPrepare(Creature creature)
+    {
+        return true;
     }
 
     protected virtual void OnDefaultAction(Creature creature)

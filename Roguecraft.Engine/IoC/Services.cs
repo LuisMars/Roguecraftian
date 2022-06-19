@@ -6,6 +6,7 @@ using Roguecraft.Engine.Cameras;
 using Roguecraft.Engine.Core;
 using Roguecraft.Engine.Input;
 using Roguecraft.Engine.Random;
+using Roguecraft.Engine.Random.Dice;
 using Roguecraft.Engine.Render;
 using Roguecraft.Engine.Simulation;
 using Roguecraft.Engine.Visibility;
@@ -32,6 +33,7 @@ public class Services
         _kernel.Bind<FrameCounter>().ToSelf().InSingletonScope();
         _kernel.Bind<RenderService>().ToSelf().InSingletonScope();
         _kernel.Bind<ParticleRenderer>().ToSelf().InSingletonScope();
+        _kernel.Bind<DiceRoller>().ToSelf().InSingletonScope();
     }
 
     public Level Level => _kernel.Get<Level>();

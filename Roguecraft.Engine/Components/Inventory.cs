@@ -4,6 +4,7 @@ namespace Roguecraft.Engine.Components;
 
 public class Inventory
 {
+    public Item? CurrenItem => Items[CurrentIndex];
     public int CurrentIndex { get; private set; } = 0;
     public Item[] Items { get; set; } = new Item[8];
 
@@ -45,5 +46,18 @@ public class Inventory
         Items[CurrentIndex] = null;
 
         return item;
+    }
+
+    internal void Remove(Potion potion)
+    {
+        for (var i = 0; i < Items.Length; i++)
+        {
+            if (Items[i] != potion)
+            {
+                continue;
+            }
+            Items[i] = null;
+            return;
+        }
     }
 }

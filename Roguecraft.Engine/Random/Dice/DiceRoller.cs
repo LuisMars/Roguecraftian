@@ -16,7 +16,7 @@ public class DiceRoller
         var result = roll.Bonus;
         for (var i = 0; i < roll.NumberOfDice; i++)
         {
-            result += _random.Range(1, roll.Sides, RandomIndex++);
+            result += 1 + _random.Range(0, roll.Sides, RandomIndex++);
         }
         return result;
     }

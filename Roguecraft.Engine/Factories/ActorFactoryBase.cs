@@ -7,7 +7,7 @@ using Roguecraft.Engine.Simulation;
 
 namespace Roguecraft.Engine.Factories;
 
-public abstract class ActorFactoryBase<TActor> : IActorFactory where TActor : Actor
+public abstract class ActorFactoryBase<TActor> : IActorFactory<TActor> where TActor : Actor
 {
     public ActorFactoryBase(Configuration configuration, ActorPool actorPool, CollisionService collisionService, ContentRepository contentRepository)
     {
@@ -23,7 +23,7 @@ public abstract class ActorFactoryBase<TActor> : IActorFactory where TActor : Ac
     protected ContentRepository ContentRepository { get; }
     protected Vector2 Size { get; set; }
 
-    public void Add(Vector2 position, Vector2 size, string? name = null)
+    public TActor Add(Vector2 position, Vector2 size, string? name = null)
     {
         Size = size;
         var actor = Create(position, name);
@@ -36,11 +36,12 @@ public abstract class ActorFactoryBase<TActor> : IActorFactory where TActor : Ac
         {
             ActorPool.Hero = hero;
         }
+        return actor;
     }
 
-    public void Add(Vector2 position, string? name = null)
+    public TActor Add(Vector2 position, string? name = null)
     {
-        Add(position, Vector2.One, name);
+        return Add(position, Vector2.One, name);
     }
 
     protected abstract TActor Create(Vector2 position, string? name = null);

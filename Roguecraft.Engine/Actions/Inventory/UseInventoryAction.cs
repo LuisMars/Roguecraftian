@@ -17,12 +17,13 @@ public class UseInventoryAction : GameAction
 
     public override bool TryPrepare(bool useMouse)
     {
-        Item = Creature.Inventory.UseCurrentItem();
-        return Item is not null;
+        Item = Creature.Inventory.CurrenItem;
+        return Item is not null && Item.TryPrepare(Creature);
     }
 
     protected override void OnPerform(float deltaTime)
     {
+        Creature.Inventory.UseCurrentItem();
         Item?.DefaultAction(Creature);
     }
 }

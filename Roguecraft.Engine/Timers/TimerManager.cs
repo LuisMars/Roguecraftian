@@ -14,6 +14,7 @@ public class TimerManager
 
     public IEnumerable<TimerType> ActiveTypes => _timers.Where(t => t.Value.IsActive).Select(t => t.Key);
     public IEnumerable<TimerType> JustTriggeredTypes => _timers.Where(t => t.Value.JustTriggered).Select(t => t.Key);
+    public IEnumerable<ActionTimer> Timers => _timers.Values;
     public ActionTimer this[TimerType timerType] => _timers[timerType];
 
     internal void Update(float deltaTime)
