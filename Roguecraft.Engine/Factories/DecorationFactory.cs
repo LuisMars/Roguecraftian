@@ -50,6 +50,22 @@ public class DecorationFactory : ActorFactoryBase<Wall>
         Add(position);
     }
 
+    public void AddPlant(Vector2 position, Vector2 size, TextureRotation rotated)
+    {
+        Color = Configuration.WoodColor.ToColor();
+        Texture = ContentRepository.Plant;
+        Rotation = rotated;
+        Add(position, size, "Plant");
+    }
+
+    public void AddStatue(Vector2 position, TextureRotation rotated)
+    {
+        Texture = ContentRepository.Statue;
+        Rotation = rotated;
+        Color = Configuration.WallColor.ToColor();
+        Add(position, Vector2.One, "Statue");
+    }
+
     protected override Wall Create(Vector2 position, string? name = null)
     {
         var wall = new Wall

@@ -6,9 +6,9 @@ namespace Roguecraft.Engine.Procedural.Dungeons;
 public class Dungeon
 {
     private const int AverageRoomSize = 10;
-    private const int MaxDungeonSize = 100;
-    private const int MaxRoomSize = 20;
-    private const int MinRoomSize = 2;
+    private const int MaxDungeonSize = 70;
+    private const int MaxRoomSize = 15;
+    private const int MinRoomSize = 3;
     private readonly RandomGenerator _random;
     private readonly List<WayPointConnection> _waypointsConnections = new();
 
@@ -79,18 +79,18 @@ public class Dungeon
         return (left, top, right - left, bottom - top);
     }
 
-    public Room? FindSpecialRoom()
+    public Room FindSpecialRoom()
     {
         return FindSpecialRoom(new());
     }
 
-    public Room? FindSpecialRoom(List<Room> toAvoid)
+    public Room FindSpecialRoom(List<Room> toAvoid)
     {
         var longestPath = GetLongestPath();
         longestPath.AddRange(toAvoid);
-        Room? farthest = null;
+        Room farthest = longestPath[1];
         int maxLength = 0;
-        foreach (var room in Rooms.Where(r => !r.IsCorridor() && !longestPath.Contains(r)))
+        foreach (var room in Rooms.Where(r => !r.IsCorridor() && !longestPath.Contains(r) && r.Width > 4 && r.Height > 4))
         {
             var minLength = int.MaxValue;
             foreach (var path in longestPath)

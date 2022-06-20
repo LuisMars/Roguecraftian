@@ -46,6 +46,9 @@ namespace Roguecraft.Engine.Content
         public GameSound InventorySound { get; private set; }
         public TextureRegion2D Line { get; private set; }
         public TextureRegion2D Particle { get; private set; }
+        public TextureRegion2D Pew { get; private set; }
+        public TextureRegion2D Plant { get; private set; }
+        public TextureRegion2D Podium { get; private set; }
         public TextureRegion2D Potion { get; private set; }
         public TextureRegion2D ProgressBack { get; private set; }
         public TextureRegion2D ProgressFrame { get; private set; }
@@ -53,9 +56,12 @@ namespace Roguecraft.Engine.Content
         public TextureRegion2D Ritual { get; private set; }
         public GameSound SlowDownSound { get; private set; }
         public GameSound SpeedUpSound { get; private set; }
+        public TextureRegion2D Statue { get; private set; }
         public TextureRegion2D Table { get; private set; }
+        public TextureRegion2D Torch { get; private set; }
         public TextureRegion2D UnderPlayer { get; private set; }
         public TextureRegion2D Wall { get; private set; }
+        public TextureRegion2D Wheelchair { get; private set; }
 
         private void Load()
         {
@@ -71,6 +77,12 @@ namespace Roguecraft.Engine.Content
             Coach = LoadTextureRegion("coach");
             Table = LoadTextureRegion("table");
             Bed = LoadTextureRegion("bed");
+            Torch = LoadTextureRegion("torch");
+            Statue = LoadTextureRegion("statue");
+            Wheelchair = LoadTextureRegion("wheelchair");
+            Pew = LoadTextureRegion("pew");
+            Podium = LoadTextureRegion("podium");
+            Plant = LoadTextureRegion("plant");
 
             UnderPlayer = LoadTextureRegion("under_player");
 

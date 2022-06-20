@@ -1,16 +1,16 @@
 ﻿namespace Roguecraft.Engine.Procedural.RoomDecorators.Rules;
 
-public class ChestRule : ReplacementRuleBase
+public class TorchRule : ReplacementRuleBase
 {
     public override char[,] Source { get; } = new char[,] {
         { 'W', 'W', '*' },
-        { 'W', 'F', 'F' },
-        { 'W', 'W', '*' },
+        { 'W', 'F', '*' },
+        { '*', '*', '*' },
     };
 
     public override char[,] Target { get; } = new char[,] {
         { 'W', 'W', '*' },
-        { 'W', '$', 'F' },
-        { 'W', 'W', '*' },
+        { 'W', 't', '*' },
+        { '*', '*', '*' },
     };
 }

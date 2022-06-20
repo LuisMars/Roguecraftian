@@ -2,8 +2,11 @@
 
 namespace Roguecraft.Engine.Procedural.RoomDecorators;
 
-public abstract class ReplacementRule
+public abstract class ReplacementRuleBase
 {
+    public bool CanApply => MaxOccurences == -1 || Occurences < MaxOccurences;
+    public int MaxOccurences { get; set; } = -1;
+    public int Occurences { get; set; } = 0;
     public abstract char[,] Source { get; }
     public abstract char[,] Target { get; }
 
@@ -13,6 +16,7 @@ public abstract class ReplacementRule
         {
             if (TryApplyAllConfigurations(map, x, y))
             {
+                Occurences++;
                 return true;
             }
         }
@@ -20,7 +24,7 @@ public abstract class ReplacementRule
         return false;
     }
 
-    private char[,] FlipDiagonal(char[,] map)
+    private static char[,] FlipDiagonal(char[,] map)
     {
         var copy = new char[map.GetLength(0), map.GetLength(1)];
         for (var x = 0; x < map.GetLength(0); x++)
@@ -33,7 +37,7 @@ public abstract class ReplacementRule
         return copy;
     }
 
-    private char[,] MirrorX(char[,] map)
+    private static char[,] MirrorX(char[,] map)
     {
         var copy = new char[map.GetLength(0), map.GetLength(1)];
         for (var x = 0; x < map.GetLength(0); x++)
@@ -46,7 +50,7 @@ public abstract class ReplacementRule
         return copy;
     }
 
-    private char[,] MirrorY(char[,] map)
+    private static char[,] MirrorY(char[,] map)
     {
         var copy = new char[map.GetLength(0), map.GetLength(1)];
         for (var x = 0; x < map.GetLength(0); x++)
@@ -59,7 +63,7 @@ public abstract class ReplacementRule
         return copy;
     }
 
-    private IEnumerable<(int X, int Y)> RandomizeOrder(RandomGenerator random, char[,] map)
+    private static IEnumerable<(int X, int Y)> RandomizeOrder(RandomGenerator random, char[,] map)
     {
         var list = new List<(int X, int Y)>();
         for (var i = 0; i < map.GetLength(0); i++)

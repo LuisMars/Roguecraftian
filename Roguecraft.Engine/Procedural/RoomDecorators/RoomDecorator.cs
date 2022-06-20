@@ -1,6 +1,5 @@
-﻿using MonoGame.Extended.Collections;
-using Roguecraft.Engine.Procedural.Dungeons;
-using Roguecraft.Engine.Procedural.RoomDecorators.Rules;
+﻿using Roguecraft.Engine.Procedural.Dungeons;
+using Roguecraft.Engine.Procedural.RoomDecorators.RoomRules;
 using Roguecraft.Engine.Random;
 
 namespace Roguecraft.Engine.Procedural.RoomDecorators;
@@ -14,121 +13,27 @@ public class RoomDecorator
         _random = random;
     }
 
-    public char[,] Decorate(Dungeon dungeon, Room room, bool isInMainPath, bool isStart, bool isEnd)
+    public char[,] Decorate(Dungeon dungeon, Room room, bool isInMainPath, bool isStart, bool isEnd, bool isSpecial)
     {
-        var map = GenerateInitialMap(dungeon, room);
+        RoomRulesBase roomRules = new EmptyRoomRules(dungeon, room, _random);
 
-        if (isStart/* || isEnd*/)
+        if (isStart)
         {
-            var stairsRule = new StairsRule();
-            stairsRule.TryApply(_random, map);
+            roomRules = new StartRoomRules(dungeon, room, _random);
         }
-
-        var rules = new List<ReplacementRule>
+        else if (isEnd)
         {
-            new BarrelRule(),
-            new BarrelToWallRule(),
-            new BarrelReductionRule(),
-            new RoomShapeRule(),
-            new ArmorStandRule(),
-            new TableRule(),
-            new ChairRule(),
-            new ChestRule(),
-            new BookshelfRule(),
-            new LargeBookshelfRule(),
-            new CouchRule(),
-        };
-        if (!isInMainPath)
-        {
-            rules.Add(new RitualRule());
-            rules.Add(new BedRule());
-            rules.Add(new DeskRule());
-            rules.Add(new ChestRule());
-            rules.Add(new ReduceChestRule());
         }
-        ApplyRules(map, rules);
-        if (!isStart && !isEnd)
+        else if (isSpecial)
         {
-            var enemyRules = new List<ReplacementRule>
-            {
-                new EnemyRule(),
-                new ReduceEnemiesRule(),
-            };
-            ApplyRules(map, enemyRules);
+            roomRules = new SpecialRoomRule(dungeon, room, _random);
         }
-        return map;
-    }
-
-    private static char[,] GenerateInitialMap(Dungeon dungeon, Room room)
-    {
-        var map = new char[room.Width + 1, room.Height + 1];
-
-        for (var x = 0; x <= room.Width; x++)
+        else if (isInMainPath)
         {
-            for (var y = 0; y <= room.Height; y++)
-            {
-                map[x, y] = 'F';
-            }
-        }
-        for (var x = 0; x <= room.Width; x++)
-        {
-            if (!dungeon.HasDoorAt((room.X + x, room.Y)))
-            {
-                map[x, 0] = 'W';
-            }
-            else
-            {
-                map[x, 0] = 'D';
-            }
-            if (!dungeon.HasDoorAt((room.X + x, room.Y + room.Height)))
-            {
-                map[x, room.Height] = 'W';
-            }
-            else
-            {
-                map[x, room.Height] = 'D';
-            }
-        }
-        for (var y = 0; y <= room.Height; y++)
-        {
-            if (!dungeon.HasDoorAt((room.X, room.Y + y)))
-            {
-                map[0, y] = 'W';
-            }
-            else
-            {
-                map[0, y] = 'D';
-            }
-            if (!dungeon.HasDoorAt((room.X + room.Width, room.Y + y)))
-            {
-                map[room.Width, y] = 'W';
-            }
-            else
-            {
-                map[room.Width, y] = 'D';
-            }
+            roomRules = new PathRoomRules(dungeon, room, _random);
         }
 
-        return map;
-    }
-
-    private void ApplyRules(char[,] map, List<ReplacementRule> Rules)
-    {
-        var applied = true;
-        var appliedRules = 0;
-        while (applied && appliedRules < 100)
-        {
-            applied = false;
-            var rules = Rules.Shuffle(_random);
-            foreach (var rule in rules)
-            {
-                if (rule.TryApply(_random, map))
-                {
-                    appliedRules++;
-                    applied = true;
-                    break;
-                }
-            }
-        }
+        roomRules.Apply();
+        return roomRules.Map;
     }
 }

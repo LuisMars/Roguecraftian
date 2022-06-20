@@ -1,16 +1,16 @@
 ﻿namespace Roguecraft.Engine.Procedural.RoomDecorators.Rules;
 
-public class StairsRule : ReplacementRule
+public class StatueRule : ReplacementRuleBase
 {
     public override char[,] Source { get; } = new char[,] {
-        { 'F', 'F', 'F' },
+        { 'W', 'W', 'W' },
         { 'F', 'F', 'F' },
         { 'F', 'F', 'F' },
     };
 
     public override char[,] Target { get; } = new char[,] {
-        { 'F', 'F', 'F' },
-        { 'F', 'S', 'F' },
+        { 'W', 'W', 'W' },
+        { '*', 's', '*' },
         { 'F', 'F', 'F' },
     };
 }

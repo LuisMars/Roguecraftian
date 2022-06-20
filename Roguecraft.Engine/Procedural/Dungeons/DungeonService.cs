@@ -20,6 +20,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
         private readonly RandomGenerator _random;
         private readonly RoomDecorator _roomDecorator;
         private readonly Spawner _spawner;
+        private readonly Room _special;
         private readonly Room _start;
 
         public DungeonService(RandomGenerator randomGenerator,
@@ -40,6 +41,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
             _longestPath = _dungeon.GetLongestPath();
             _start = _longestPath.First();
             _end = _longestPath.Last();
+            _special = _dungeon.FindSpecialRoom();
         }
 
         public RectangleF Bounds
@@ -99,7 +101,8 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                 var isInPath = _longestPath.Contains(room);
                 var isStart = _start == room;
                 var isEnd = _end == room;
-                var map = _roomDecorator.Decorate(_dungeon, room, isInPath, isStart, isEnd);
+                var isSpecial = _special == room;
+                var map = _roomDecorator.Decorate(_dungeon, room, isInPath, isStart, isEnd, isSpecial);
                 for (var i = 0; i < map.GetLength(0); i++)
                 {
                     for (var j = 0; j < map.GetLength(1); j++)
@@ -192,7 +195,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     }
                     var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
-                    _spawner.AddTable(position, new Vector2(2), "Table");
+                    _spawner.AddTable(position, new Vector2(2));
                 }
             }
             for (var x = 0; x < cells.GetLength(0); x++)
@@ -248,6 +251,70 @@ namespace Roguecraft.Engine.Procedural.Dungeons
             {
                 for (var y = 0; y < cells.GetLength(1); y++)
                 {
+                    if (cells[x, y] != 'p')
+                    {
+                        continue;
+                    }
+
+                    var rotation = GetRotation(cells, x, y);
+
+                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
+
+                    _spawner.AddPlant(position, rotation);
+                }
+            }
+            for (var x = 0; x < cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < cells.GetLength(1); y++)
+                {
+                    if (cells[x, y] != 't')
+                    {
+                        continue;
+                    }
+
+                    var rotation = GetRotation(cells, x, y);
+
+                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
+
+                    _spawner.AddTorch(position, rotation);
+                }
+            }
+            for (var x = 0; x < cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < cells.GetLength(1); y++)
+                {
+                    if (cells[x, y] != 's')
+                    {
+                        continue;
+                    }
+
+                    var rotation = GetRotation(cells, x, y);
+
+                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
+
+                    _spawner.AddStatue(position, rotation);
+                }
+            }
+            for (var x = 0; x < cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < cells.GetLength(1); y++)
+                {
+                    if (cells[x, y] != 'w')
+                    {
+                        continue;
+                    }
+
+                    var rotation = GetRotation(cells, x, y);
+
+                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
+
+                    _spawner.AddWheelchair(position, rotation);
+                }
+            }
+            for (var x = 0; x < cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < cells.GetLength(1); y++)
+                {
                     if (cells[x, y] != 'R')
                     {
                         continue;
@@ -261,7 +328,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     }
                     var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
-                    _spawner.AddFloorDecoration(position, new Vector2(4), "Ritual");
+                    _spawner.AddFloorDecoration(position, new Vector2(4));
                 }
             }
 
@@ -275,7 +342,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     }
                     var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
 
-                    _spawner.AddBarrel(position, "Barrel");
+                    _spawner.AddBarrel(position);
                 }
             }
 

@@ -37,6 +37,7 @@ public class RoomDecoratorViewer : Game
             Dungeon.AddRoom();
         }
         LongestPath = Dungeon.GetLongestPath();
+        SpecialRooms.Add(Dungeon.FindSpecialRoom());
         LoadMap();
     }
 
@@ -117,6 +118,7 @@ public class RoomDecoratorViewer : Game
         var isInPath = LongestPath.Contains(CurrentRoom);
         var isStart = LongestPath[0] == CurrentRoom;
         var isEnd = LongestPath[^1] == CurrentRoom;
-        Map = RoomDecorator.Decorate(Dungeon, CurrentRoom, isInPath, isStart, isEnd);
+        var isSpecial = SpecialRooms.Contains(CurrentRoom);
+        Map = RoomDecorator.Decorate(Dungeon, CurrentRoom, isInPath, isStart, isEnd, isSpecial);
     }
 }

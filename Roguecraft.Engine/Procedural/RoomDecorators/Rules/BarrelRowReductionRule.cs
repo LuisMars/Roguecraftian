@@ -1,16 +1,16 @@
 ﻿namespace Roguecraft.Engine.Procedural.RoomDecorators.Rules;
 
-public class BookshelfRule : ReplacementRuleBase
+public class BarrelRowReductionRule : ReplacementRuleBase
 {
     public override char[,] Source { get; } = new char[,] {
         { 'W', 'W', 'W' },
-        { 'F', 'F', 'F' },
-        { 'F', 'F', 'F' },
+        { 'J', 'F', 'J' },
+        { 'J', 'F', '*' },
     };
 
     public override char[,] Target { get; } = new char[,] {
         { 'W', 'W', 'W' },
-        { 'F', 'B', 'F' },
-        { 'F', 'F', 'F' },
+        { 'J', 'J', 'J' },
+        { 'F', 'F', '*' },
     };
 }

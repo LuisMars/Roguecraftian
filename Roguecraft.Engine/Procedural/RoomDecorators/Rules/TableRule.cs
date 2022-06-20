@@ -1,6 +1,6 @@
 ﻿namespace Roguecraft.Engine.Procedural.RoomDecorators.Rules;
 
-public class TableRule : ReplacementRule
+public class TableRule : ReplacementRuleBase
 {
     public override char[,] Source { get; } = new char[,] {
         { 'F', 'F', 'F', 'F', 'F', 'F' },

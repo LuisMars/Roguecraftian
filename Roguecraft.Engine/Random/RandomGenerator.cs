@@ -20,6 +20,11 @@ public class RandomGenerator : XXHash
         return Range(min, max + 1, RandomIndex++);
     }
 
+    public float Next(float min, float max)
+    {
+        return Range(min, max, RandomIndex++);
+    }
+
     public int Next(int max)
     {
         return Next(0, max);

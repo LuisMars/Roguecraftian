@@ -1,6 +1,6 @@
 ﻿namespace Roguecraft.Engine.Procedural.RoomDecorators.Rules;
 
-public class BookshelfRule : ReplacementRuleBase
+public class PlantRule : ReplacementRuleBase
 {
     public override char[,] Source { get; } = new char[,] {
         { 'W', 'W', 'W' },
@@ -10,7 +10,7 @@ public class BookshelfRule : ReplacementRuleBase
 
     public override char[,] Target { get; } = new char[,] {
         { 'W', 'W', 'W' },
-        { 'F', 'B', 'F' },
+        { '*', 'p', '*' },
         { 'F', 'F', 'F' },
     };
 }

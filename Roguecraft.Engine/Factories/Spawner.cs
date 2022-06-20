@@ -66,9 +66,9 @@ public class Spawner
         }
     }
 
-    public void AddBarrel(Vector2 position, string name)
+    public void AddBarrel(Vector2 position)
     {
-        _moveableDecorationFactory.AddBarrel(position, name);
+        _moveableDecorationFactory.AddBarrel(position);
     }
 
     public void AddBed(Vector2 position, Vector2 vector2, TextureRotation rotation)
@@ -91,13 +91,33 @@ public class Spawner
         _decorationFactory.AddCouch(position, vector2, rotation);
     }
 
-    public void AddFloorDecoration(Vector2 position, Vector2 size, string name)
+    public void AddFloorDecoration(Vector2 position, Vector2 size)
     {
-        _floorDecorationFactory.Add(position, size, name);
+        _floorDecorationFactory.AddRitual(position, size);
     }
 
-    public void AddTable(Vector2 position, Vector2 size, string name)
+    public void AddPlant(Vector2 position, TextureRotation rotation)
     {
-        _moveableDecorationFactory.AddTable(position, size, name);
+        _decorationFactory.AddPlant(position, Vector2.One, rotation);
+    }
+
+    public void AddTable(Vector2 position, Vector2 size)
+    {
+        _moveableDecorationFactory.AddTable(position, size);
+    }
+
+    internal void AddStatue(Vector2 position, TextureRotation rotation)
+    {
+        _decorationFactory.AddStatue(position, rotation);
+    }
+
+    internal void AddTorch(Vector2 position, TextureRotation rotation)
+    {
+        _floorDecorationFactory.AddTorch(position, rotation);
+    }
+
+    internal void AddWheelchair(Vector2 position, TextureRotation rotation)
+    {
+        _moveableDecorationFactory.AddWheelchair(position, rotation);
     }
 }
