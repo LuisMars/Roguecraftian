@@ -66,6 +66,22 @@ public class DecorationFactory : ActorFactoryBase<Wall>
         Add(position, Vector2.One, "Statue");
     }
 
+    internal void AddPew(Vector2 position, Vector2 size, TextureRotation rotation)
+    {
+        Color = Configuration.BedColor.ToColor();
+        Texture = ContentRepository.Pew;
+        Rotation = rotation;
+        Add(position, size, "Bed");
+    }
+
+    internal void AddPodium(Vector2 position, Vector2 size, TextureRotation rotation)
+    {
+        Color = Configuration.BedColor.ToColor();
+        Texture = ContentRepository.Podium;
+        Rotation = rotation;
+        Add(position, size, "Bed");
+    }
+
     protected override Wall Create(Vector2 position, string? name = null)
     {
         var wall = new Wall

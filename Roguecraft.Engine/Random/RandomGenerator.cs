@@ -12,7 +12,18 @@ public class RandomGenerator : XXHash
 
     public float Float()
     {
-        return Value(RandomIndex++);
+        var value = 2f;
+        while (value > 1 || value < 0)
+        {
+            value = Value(RandomIndex++);
+        }
+
+        return value;
+    }
+
+    public int GausianValueWithMean(int mean, float stdDev)
+    {
+        return GausianValueWithMean(mean, stdDev, RandomIndex);
     }
 
     public int Next(int min, int max)

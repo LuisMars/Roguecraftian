@@ -106,6 +106,16 @@ public class Spawner
         _moveableDecorationFactory.AddTable(position, size);
     }
 
+    internal void AddPew(Vector2 position, Vector2 size, TextureRotation rotation)
+    {
+        _decorationFactory.AddPew(position, size, rotation);
+    }
+
+    internal void AddPodium(Vector2 position, Vector2 size, TextureRotation rotation)
+    {
+        _decorationFactory.AddPodium(position, size, rotation);
+    }
+
     internal void AddStatue(Vector2 position, TextureRotation rotation)
     {
         _decorationFactory.AddStatue(position, rotation);

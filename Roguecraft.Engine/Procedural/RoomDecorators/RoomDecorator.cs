@@ -13,10 +13,11 @@ public class RoomDecorator
         _random = random;
     }
 
+    private bool HasChurch { get; set; }
+
     public char[,] Decorate(Dungeon dungeon, Room room, bool isInMainPath, bool isStart, bool isEnd, bool isSpecial)
     {
         RoomRulesBase roomRules = new EmptyRoomRules(dungeon, room, _random);
-
         if (isStart)
         {
             roomRules = new StartRoomRules(dungeon, room, _random);
@@ -31,6 +32,28 @@ public class RoomDecorator
         else if (isInMainPath)
         {
             roomRules = new PathRoomRules(dungeon, room, _random);
+        }
+        else
+        {
+            if (!HasChurch)
+            {
+                roomRules = new ChurchRoomRules(dungeon, room, _random);
+
+                if (roomRules.Apply())
+                {
+                    HasChurch = true;
+                    return roomRules.Map;
+                }
+            }
+
+            if (_random.Next(1) == 0)
+            {
+                roomRules = new LibraryRoomRules(dungeon, room, _random);
+            }
+            else
+            {
+                roomRules = new BedroomRoomRules(dungeon, room, _random);
+            }
         }
 
         roomRules.Apply();

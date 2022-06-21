@@ -3,8 +3,8 @@
 public class PodiumRule : ReplacementRuleBase
 {
     public override char[,] Source { get; } = new char[,] {
-        { '*', 'W', 'W', 'W', 'W', '*' },
-        { '*', 'F', 'F', 'F', 'F', '*' },
+        { 'W', 'W', '*', '*', '*', '*' },
+        { 'W', 'F', 'F', 'F', 'F', '*' },
         { '*', 'F', 'F', 'F', 'F', '*' },
         { '*', 'F', 'F', 'F', 'F', '*' },
         { '*', 'F', 'F', 'F', 'F', '*' },
@@ -12,11 +12,11 @@ public class PodiumRule : ReplacementRuleBase
     };
 
     public override char[,] Target { get; } = new char[,] {
-        { '*', 'W', 'W', 'W', 'W', '*' },
+        { '*', '*', '*', '*', '*', '*' },
         { '*', 'F', 'F', 'F', 'F', '*' },
         { '*', 'F', 'P', 'P', 'F', '*' },
-        { '*', 'F', 'F', 'F', 'F', '*' },
-        { '*', 'F', 'p', 'p', 'F', '*' },
-        { '*', 'F', 'F', 'F', 'F', '*' },
+        { '*', 'F', 'ꝓ', 'ꝓ', 'F', '*' },
+        { '*', 'F', 'ꝓ', 'ꝓ', 'F', '*' },
+        { '*', 'F', 'ꝓ', 'ꝓ', 'F', '*' },
     };
 }

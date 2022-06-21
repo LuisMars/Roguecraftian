@@ -263,6 +263,7 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     _spawner.AddPlant(position, rotation);
                 }
             }
+
             for (var x = 0; x < cells.GetLength(0); x++)
             {
                 for (var y = 0; y < cells.GetLength(1); y++)
@@ -388,6 +389,97 @@ namespace Roguecraft.Engine.Procedural.Dungeons
                     _spawner.AddBed(position, new Vector2(width, height), rotation);
                 }
             }
+
+            for (var x = 0; x < cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < cells.GetLength(1); y++)
+                {
+                    if (cells[x, y] != 'P')
+                    {
+                        continue;
+                    }
+                    var width = 1;
+                    var height = 1;
+
+                    var rotation = TextureRotation.HalfTurn;
+                    if (cells[x, y + 1] == 'P')
+                    {
+                        rotation = TextureRotation.Clockwise;
+                        if (cells[x + 1, y] == 'ꝓ')
+                        {
+                            rotation = TextureRotation.AntiClockwise;
+                        }
+                    }
+                    else if (cells[x, y + 1] == 'ꝓ')
+                    {
+                        rotation = TextureRotation.None;
+                    }
+
+                    cells[x, y] = 'F';
+                    if (cells[x, y + 1] == 'P')
+                    {
+                        cells[x, y + 1] = 'F';
+                        height++;
+                    }
+                    else if (cells[x + 1, y] == 'P')
+                    {
+                        width++;
+                        cells[x + 1, y] = 'F';
+                    }
+
+                    if (rotation == TextureRotation.HalfTurn || rotation == TextureRotation.None)
+                    {
+                        var increment = 2;
+                        if (rotation == TextureRotation.HalfTurn)
+                        {
+                            increment = -2;
+                        }
+                        var i = y + increment;
+                        var cell = cells[x, i];
+
+                        do
+                        {
+                            cells[x, i - increment / 2] = 'F';
+                            cells[x, i + 1 - increment / 2] = 'F';
+                            cells[x, i] = 'F';
+                            cells[x, i + 1] = 'F';
+
+                            var p = new Vector2((x - offset.X) * _configuration.WallSize, (i - offset.Y) * _configuration.WallSize);
+                            _spawner.AddPew(p, new Vector2(width, height), rotation);
+                            i += increment;
+                            cell = cells[x, i];
+                        }
+                        while (cell == 'ꝓ');
+                    }
+                    if (rotation == TextureRotation.AntiClockwise || rotation == TextureRotation.Clockwise)
+                    {
+                        var increment = 2;
+                        if (rotation == TextureRotation.Clockwise)
+                        {
+                            increment = -2;
+                        }
+                        var i = x + increment;
+                        var cell = cells[i, y];
+
+                        do
+                        {
+                            cells[i - increment / 2, y] = 'F';
+                            cells[i - increment / 2, y + 1] = 'F';
+                            cells[i, y] = 'F';
+                            cells[i, y + 1] = 'F';
+
+                            var p = new Vector2((i - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
+                            _spawner.AddPew(p, new Vector2(width, height), rotation);
+                            i += increment;
+                            cell = cells[i, y];
+                        }
+                        while (cell == 'ꝓ');
+                    }
+                    var position = new Vector2((x - offset.X) * _configuration.WallSize, (y - offset.Y) * _configuration.WallSize);
+                    _spawner.AddPodium(position, new Vector2(width, height), rotation);
+                }
+            }
+
             for (var x = 0; x < cells.GetLength(0); x++)
             {
                 for (var y = 0; y < cells.GetLength(1); y++)

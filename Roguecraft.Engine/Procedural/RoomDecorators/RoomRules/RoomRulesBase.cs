@@ -19,8 +19,9 @@ public abstract class RoomRulesBase
 
     public char[,] Map { get; set; }
     protected List<List<ReplacementRuleBase>> Rules { get; set; } = new();
+    private bool AppliedOneRule { get; set; }
 
-    public void Apply()
+    public bool Apply()
     {
         Map = GenerateInitialMap();
         var start = 0;
@@ -32,6 +33,7 @@ public abstract class RoomRulesBase
                 start++;
             }
         }
+        return AppliedOneRule;
     }
 
     private char[,] GenerateInitialMap()
@@ -101,6 +103,7 @@ public abstract class RoomRulesBase
                 {
                     appliedRules++;
                     applied = true;
+                    AppliedOneRule = true;
                     break;
                 }
             }

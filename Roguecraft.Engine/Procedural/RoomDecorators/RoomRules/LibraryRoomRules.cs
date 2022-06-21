@@ -4,9 +4,9 @@ using Roguecraft.Engine.Random;
 
 namespace Roguecraft.Engine.Procedural.RoomDecorators.RoomRules;
 
-public class PathRoomRules : RoomRulesBase
+internal class LibraryRoomRules : RoomRulesBase
 {
-    public PathRoomRules(Dungeon dungeon, Room room, RandomGenerator random) : base(dungeon, room, random)
+    public LibraryRoomRules(Dungeon dungeon, Room room, RandomGenerator random) : base(dungeon, room, random)
     {
         Rules = new()
         {
@@ -14,14 +14,18 @@ public class PathRoomRules : RoomRulesBase
             {
                 new RoomShapeRule(),
                 new TorchRule(),
-                new StatueRule(),
-                new PlantRule(),
-                new WheelchairRule(),
-                new EnemyRule()
+                new BookshelfRule(),
+                new BookshelfDoubleRule(),
+                new TableRule(),
+                new ChairRule()
+            },
+            new()
+            {
+                new EnemyRule
                 {
                     MaxOccurences = 2
                 }
-            }
+            },
         };
     }
 }

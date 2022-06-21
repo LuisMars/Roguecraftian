@@ -66,7 +66,7 @@ namespace Roguecraft.Engine.Content
         private void Load()
         {
             Creature = LoadTextureRegion("person");
-            Enemy = LoadTextureRegion("enemy");
+            Enemy = LoadTextureRegion("enemy2");
             Wall = LoadTextureRegion("wall");
             Decoration = LoadTextureRegion("decoration");
             Chair = LoadTextureRegion("chair");

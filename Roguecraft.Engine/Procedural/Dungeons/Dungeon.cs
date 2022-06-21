@@ -1,14 +1,14 @@
 ﻿using Roguecraft.Engine.Random;
-using System.Diagnostics;
 
 namespace Roguecraft.Engine.Procedural.Dungeons;
 
 public class Dungeon
 {
-    private const int AverageRoomSize = 10;
-    private const int MaxDungeonSize = 70;
-    private const int MaxRoomSize = 15;
-    private const int MinRoomSize = 3;
+    private const int AverageRoomSide = 5;
+    private const int CorridorSize = 2;
+    private const int MaxDungeonSize = 150;
+    private const int MaxRoomSide = 20;
+    private const int MinRoomSide = 5;
     private readonly RandomGenerator _random;
     private readonly List<WayPointConnection> _waypointsConnections = new();
 
@@ -28,45 +28,56 @@ public class Dungeon
             Rooms.Add(room);
             return;
         }
-        var tries = 0;
-
-        var rooms = Rooms.Where(r => r.IsCorridor(MinRoomSize) && Connections.Count(r) == 1 && r.CanHaveConnections).ToList();
-        if (!rooms.Any())
+        Room other;
+        do
         {
-            rooms = Rooms.Where(r => r.CanHaveConnections).ToList();
-        }
-        var roomIndex = _random.Next(rooms.Count - 1);
-        var other = rooms[roomIndex];
-        while (tries < 1000)
-        {
-            tries++;
+            var tries = 0;
+            var rooms = Rooms.Where(r => r.CanHaveConnections).ToList();
+            for (var i = 20; i > 1; i--)
+            //for (var i = 1; i <= 5; i++)
+            {
+                var testRooms = Rooms.Where(r => Connections.Count(r) == i && r.CanHaveConnections).ToList();
+                if (testRooms.Any())
+                {
+                    rooms = testRooms;
+                    break;
+                }
+            }
+            var roomIndex = _random.Next(rooms.Count - 1);
 
-            var newRoom = GenerateBottomRoom(other);
-            if (CanAdd(newRoom))
+            other = rooms[roomIndex];
+            while (tries < 10)
             {
-                SetRoom(other, newRoom);
-                return;
+                tries++;
+
+                var newRoom = GenerateBottomRoom(other);
+                if (CanAdd(newRoom))
+                {
+                    SetRoom(other, newRoom);
+                    return;
+                }
+                newRoom = GenerateTopRoom(other);
+                if (CanAdd(newRoom))
+                {
+                    SetRoom(other, newRoom);
+                    return;
+                }
+                newRoom = GenerateRightRoom(other);
+                if (CanAdd(newRoom))
+                {
+                    SetRoom(other, newRoom);
+                    return;
+                }
+                newRoom = GenerateLeftRoom(other);
+                if (CanAdd(newRoom))
+                {
+                    SetRoom(other, newRoom);
+                    return;
+                }
             }
-            newRoom = GenerateTopRoom(other);
-            if (CanAdd(newRoom))
-            {
-                SetRoom(other, newRoom);
-                return;
-            }
-            newRoom = GenerateRightRoom(other);
-            if (CanAdd(newRoom))
-            {
-                SetRoom(other, newRoom);
-                return;
-            }
-            newRoom = GenerateLeftRoom(other);
-            if (CanAdd(newRoom))
-            {
-                SetRoom(other, newRoom);
-                return;
-            }
+            other.CanHaveConnections = false;
         }
-        other.CanHaveConnections = false;
+        while (!other.CanHaveConnections);
     }
 
     public (int x, int y, int width, int height) Bounds()
@@ -90,7 +101,7 @@ public class Dungeon
         longestPath.AddRange(toAvoid);
         Room farthest = longestPath[1];
         int maxLength = 0;
-        foreach (var room in Rooms.Where(r => !r.IsCorridor() && !longestPath.Contains(r) && r.Width > 4 && r.Height > 4))
+        foreach (var room in Rooms.Where(r => !r.IsCorridor() && !longestPath.Contains(r) && r.Width > 5 && r.Height > 5))
         {
             var minLength = int.MaxValue;
             foreach (var path in longestPath)
@@ -118,9 +129,10 @@ public class Dungeon
         foreach (var room in Rooms)
         {
             var goal = FarthestRoomFrom(room);
+
             var current = ShortestPathFrom(room, goal);
             var distance = TotalDistance(current);
-            if (maxDistance < distance)
+            if (maxDistance < distance && !current[0].IsCorridor() && !current[^1].IsCorridor())
             {
                 path = current;
                 maxDistance = distance;
@@ -199,7 +211,12 @@ public class Dungeon
     private Room GenerateBottomRoom(Room other)
     {
         var room = RandomRoom(other);
-        var xOffset = _random.Next(-room.Width + MinRoomSize, other.Width - MinRoomSize);
+        var size = MinRoomSide;
+        if (room.IsCorridor())
+        {
+            size = CorridorSize;
+        }
+        var xOffset = _random.Next(-room.Width + size, other.Width - size);
         room.Move(xOffset, other.Height);
         return room;
     }
@@ -207,7 +224,12 @@ public class Dungeon
     private Room GenerateLeftRoom(Room other)
     {
         var room = RandomRoom(other);
-        var yOffset = _random.Next(-room.Height + MinRoomSize, other.Height - MinRoomSize);
+        var size = MinRoomSide;
+        if (room.IsCorridor())
+        {
+            size = CorridorSize;
+        }
+        var yOffset = _random.Next(-room.Height + size, other.Height - size);
         room.Move(-room.Width, yOffset);
         return room;
     }
@@ -215,7 +237,12 @@ public class Dungeon
     private Room GenerateRightRoom(Room other)
     {
         var room = RandomRoom(other);
-        var yOffset = _random.Next(-room.Height + MinRoomSize, other.Height - MinRoomSize);
+        var size = MinRoomSide;
+        if (room.IsCorridor())
+        {
+            size = CorridorSize;
+        }
+        var yOffset = _random.Next(-room.Height + size, other.Height - size);
         room.Move(other.Width, yOffset);
         return room;
     }
@@ -223,7 +250,12 @@ public class Dungeon
     private Room GenerateTopRoom(Room other)
     {
         var room = RandomRoom(other);
-        var xOffset = _random.Next(-room.Width + MinRoomSize, other.Width - MinRoomSize);
+        var size = MinRoomSide;
+        if (room.IsCorridor())
+        {
+            size = CorridorSize;
+        }
+        var xOffset = _random.Next(-room.Width + size, other.Width - size);
         room.Move(xOffset, -room.Height);
         return room;
     }
@@ -232,10 +264,10 @@ public class Dungeon
     {
         var width = RandomRoomSide();
         var height = RandomRoomSide();
-        var corridorChange = 0.85f;
+        var corridorChange = 1f;
         if (connectedToCorridor)
         {
-            corridorChange += 0.149f;
+            corridorChange -= 0.05f;
         }
         var isCorridor = _random.Float() > corridorChange;
         if (isCorridor)
@@ -243,11 +275,11 @@ public class Dungeon
             var isHorizontal = _random.Float() > 0.5f;
             if (isHorizontal)
             {
-                height = MinRoomSize;
+                height = CorridorSize;
             }
             else
             {
-                width = MinRoomSize;
+                width = CorridorSize;
             }
             return (width, height);
         }
@@ -263,14 +295,12 @@ public class Dungeon
                 height = MaxDungeonSize / width;
             }
         }
-        Debug.Assert(width >= MinRoomSize);
-        Debug.Assert(height >= MinRoomSize);
         return (width, height);
     }
 
     private Room RandomRoom(Room other)
     {
-        (var width, var height) = GetRandomRoomSize(!other.IsCorridor(MinRoomSize));
+        (var width, var height) = GetRandomRoomSize(!other.IsCorridor(MinRoomSide));
         var room = new Room(other.X, other.Y, width, height);
         return room;
     }
@@ -284,7 +314,24 @@ public class Dungeon
 
     private int RandomRoomSide()
     {
-        return _random.Next(AverageRoomSize, MaxRoomSize);
+        var type = _random.Next(0, 10);
+        if (type == 0)
+        {
+            return _random.Range(MinRoomSide, MaxRoomSide / 2);
+        }
+        else if (type == 1)
+        {
+            return _random.Range(MaxRoomSide / 2, MaxRoomSide + 1);
+        }
+        else if (type == 2)
+        {
+            return _random.Range(MinRoomSide, MaxRoomSide + 1);
+        }
+        else
+        {
+            return _random.Range(MaxRoomSide / 3, MaxRoomSide / 2);
+        }
+        //return _random.Next(AverageRoomSide, MaxRoomSide);
     }
 
     private void SetRoom(Room other, Room newRoom)

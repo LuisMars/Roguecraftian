@@ -1,17 +1,14 @@
 ﻿namespace Roguecraft.Engine.Procedural.RoomDecorators.Rules;
 
-public class StartRule : ReplacementRuleBase
+public class EnemyPewRule : ReplacementRuleBase
 {
-    public StartRule()
-    {
-        MaxOccurences = 1;
-    }
-
     public override char[,] Source { get; } = new char[,] {
-        { 'F' }
+        { 'F', 'F' },
+        { 'P', 'F' },
     };
 
     public override char[,] Target { get; } = new char[,] {
-        { 'S' }
+        { 'F', 'F' },
+        { 'ꝓ', 'E' },
     };
 }

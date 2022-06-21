@@ -15,7 +15,14 @@ internal class ChurchRoomRules : RoomRulesBase
                 new PodiumRule
                 {
                     MaxOccurences = 1
-                }
+                },
+                new PodiumExtraRule(),
+                new PewRule()
+            },
+            new()
+            {
+                new EnemyPewRule(),
+                new EnemyRule()
             }
         };
     }

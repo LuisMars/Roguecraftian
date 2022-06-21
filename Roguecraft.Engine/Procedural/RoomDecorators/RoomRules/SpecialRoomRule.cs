@@ -15,8 +15,12 @@ public class SpecialRoomRule : RoomRulesBase
                 new RitualRule()
                 {
                     MaxOccurences = 1
-                },
-                new RitualSeparationRule()
+                }
+            },
+            new()
+            {
+                new TorchRule(),
+                new RoomShapeRule()
             }
         };
     }
